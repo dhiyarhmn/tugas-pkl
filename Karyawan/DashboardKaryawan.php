@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+
+// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+$koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
+
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+    header("Location: /Login.php");
+    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,32 +38,32 @@
         </div>
         <ul class="list-unstyled components">
             <li class="active">
-                <a href="#">
+                <a href="DashboardKaryawan.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="EditProfileKaryawan.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="PengajuanAbsensiKaryawan.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="StatusPengajuanKaryawan.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
                 </a>
             </li>
         </ul>
         <div class="sidebar-logout">
-            <a href="#" class="btn logout-button">
+            <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
                 <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
             </a>
@@ -107,17 +120,17 @@
                         <div class="card-body">
                             <h5 class="card-title">Pengajuan Absensi</h5>
                             <p class="card-text">Some sample content goes here.</p>
-                            <button type="button" class="btn custom-btn-blue">Show More</button>
+                            <button type="button" class="btn custom-btn-blue" onclick="window.location.href='PengajuanAbsensiKaryawan.php'">Show More</button>
                         </div>
                     </div>
                 </div>
-                <!-- Kotak Status Pengajuan -->
+                <!-- Kotak Status Pengajuan  -->
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Status Pengajuan</h5>
                             <p class="card-text">Some sample content goes here.</p>
-                            <button type="button" class="btn custom-btn-blue btn-large">Show More</button>
+                            <button type="button" class="btn custom-btn-blue btn-large" onclick="window.location.href='StatusPengajuanKaryawan.php'">Show More</button>
                         </div>
                     </div>
                 </div>

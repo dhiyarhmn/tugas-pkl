@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+
+// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+$koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
+
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+    header("Location: /Login.php");
+    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,33 +37,33 @@
             </button>
         </div>
         <ul class="list-unstyled components">
-            <li class="active">
-                <a href="#">
+            <li>
+                <a href="DashboardKaryawan.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="EditProfileKaryawan.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
-            <li>
-                <a href="#">
+            <li class="active">
+                <a href="PengajuanAbsensiKaryawan.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="StatusPengajuanKaryawan.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
                 </a>
             </li>
         </ul>
         <div class="sidebar-logout">
-            <a href="#" class="btn logout-button">
+            <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
                 <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
             </a>
@@ -58,26 +71,78 @@
     </nav>
     <div id="content">
         <div class="container mt-3">
-        <!-- <img src="/Assets/img/logoo.png" alt="Logo" width="1000"> -->
-            <h2 class="text-center mb-4">PT. Daekyung Indah Heavy Industry</h2>            
+            <div class="row justify-content-center align-items-center">
+                <div class="col-auto">
+                    <img src="/Assets/img/logo3.png" class="img-fluid" style="max-width: 60px; height: auto;">  
+                </div>
+                <div class="col-auto">
+                    <h2>PT. DAEKYUNG INDAH HEAVY INDUSTRY</h2>
+                </div> 
+            </div>            
             <div class="row justify-content-center mt-4">
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
-                        <h5 class="card-title text-center mb-4" >Pengajuan Absensi</h5>
-                        <form method="post">
-                            <div class="container">
-                                <input required="" type="text" name="text" class="input">
-                                <label class="label">Nama</label>
-                            </div>
-                        </form>
+                            <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
+                            <form method="post">
+                                <div class="container input-container">
+                                    <input required="" type="text" name="nama" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Nama</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Departemen</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="jabatan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Jabatan</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="date" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
+                                </div>
+                                <div class="container input-container">
+                                    <select required="" name="jenis_absensi" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                        <option value=""></option>
+                                        <option value="A">Absent (Absen)</option>
+                                        <option value="P">Permit (Izin)</option>
+                                        <option value="L">Late (Terlambat)</option>
+                                        <option value="BT">Business Trip (Dinas)</option>
+                                        <option value="DL">Doctor Letter (Sakit dengan Surat Dokter)</option>
+                                        <option value="AL">Annual Leave (Cuti Tahunan)</option>
+                                        <option value="SBA">Sick By Accident (Sakit Akibat Kecelakaan Kerja)</option>
+                                        <option value="LP">Legal Permit (Izin Resmi)</option>
+                                        <option value="S">Suspend (Skors)</option>
+                                    </select>
+                                    <label class="label">Jenis Absensi</label>
+                                </div>
+                                <div class="container input-container">
+                                    <select required="" name="lama_periode_absen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                        <option value=""></option>
+                                        <option value="Hour">Hour</option>
+                                        <option value="Day">Day</option>
+                                    </select>
+                                    <label class="label">Lama Periode Absen</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="periode_awal" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Periode Awal</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="periode_akhir" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Periode Akhir</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="keterangan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Keterangan</label>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
