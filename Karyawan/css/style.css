@@ -1,0 +1,325 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('/Assets/img/background7.jpeg'); /* Adjust the path as necessary */
+  background-size: cover; /* Cover the entire page */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  min-height: 100vh; /* Ensure it covers the whole viewport height */
+}
+/* .container {
+  display: grid;
+  grid-template-rows: 60px 60px auto 60px;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'header' 'sidebar' 'main' 'footer';
+  height: 100vh;
+}
+@media (min-width: 480px) {
+  .container {
+    grid-template-rows: 60px auto 60px;
+    grid-template-columns: 160px auto;
+    grid-template-areas: 
+    'header header header' 
+    'sidebar main main'  
+    'footer footer footer';
+    }
+} */
+.wrapper {
+  display: flex;
+  flex-direction: column; 
+}
+#sidebar {
+  width: 250px;
+  position: fixed; 
+  top: 0;
+  left: 0px;
+  height: 100%;
+  background-color: rgba(71, 71, 71, 0.8); /* warna navbar bawah */
+  transition: all 0.3s;
+}
+#sidebar.active {
+  left: 0;
+}
+#sidebar .sidebar-header {
+  padding: 20px;
+  background: rgba(60, 60, 60, 0.6); /* warna navbar atas */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
+#sidebar ul.components {
+  padding: 20px 0;
+  border-bottom: 1px solid #818181;
+}
+#sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+#sidebar ul li a {
+  padding: 10px;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  color: #fff;
+}
+#sidebar ul li a i {
+  margin-right: 15px; /* Sesuaikan ini untuk memberi ruang yang cukup antara ikon dan teks */
+}
+#sidebar ul li a:hover {
+  color: #fff;
+  background: #9bc4e2; /* warna navbar pas mousenya diarahin */
+}
+#sidebar ul li.active > a, a[aria-expanded="true"] {
+  color: #fff;
+  background: #160066; /* warna navbar pas dipencet mousenya */
+}
+#content {
+  width: 100%;
+  padding-left: 0;
+  transition: all 0.3s;
+}
+#content h2 {
+  margin-top: 20px;
+}
+#content.shift {
+  padding-left: 250px;
+}
+#sidebarCollapse {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1050;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+}
+#sidebar.closed {
+  width: 80px;
+  left: 0;
+}
+#sidebar.closed ul li a span {
+  display: none;
+}
+#sidebar.closed ul li a {
+  justify-content: center; /* Tengahkan ikon secara horizontal */
+  align-items: center; /* Tengahkan ikon secara vertikal */
+  padding: 15px; /* Atur padding agar ikon terletak di tengah */
+}
+#sidebar ul li a span {
+  margin-left: 0; /* Sesuaikan ini jika perlu */
+}
+#sidebarCollapse {
+  background: none; /* Hapus latar belakang */
+  border: none; /* Hapus border */
+  color: white; /* Atur warna ikon, sesuaikan sesuai kebutuhan */
+  padding: 10px; /* Atur padding, sesuaikan sesuai kebutuhan */
+  font-size: 20px; /* Atur ukuran ikon, sesuaikan sesuai kebutuhan */
+  cursor: pointer; /* Tambahkan cursor pointer untuk memberikan indikasi bahwa ini adalah tombol */
+}
+#sidebarCollapse:hover {
+  color: #ddd; /* Warna saat hover, sesuaikan sesuai kebutuhan */
+}
+#sidebarCollapse.open {
+  position: fixed;
+  left: -10px; /* Pindahkan ke kanan sejauh lebar sidebar */
+  top: 0;
+  z-index: 1050;
+  margin-top: 0.5rem;
+}
+/* Posisi logout */
+/* Gaya untuk tombol Logout */
+.sidebar-logout {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+}
+.logout-button {
+  width: 100%;
+  background-color: #7c0a02; 
+  color: white;
+  text-align: center;
+  border: none;
+}
+.logout-button:hover {
+  background-color: pink;
+}
+/* Menyembunyikan teks "Logout" ketika navbar tertutup */
+#sidebar.closed .logout-button span {
+  display: none;
+}
+/* Menampilkan teks "Logout" ketika navbar terbuka */
+#sidebar:not(.closed) .logout-button span {
+  display: inline;
+}
+.btn.custom-btn-blue {
+  background-color: #160066; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 20px; /* Rounded edges */
+  border: none;
+  padding: 10px 178px; /* Padding */
+  font-size: 1rem; /* Font size */
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+.btn.custom-btn-blue:hover, .btn.custom-btn-blue:focus {
+  background-color: #9bc4e2; /* Darker blue on hover/focus */
+  box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); /* Deeper shadow on hover/focus */
+}
+.larger-card {
+  width: 30%; /* Atur lebar kotak */
+  margin-bottom: 30px; /* Atur margin bawah */
+  padding: 20px; /* Atur padding dalam kotak */
+  font-size: 1.2rem; /* Atur ukuran font */
+}
+.larger-card .fa {
+  font-size: 5rem; /* Atur ukuran ikon */
+  /* Anda juga bisa menambahkan margin atau padding jika diperlukan */
+}
+.larger-card .card-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.approved-icon {
+color: #006b3c; /* Warna biru dengan kode #160066 */
+display: flex;
+}
+.declined-icon {
+color: #7c0a02; /* Warna biru dengan kode #160066 */
+}
+.on-process-icon {
+color: 	#eead0e; /* Warna biru dengan kode #160066 */
+}
+/* Responsive Text for 'PT. Daekyung Indah Heavy Industry' */
+.navbar-brand {
+  font-size: 1.5rem; /* Adjust base font size */
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .navbar-brand {
+      font-size: 1.2rem; /* Smaller font size for smaller devices */
+  }
+
+  #sidebar {
+      width: 100%; /* Full width sidebar on smaller screens */
+      left: 0;
+  }
+
+  #content.shift {
+      padding-left: 0; /* Remove shift on smaller screens */
+  }
+
+  .larger-card, .sidebar-logout, .btn.custom-btn-blue {
+      width: 100%; /* Full width for cards and buttons on smaller screens */
+      padding: 15px; /* Adjust padding */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-brand {
+      font-size: 1rem; /* Even smaller font size for very small devices */
+  }
+
+  #sidebar.closed {
+      width: 100%; /* Full width sidebar when closed on very small screens */
+  }
+}
+.rounded-card {
+  border-radius: 20px;
+  box-shadow: 0px 8px 12px rgba(34, 34, 34, 0.6);
+}
+.btn.custom-detail-btn-blue {
+  background-color: #160066; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 20px; /* Rounded edges */
+  border: none;
+  padding: 1px 20px; /* Padding */
+  font-size: 0.7rem; /* Font size */
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+.btn.custom-detail-btn-blue:hover, .btn.custom-detail-btn-blue:focus {
+  background-color: #9bc4e2; /* Darker blue on hover/focus */
+  box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); /* Deeper shadow on hover/focus */
+}
+.custom-larger-card {
+  width: 100%; /* Atau nilai spesifik lain sesuai kebutuhan */
+  padding: 30px; /* Lebih banyak padding di dalam kotak */
+  /* Anda bisa menambahkan properti CSS lain jika diperlukan */
+}
+.col-md-6.mb-3 {
+  width: 100%; /* Change this value to the desired width */
+  margin: auto; /* Center the box if the width is less than 100% */
+}
+.text-center {
+  text-align: center;
+}
+.detail-column {
+  width: 130px; /* atau lebar yang diinginkan */
+}
+.table-column {
+  width: 250px;
+}
+.custom-table-container {
+  margin: auto; /* Menengahkan tabel */
+  width: 1025px; /* Menyesuaikan lebar tabel */
+  padding: 20px; /* Menambahkan padding */
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+  color: white;
+}
+
+.container .label {
+  font-size: 15px;
+  padding-left: 10px;
+  position: absolute;
+  top: 13px;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.input {
+  width: 200px;
+  height: 45px;
+  border: none;
+  outline: none;
+  padding: 0px 7px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+  background-color: transparent;
+  box-shadow: 3px 3px 10px rgba(0,0,0,1),
+  -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.input:focus {
+  border: 2px solid transparent;
+  color: #fff;
+  box-shadow: 3px 3px 10px rgba(0,0,0,1),
+  -1px -1px 6px rgba(255, 255, 255, 0.4),
+  inset 3px 3px 10px rgba(0,0,0,1),
+  inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.container .input:valid ~ .label,
+.container .input:focus ~ .label {
+  transition: 0.3s;
+  padding-left: 2px;
+  transform: translateY(-35px);
+}
+
+.container .input:valid,
+.container .input:focus {
+  box-shadow: 3px 3px 10px rgba(0,0,0,1),
+  -1px -1px 6px rgba(255, 255, 255, 0.4),
+  inset 3px 3px 10px rgba(0,0,0,1),
+  inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}

@@ -1,0 +1,20 @@
+@font-face {
+  font-family: 'Berlin Sans FB Demi';
+  src: url('/Assets/fonts/Berlin Sans FB Demi Bold.ttf') format('truetype');
+  /* Gantilah 'path/to/BerlinSansFBDemi.ttf' dengan path yang sesuai dengan lokasi file font di proyek Anda */
+  font-weight: normal;
+  font-style: normal;
+}
+
+h2 {
+  font-family: 'Berlin Sans FB Demi', sans-serif;
+  /* Gunakan font ini untuk elemen h1 */
+}
+
+.daekyung {
+  font-family: 'Berlin Sans FB Demi', sans-serif;
+}
+.logo-text-container {
+  display: flex;
+  align-items: center; /* Untuk memastikan logo dan teks terpusat secara vertikal */
+}
