@@ -1,3 +1,16 @@
+<?php
+session_start();
+
+
+// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+$koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
+
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+    header("Location: /Login.php");
+    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,32 +40,32 @@
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="#">
+                <a href="DashboardKaryawan.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="EditProfileKaryawan.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="PengajuanAbsensiKaryawan.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li class="active">
-                <a href="#">
+                <a href="StatusPengajuanKaryawan.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
                 </a>
             </li>
         </ul>
         <div class="sidebar-logout">
-            <a href="#" class="btn logout-button">
+            <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
                 <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
             </a>
