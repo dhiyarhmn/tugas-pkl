@@ -64,20 +64,29 @@
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
-                        <h5 class="card-title text-center mb-4" >Pengajuan Absensi</h5>
-                        <form method="post">
-                            <div class="container">
-                                <input required="" type="text" name="text" class="input">
-                                <label class="label">Nama</label>
-                            </div>
-                        </form>
+                            <h5 class="card-title text-center mb-4">Pengajuan Absensi</h5>
+                            <form method="post">
+                                <div class="form-group input-container">
+                                    <input required="" type="text" name="nama" class="form-control" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label for="nama" class="form-label">Nama</label>
+                                </div>
+
+                                <div class="form-group input-container">
+                                    <input required="" type="text" name="departemen" class="form-control" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label for="departemen" class="form-label">Departemen</label>
+                                </div>
+
+                                <div class="form-group input-container">
+                                    <input required="" type="text" name="jabatan" class="form-control" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label for="jabatan" class="form-label">Jabatan</label>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>

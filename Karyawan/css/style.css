@@ -185,7 +185,6 @@ body {
 }
 .approved-icon {
 color: #006b3c; /* Warna biru dengan kode #160066 */
-display: flex;
 }
 .declined-icon {
 color: #7c0a02; /* Warna biru dengan kode #160066 */
@@ -322,4 +321,18 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
   -1px -1px 6px rgba(255, 255, 255, 0.4),
   inset 3px 3px 10px rgba(0,0,0,1),
   inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+/* css kotak di form pengajuan absensi */
+.input-container {
+    margin: 10px 0; /* Margin normal */
+    transition: margin 0.3s; /* Animasi untuk transisi margin */
+}
+
+.input-container.focused {
+    margin: 20px 0; /* Margin tambahan ketika difokuskan */
+}
+
+.form-control:focus {
+    box-shadow: none; /* Opsional: Hapus bayangan saat fokus jika diinginkan */
 }

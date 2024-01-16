@@ -14,3 +14,12 @@ $(document).ready(function () {
       $('#content').toggleClass('shift');
   });
 });
+function focusInput(element) {
+    element.parentElement.classList.add("focused");
+}
+
+function blurInput(element) {
+    if (element.value === "") {
+        element.parentElement.classList.remove("focused");
+    }
+}

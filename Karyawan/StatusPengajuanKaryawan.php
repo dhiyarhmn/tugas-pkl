@@ -69,7 +69,7 @@
                 </div>
             </div>
             <div class="row justify-content-center mt-4 box-container">
-                <div class="col-auto mb-3 larger-card" style="margin-top: 75px; ">
+                <div class="col-auto mb-3 larger-card" style="margin-top: 75px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
@@ -109,14 +109,14 @@
                         <th class="text-center table-column">Status</th>
                         <th class="text-center table-column">Jenis Absensi</th>
                         <th class="text-center table-column">Tanggal Pengajuan</th>
-                        <th class="text-center detail-column">Action</th>
+                        <th class="text-center detail-column">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><i class="fa fa-check-circle approved-icon" aria-hidden="true"></i> Approve</td>
+                        <td><i class="fa fa-check-circle approved-icon" aria-hidden="true"></i> Approved</td>
                         <td>AL (Annual Leave)</td>
-                        <td>06-09-2023</td>
+                        <td>01-10-2023</td>
                         <td class="text-center"><button type="button" class="btn custom-detail-btn-blue">Detail</button></td>
                     </tr>
                     <tr>
