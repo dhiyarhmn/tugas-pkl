@@ -71,7 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <!-- Tambahkan formulir login di sini -->
->>>>>>> 8b58fa3c4075e5c7d0f5f8cbaff336ec989cf1f0
 
 <!DOCTYPE html>
 <html lang="en">
