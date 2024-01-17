@@ -69,12 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     loginUser($username, $password);
 }
 ?>
-
-<!-- Tambahkan formulir login di sini -->
-
-<!DOCTYPE html>
-<html lang="en">
-
+  
+  <!DOCTYPE html>
+  <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -94,20 +91,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="header">
     <div class="inner-header flex flex-col items-center justify-center h-screen">
         <div class="container">
-          <form class="form">
+        <form class="form" method="post" action="">
               <div class="form_front">
                 <div class="col-auto">
                   <img src="/Assets/img/logo3.png" class="img-fluid" style="max-width: 100px; height: auto;">  
                 </div>
                   <div class="form_details">Login</div>
-                    <input type="text" class="input" placeholder="Username">
-                    <input type="password" class="input" placeholder="Password">
-                  <div class="flex-column">
-                    <div class="remember-me">
-                      <input type="radio" />
-                      <label>Remember me</label>
-                    </div>
-                    <button class="forgot-password">Forgot password?</button>
+                    <input type="text" id="username" name="username" class="input" placeholder="Username" autocomplete="username">
+                    <input type="password" id="password" name="password" class="input" placeholder="Password" autocomplete="current-password">
+                    <div class="flex-column">
+                      <div class="remember-me">
+                          <input type="checkbox" id="remember-me"> <!-- Change type to 'checkbox' -->
+                          <label for="remember-me">Remember me</label> <!-- 'for' associates with checkbox -->
+                      </div>
+                      <button class="forgot-password">Forgot password?</button>
                   </div>
                   <button class="btn">Login</button>
               </div>
@@ -115,15 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
     </div>
   </div>
-        <?php
-          // Menampilkan pesan kesalahan jika terdapat kesalahan
-          if (!empty($error)) {
-              echo '<div class="text-red-500 text-center mt-2">' . $error . '</div>';
-          }
-        ?>
-      </form>
-    </div>
-  </div>
-</body>
-
+  <?php if (!empty($error)) : ?>
+        <div class="text-red-500 text-center mt-2"><?= $error ?></div>
+    <?php endif; ?>
+  </body>
 </html>
