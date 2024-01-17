@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url('/Assets/img/background7.jpeg'); /* Adjust the path as necessary */
+  background-image: url("/Assets/img/background9.jpeg"); /* Adjust the path as necessary */
   background-size: cover; /* Cover the entire page */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
@@ -26,12 +26,12 @@ body {
 } */
 .wrapper {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 #sidebar {
   width: 250px;
 
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0px;
   height: 100%;
@@ -73,7 +73,8 @@ body {
   color: #fff;
   background: #9bc4e2; /* warna navbar pas mousenya diarahin */
 }
-#sidebar ul li.active > a, a[aria-expanded="true"] {
+#sidebar ul li.active > a,
+a[aria-expanded="true"] {
   color: #fff;
   background: #160066; /* warna navbar pas dipencet mousenya */
 }
@@ -139,7 +140,7 @@ body {
 }
 .logout-button {
   width: 100%;
-  background-color: #7c0a02; 
+  background-color: #7c0a02;
   color: white;
   text-align: center;
   border: none;
@@ -165,7 +166,8 @@ body {
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
   transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
-.btn.custom-btn-blue:hover, .btn.custom-btn-blue:focus {
+.btn.custom-btn-blue:hover,
+.btn.custom-btn-blue:focus {
   background-color: #9bc4e2; /* Darker blue on hover/focus */
   box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); /* Deeper shadow on hover/focus */
 }
@@ -185,13 +187,13 @@ body {
   align-items: flex-start;
 }
 .approved-icon {
-color: #006b3c; /* Warna biru dengan kode #160066 */
+  color: #006b3c; /* Warna biru dengan kode #160066 */
 }
 .declined-icon {
-color: #7c0a02; /* Warna biru dengan kode #160066 */
+  color: #7c0a02; /* Warna biru dengan kode #160066 */
 }
 .on-process-icon {
-color: 	#eead0e; /* Warna biru dengan kode #160066 */
+  color: #eead0e; /* Warna biru dengan kode #160066 */
 }
 /* Responsive Text for 'PT. Daekyung Indah Heavy Industry' */
 .navbar-brand {
@@ -201,31 +203,33 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
 /* Media Queries */
 @media (max-width: 768px) {
   .navbar-brand {
-      font-size: 1.2rem; /* Smaller font size for smaller devices */
+    font-size: 1.2rem; /* Smaller font size for smaller devices */
   }
 
   #sidebar {
-      width: 100%; /* Full width sidebar on smaller screens */
-      left: 0;
+    width: 100%; /* Full width sidebar on smaller screens */
+    left: 0;
   }
 
   #content.shift {
-      padding-left: 0; /* Remove shift on smaller screens */
+    padding-left: 0; /* Remove shift on smaller screens */
   }
 
-  .larger-card, .sidebar-logout, .btn.custom-btn-blue {
-      width: 100%; /* Full width for cards and buttons on smaller screens */
-      padding: 15px; /* Adjust padding */
+  .larger-card,
+  .sidebar-logout,
+  .btn.custom-btn-blue {
+    width: 100%; /* Full width for cards and buttons on smaller screens */
+    padding: 15px; /* Adjust padding */
   }
 }
 
 @media (max-width: 100%) {
   .navbar-brand {
-      font-size: 1rem; /* Even smaller font size for very small devices */
+    font-size: 1rem; /* Even smaller font size for very small devices */
   }
 
   #sidebar.closed {
-      width: 100%; /* Full width sidebar when closed on very small screens */
+    width: 100%; /* Full width sidebar when closed on very small screens */
   }
 }
 .rounded-card {
@@ -242,7 +246,8 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
   transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
-.btn.custom-detail-btn-blue:hover, .btn.custom-detail-btn-blue:focus {
+.btn.custom-detail-btn-blue:hover,
+.btn.custom-detail-btn-blue:focus {
   background-color: #9bc4e2; /* Darker blue on hover/focus */
   box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); /* Deeper shadow on hover/focus */
 }
@@ -268,6 +273,9 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
   margin: auto; /* Menengahkan tabel */
   width: 1025px; /* Menyesuaikan lebar tabel */
   padding: 20px; /* Menambahkan padding */
+}
+#dataTable {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.8); /* Anda dapat menyesuaikan ukuran dan warna bayangan sesuai kebutuhan Anda */
 }
 .container {
   display: flex;
@@ -296,17 +304,13 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
   color: #000000;
   font-size: 15px;
   background-color: #b0b0b0;
-  box-shadow: 3px 3px 10px rgba(0,0,0,1),
-  -1px -1px 6px rgba(255, 255, 255, 0.4);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
 .input:focus {
   border: 2px solid transparent;
-  color: #fff;
-  box-shadow: 3px 3px 10px rgba(0,0,0,1),
-  -1px -1px 6px rgba(255, 255, 255, 0.4),
-  inset 3px 3px 10px rgba(0,0,0,1),
-  inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+  color: #000000;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4), inset 3px 3px 10px rgba(0, 0, 0, 1), inset -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
 .container .input:valid ~ .label,
@@ -318,13 +322,12 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
 
 .container .input:valid,
 .container .input:focus {
-  box-shadow: 3px 3px 10px rgba(0,0,0,1),
-  -1px -1px 6px rgba(255, 255, 255, 0.4),
-  inset 3px 3px 10px rgba(0,0,0,1),
-  inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4), inset 3px 3px 10px rgba(0, 0, 0, 1), inset -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
-/* css kotak di form pengajuan absensi */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+/* CSS KOTAK DI FORM PENGAJUAN ABSENSI */
+/* -------------------------------------------------------------------------------------------------------------------------- */
 .input-container {
   width: 100%; /* Mengatur lebar container input sesuai lebar card */
   padding: 0 15px; /* Penambahan padding jika diperlukan */
@@ -340,17 +343,41 @@ color: 	#eead0e; /* Warna biru dengan kode #160066 */
   margin: 60px 0; /* Margin tambahan ketika difokuskan */
 }
 
-/* css buat tanggal */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+/* CSS BUAT DATETIME PADA FORM PENGAJUAN */
+/* -------------------------------------------------------------------------------------------------------------------------- */
 /* Gaya untuk input date ketika placeholder ditampilkan */
-.input.placeholder-shown::-webkit-datetime-edit, 
-.input.placeholder-shown::-webkit-inner-spin-button, 
+.input.placeholder-shown::-webkit-datetime-edit,
+.input.placeholder-shown::-webkit-inner-spin-button,
 .input.placeholder-shown::-webkit-clear-button {
-    color: transparent;
+  color: transparent;
 }
 
 /* Gaya untuk input date ketika placeholder tidak ditampilkan */
-.input::-webkit-datetime-edit, 
-.input::-webkit-inner-spin-button, 
+.input::-webkit-datetime-edit,
+.input::-webkit-inner-spin-button,
 .input::-webkit-clear-button {
-    color: #000000; /* atau warna lain sesuai kebutuhan */
+  color: #000000; /* atau warna lain sesuai kebutuhan */
 }
+/* -------------------------------------------------------------------------------------------------------------------------- */
+/* CSS UNTUK BUTTON SUBMIT FORM PENGAJUAN */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+.button-submit {
+  color: #ffffff;
+  padding: 0.3em 1.5em;
+  font-size: 15px;
+  border-radius: 0.5em;
+  background:#160066;
+  cursor: pointer;
+  border: 1px solid #160066;
+  transition: all 0.3s;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.button-submit:active {
+  color: #b0b0b0;
+  box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+}
+/* -------------------------------------------------------------------------------------------------------------------------- */
+/* CSS UNTUK LOGIN */
+/* -------------------------------------------------------------------------------------------------------------------------- */

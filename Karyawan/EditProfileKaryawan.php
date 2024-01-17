@@ -43,13 +43,13 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li>
+            <li class="active">
                 <a href="EditProfileKaryawan.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
-            <li class="active">
+            <li>
                 <a href="PengajuanAbsensiKaryawan.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
@@ -83,14 +83,22 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
-                            <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
+                            <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
                             <form method="post">
                                 <div class="container input-container">
-                                    <input required="" type="text" name="nama" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="text" name="NIK" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">NIK</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="Nama" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Nama</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="text" name="Gender" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Gender</label>
+                                </div>
+                                <div class="container input-container">
+                                    <input required="" type="text" name="Departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Departemen</label>
                                 </div>
                                 <div class="container input-container">
@@ -98,43 +106,16 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                                     <label class="label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="date" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
+                                    <input required="" <input type='email' pattern=".+@*\.com" name="Email" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Email</label>
                                 </div>
                                 <div class="container input-container">
-                                    <select required="" name="jenis_absensi" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                        <option value=""></option>
-                                        <option value="A">Absent (Absen)</option>
-                                        <option value="P">Permit (Izin)</option>
-                                        <option value="L">Late (Terlambat)</option>
-                                        <option value="BT">Business Trip (Dinas)</option>
-                                        <option value="DL">Doctor Letter (Sakit dengan Surat Dokter)</option>
-                                        <option value="AL">Annual Leave (Cuti Tahunan)</option>
-                                        <option value="SBA">Sick By Accident (Sakit Akibat Kecelakaan Kerja)</option>
-                                        <option value="LP">Legal Permit (Izin Resmi)</option>
-                                        <option value="S">Suspend (Skors)</option>
-                                    </select>
-                                    <label class="label">Jenis Absensi</label>
+                                    <input required="" type="text" name="No HP" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">No HP</label>
                                 </div>
                                 <div class="container input-container">
-                                    <select required="" name="lama_periode_absensi" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                        <option value=""></option>
-                                        <option value="Hour">Hour</option>
-                                        <option value="Day">Day</option>
-                                    </select>
-                                    <label class="label">Lama Periode Absensi</label>
-                                </div>
-                                <div class="container input-container">
-                                    <input required="" type="datetime-local" name="periode_awal" class="input" id="periode_awal" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label for="periode_awal" class="label">Periode Awal</label>
-                                </div>
-                                <div class="container input-container">
-                                    <input required="" type="datetime-local" name="periode_akhir" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Periode Akhir</label>
-                                </div>
-                                <div class="container input-container">
-                                    <input required="" type="text" name="keterangan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Keterangan</label>
+                                    <input required="" type="text" name="Username" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <label class="label">Username</label>
                                 </div>
                                 <div class="container">
                                     <button class="button-submit" type="submit">Submit</button>

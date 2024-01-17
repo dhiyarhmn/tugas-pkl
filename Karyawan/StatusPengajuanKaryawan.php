@@ -130,24 +130,44 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                         <td><i class="fa fa-check-circle approved-icon" aria-hidden="true"></i> Approved</td>
                         <td>AL (Annual Leave)</td>
                         <td>01-10-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue">Detail</button></td>
+                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-times-circle declined-icon" aria-hidden="true"></i> Declined</td>
                         <td>DL (Doctor Letter)</td>
                         <td>26-09-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue">Detail</button></td>
+                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-exclamation-circle on-process-icon" aria-hidden="true"></i> On Process</td>
                         <td>L (Late)</td>
                         <td>01-10-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue">Detail</button></td>
+                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+<!-- Popup card detail -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Detail Absensi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Isi detail absensi akan ditampilkan di sini -->
+        <!-- Anda bisa menambahkan informasi absensi seperti jenis, tanggal, dan lainnya di sini -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Bootstrap and jQuery libraries -->
@@ -160,5 +180,6 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
 <script src="assets/demo/datatables-demo.js"></script>
 
 <script src="./js/script.js"></script>
+
 </body>
 </html>
