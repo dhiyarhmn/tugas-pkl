@@ -342,6 +342,17 @@ a[aria-expanded="true"] {
 .input-container.focused {
   margin: 60px 0; /* Margin tambahan ketika difokuskan */
 }
+.active-label {
+  /* Sesuaikan properti ini sesuai kebutuhan untuk mengatur posisi label */
+  transition: 0.3s;
+  padding-left: 0px;
+  transform: translateY(-35px);
+}
+.static-label {
+  transform: translateY(-35px); /* Atur sesuai dengan desain Anda */
+  font-size: 12px; /* Atur sesuai dengan desain Anda */
+  /* Tambahkan properti lain yang diperlukan */
+}
 
 /* -------------------------------------------------------------------------------------------------------------------------- */
 /* CSS BUAT DATETIME PADA FORM PENGAJUAN */
@@ -381,3 +392,4 @@ a[aria-expanded="true"] {
 /* -------------------------------------------------------------------------------------------------------------------------- */
 /* CSS UNTUK LOGIN */
 /* -------------------------------------------------------------------------------------------------------------------------- */
+

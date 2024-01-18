@@ -5,6 +5,7 @@ session_start();
 // Koneksi ke database (sesuaikan dengan detail koneksi Anda)
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
+
 if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
@@ -86,28 +87,28 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                             <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
                             <form method="post">
                                 <div class="container input-container">
-                                    <input required="" type="text" name="NIK" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">NIK</label>
+                                    <input required="" type="text" name="NIK" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">NIK</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Nama" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Nama</label>
+                                    <input required="" type="text" name="Nama" class="input" readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Nama</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Gender" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Gender</label>
+                                    <input required="" type="text" name="Departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Departemen</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Departemen</label>
+                                    <input required="" type="text" name="jabatan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="jabatan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Jabatan</label>
+                                    <input required="" type="text" name="Gender" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Gender</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" <input type='email' pattern=".+@*\.com" name="Email" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Email</label>
+                                  <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                  <label class="label" for="Email">Email</label>
                                 </div>
                                 <div class="container input-container">
                                     <input required="" type="text" name="No HP" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
@@ -118,7 +119,7 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                                     <label class="label">Username</label>
                                 </div>
                                 <div class="container">
-                                    <button class="button-submit" type="submit">Submit</button>
+                                    <button class="button-submit" type="submit">Save</button>
                                 </div>
                             </form>
                         </div>

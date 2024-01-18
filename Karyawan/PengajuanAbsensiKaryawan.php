@@ -1,13 +1,36 @@
 <?php
 session_start();
 
-
-// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
-    header("Location: /Login.php");
-    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+// Ambil data dari tabel Karyawan
+$queryKaryawan = "SELECT NamaLengkap, departemen, jabatan FROM Karyawan WHERE UserID = '{$_SESSION["UserID"]}'";
+$resultKaryawan = mysqli_query($koneksi, $queryKaryawan);
+$rowKaryawan = mysqli_fetch_assoc($resultKaryawan);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $NamaLengkap = $_POST["NamaLengkap"];
+    $departemen = $_POST["departemen"];
+    $jabatan = $_POST["jabatan"];
+    $tanggal_pengajuan = $_POST["tanggal_pengajuan"];
+    $jenis_absensi = $_POST["jenis_absensi"];
+    $lama_periode_absensi = $_POST["lama_periode_absensi"];
+    $periode_awal = $_POST["periode_awal"];
+    $periode_akhir = $_POST["periode_akhir"];
+    $keterangan = $_POST["keterangan"];
+
+    // Insert data into the "Absensi" table
+    $query = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai)
+              VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal', '$periode_akhir')";
+
+    if (mysqli_query($koneksi, $query)) {
+        // Redirect to the desired page after successfully inserting data
+        header("Location: StatusPengajuanKaryawan.php");
+        exit();
+    } else {
+        // Handle any errors that may occur during the database insert
+        echo "Error: " . mysqli_error($koneksi);
+    }
 }
 ?>
 
@@ -86,19 +109,19 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                             <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
                             <form method="post">
                                 <div class="container input-container">
-                                    <input required="" type="text" name="nama" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Nama</label>
+                                    <input required="" type="text" name="nama" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NamaLengkap']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Nama</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Departemen</label>
+                                    <input required="" type="text" name="departemen" class="input" value="<?php echo htmlspecialchars($rowKaryawan['departemen']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Departemen</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="jabatan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label">Jabatan</label>
+                                    <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowKaryawan['jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="date" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                <input required="" type="date" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
                                 </div>
                                 <div class="container input-container">
@@ -129,7 +152,7 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                                     <label for="periode_awal" class="label">Periode Awal</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="datetime-local" name="periode_akhir" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="datetime-local" name="periode_akhir" class="input" id="periode_akhir" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Periode Akhir</label>
                                 </div>
                                 <div class="container input-container">
