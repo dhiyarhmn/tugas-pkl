@@ -5,7 +5,7 @@ session_start();
 // Koneksi ke database (sesuaikan dengan detail koneksi Anda)
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
 }
@@ -40,27 +40,33 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="DashboardKaryawan.php">
+                <a href="DashboardManajer.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="EditProfileKaryawan.php">
+                <a href="EditProfileManajer.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="PengajuanAbsensiKaryawan.php">
+                <a href="PengajuanAbsensiManajer.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li class="active">
-                <a href="StatusPengajuanKaryawan.php">
+                <a href="StatusPengajuanManajer.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="ApprovalManajer.php">
+                    <i class="fa fa-check-square"></i> 
+                    <span>Approval</span>
                 </a>
             </li>
         </ul>

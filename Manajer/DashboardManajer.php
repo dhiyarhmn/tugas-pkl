@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-
 // Koneksi ke database (sesuaikan dengan detail koneksi Anda)
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
 }
@@ -22,16 +21,14 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
     <title>PT. Daekyung Indah Heavy Industry</title>
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-    <!-- Custom CSS -->
+    
+    <!-- Adjusted CSS link. Assuming 'style.css' is in the same directory as the PHP file -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/fonts.css"> 
 </head>
 <body>
-
-<div class="wrapper">
+    <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
             <button type="button" id="sidebarCollapse" class="btn">
@@ -39,28 +36,34 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
             </button>
         </div>
         <ul class="list-unstyled components">
-            <li>
-                <a href="DashboardKaryawan.php">
+            <li class="active">
+                <a href="DashboardManajer.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="EditProfileKaryawan.php">
+                <a href="EditProfileManajer.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="PengajuanAbsensiKaryawan.php">
+                <a href="PengajuanAbsensiManajer.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
-            <li class="active">
-                <a href="StatusPengajuanKaryawan.php">
+            <li>
+                <a href="StatusPengajuanManajer.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="ApprovalManajer.php">
+                    <i class="fa fa-check-square"></i> 
+                    <span>Approval</span>
                 </a>
             </li>
         </ul>
@@ -82,7 +85,7 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                 </div>
             </div>
             <div class="row justify-content-center mt-4 box-container">
-                <div class="col-auto mb-3 larger-card" style="margin-top: 75px;">
+                <div class="col-auto mb-3 larger-card" style="margin-top: 75px; ">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
@@ -115,71 +118,38 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
                         </div>
                     </div>
                 </div>
-            <div class="custom-table-container">
-                <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th class="text-center table-column">Status</th>
-                        <th class="text-center table-column">Jenis Absensi</th>
-                        <th class="text-center table-column">Tanggal Pengajuan</th>
-                        <th class="text-center detail-column">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><i class="fa fa-check-circle approved-icon" aria-hidden="true"></i> Approved</td>
-                        <td>AL (Annual Leave)</td>
-                        <td>01-10-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-times-circle declined-icon" aria-hidden="true"></i> Declined</td>
-                        <td>DL (Doctor Letter)</td>
-                        <td>26-09-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-exclamation-circle on-process-icon" aria-hidden="true"></i> On Process</td>
-                        <td>L (Late)</td>
-                        <td>01-10-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row justify-content-center mt-4 box-container">
+                <!-- Kotak Pengajuan Absensi -->
+                <div class="col-md-6 mb-3">
+                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
+                        <div class="card-body">
+                            <h5 class="card-title">Pengajuan Absensi</h5>
+                            <p class="card-text">Some sample content goes here.</p>
+                            <button type="button" class="btn custom-btn-blue" onclick="window.location.href='PengajuanAbsensiManajer.php'">Show More</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Kotak Status Pengajuan  -->
+                <div class="col-md-6">
+                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
+                        <div class="card-body">
+                            <h5 class="card-title">Status Pengajuan</h5>
+                            <p class="card-text">Some sample content goes here.</p>
+                            <button type="button" class="btn custom-btn-blue btn-large" onclick="window.location.href='StatusPengajuanManajer.php'">Show More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<!-- Popup card detail -->
-<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="detailModalLabel">Detail Pengajuan Absensi</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Isi detail pengajuan absensi akan ditampilkan di sini -->
-        <!-- Anda bisa menambahkan informasi absensi seperti jenis, tanggal, dan lainnya di sini -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-<script src="assets/demo/datatables-demo.js"></script>
-
-<script src="./js/script.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
+    <script src="./js/script.js"></script>
 </body>
 </html>

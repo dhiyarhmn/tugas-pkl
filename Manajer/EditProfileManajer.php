@@ -1,67 +1,14 @@
 <?php
 session_start();
 
-// Koneksi ke database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "pengajuanabsensi3";
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+$koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
+
+
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
-}
-
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Periksa koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-// Inisialisasi variabel rowKaryawan
-$rowKaryawan = null;
-
-// Cek apakah UserID ada di session
-if (isset($_SESSION['UserID'])) {
-    $userID = $_SESSION['UserID'];
-
-    // Ambil data karyawan dan username berdasarkan UserID
-    $queryGetDataKaryawan = "SELECT Karyawan.*, User.Username FROM Karyawan JOIN User ON Karyawan.UserID = User.UserID WHERE Karyawan.UserID = '$userID'";
-    $resultGetDataKaryawan = $conn->query($queryGetDataKaryawan);
-
-    if ($resultGetDataKaryawan->num_rows > 0) {
-        $rowKaryawan = $resultGetDataKaryawan->fetch_assoc();
-    }
-}
-
-// Cek apakah form telah disubmit
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ambil data dari formulir
-    $Email = $_POST["Email"];
-    $NoHP = $_POST["NoHP"];
-    $Username = $_POST["Username"];
-
-    if ($rowKaryawan) {
-        // Update data Karyawan
-        $sqlKaryawan = "UPDATE Karyawan SET Email = '$Email', NoHP = '$NoHP' WHERE UserID = '$userID'";
-
-        if ($conn->query($sqlKaryawan) === TRUE) {
-            echo "Data Karyawan berhasil diupdate.";
-        } else {
-            echo "Error: " . $sqlKaryawan . "<br>" . $conn->error;
-        }
-
-        // Update data User
-        $sqlUser = "UPDATE User SET Username = '$Username' WHERE UserID = '$userID'";
-        if ($conn->query($sqlUser) === TRUE) {
-            echo "Data User berhasil diupdate.";
-        } else {
-            echo "Error: " . $sqlUser . "<br>" . $conn->error;
-        }
-    }
-    // Tutup koneksi ke database
-    $conn->close();
 }
 ?>
 
@@ -92,27 +39,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="DashboardKaryawan.php">
+                <a href="DashboardManajer.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="active">
-                <a href="EditProfileKaryawan.php">
+                <a href="EditProfileManajer.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="PengajuanAbsensiKaryawan.php">
+                <a href="PengajuanAbsensiManajer.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li>
-                <a href="StatusPengajuanKaryawan.php">
+                <a href="StatusPengajuanManajer.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="ApprovalManajer.php">
+                    <i class="fa fa-check-square"></i> 
+                    <span>Approval</span>
                 </a>
             </li>
         </ul>
@@ -140,35 +93,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
                             <form method="post">
                                 <div class="container input-container">
-                                    <input required="" type="text" name="NIK" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NIK']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="NIK" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">NIK</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Nama" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NamaLengkap']); ?>" readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="Nama" class="input" readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Nama</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Departemen" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Departemen']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="Departemen" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Departemen</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="jabatan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Gender" class="input" value="<?php echo htmlspecialchars($rowKaryawan['JenisKelamin']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="Gender" class="input" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Gender</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
-                                    <label class="label" for="Email">Email</label>
+                                  <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                  <label class="label" for="Email">Email</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="NoHP" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NoHP'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="text" name="No HP" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">No HP</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Username" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Username'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="text" name="Username" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Username</label>
                                 </div>
                                 <div class="container">

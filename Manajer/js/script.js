@@ -59,6 +59,22 @@ function blurInput(element) {
 }
 
 // -------------------------------------------------------------------
+// JS BUAT KOTAK INPUT
+// -------------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".input-container .input").forEach(function (input) {
+    if (input.value !== "") {
+      input.nextElementSibling.classList.add("active-label");
+    }
+  });
+});
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".input-container .input[readonly]").forEach(function (input) {
+    input.nextElementSibling.classList.add("static-label");
+  });
+});
+
+// -------------------------------------------------------------------
 // JS BUAT DATETIME PADA FORM PENGAJUAN
 // -------------------------------------------------------------------
 function focusInput(inputElement) {
@@ -105,9 +121,8 @@ function focusDateTimeInput() {
 function focusDateTimeInput() {
   document.getElementById("periode_akhir").focus();
 }
-
 // -------------------------------------------------------------------
-// JS BUAT BUTTON DETAIL PADA STATUS PENGAJUAN
+// JS BUTTON DETAIL PADA STATUS PENGAJUAN DAN APPROVAL
 // -------------------------------------------------------------------
 $(document).ready(function () {
   // Fungsi untuk membuka popup ketika tombol detail diklik
@@ -126,35 +141,57 @@ $(document).ready(function () {
   $("#dataTable").DataTable();
 });
 
-// Fungsi untuk menampilkan data detail absensi
+// Fungsi untuk menampilkan data detail pengajuan absensi
 function showDetailModal(status, jenis, tanggal) {
   // Mengisi konten modal dengan data absensi
   var modalTitle = document.getElementById("detailModalLabel");
   var modalBody = document.querySelector(".modal-body");
 
-  modalTitle.textContent = "Detail Absensi - " + status;
+  modalTitle.textContent = "Detail Pengajuan Absensi - " + status;
   modalBody.innerHTML = "<p>Jenis Absensi: " + jenis + "</p>" + "<p>Tanggal Pengajuan: " + tanggal + "</p>";
 
   // Menampilkan modal
   $("#detailModal").modal("show");
 }
+// -------------------------------------------------------------------
+// JS BUTTON APPROVE
+// -------------------------------------------------------------------
+$(document).ready(function () {
+  $(".custom-approval-btn-green").click(function () {
+    var approveModalBody = document.querySelector("#approveModal .modal-body");
+    approveModalBody.textContent = "Pengajuan Absensi Berhasil Di Approve";
+    $("#approveModal").modal("show");
+
+    // Menyimpan referensi ke tombol
+    var button = $(this);
+
+    // Menghilangkan efek hover dan focus sejenak
+    button.removeClass("custom-approval-btn-green");
+
+    // Menunggu efek modal selesai
+    setTimeout(function () {
+      // Mengembalikan class dan warna asli
+      button.addClass("custom-approval-btn-green");
+    }, 100); // Anda bisa menyesuaikan waktu tunggu sesuai kebutuhan
+  });
+
+  $("#dataTable").DataTable();
+});
 
 // -------------------------------------------------------------------
-// JS BUAT KOTAK INPUT
+// JS BUTTON DECLINE
 // -------------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".input-container .input").forEach(function (input) {
-    if (input.value !== "") {
-      input.nextElementSibling.classList.add("active-label");
-    }
-  });
-});
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".input-container .input[readonly]").forEach(function (input) {
-    input.nextElementSibling.classList.add("static-label");
-  });
-});
+$(document).ready(function () {
+  // Corrected the class for the Approve button
+  $(".custom-decline-btn-red").click(function () {
+    // Menampilkan pesan sukses pada modal
+    var declineModalBody = document.querySelector("#declineModal .modal-body");
+    declineModalBody.textContent = "Pengajuan Absensi Berhasil Di Decline";
 
-// -------------------------------------------------------------------
-// JS BUAT ...
-// -------------------------------------------------------------------
+    // Menampilkan modal
+    $("#declineModal").modal("show");
+  });
+
+  // Initialize DataTable
+  $("#dataTable").DataTable();
+});

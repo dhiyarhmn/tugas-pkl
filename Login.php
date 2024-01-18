@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="" />
   <meta name="author" content="" />
-  <title>Halaman Login</title>
+  <title>PT. Daekyung Indah Heavy Industry</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="/css/style.css"> 
@@ -97,13 +97,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <img src="/Assets/img/logo3.png" class="img-fluid" style="max-width: 100px; height: auto;">  
                 </div>
                   <div class="form_details">Login</div>
-                    <input type="text" id="username" name="username" class="input" placeholder="Username" autocomplete="username">
-                    <input type="password" id="password" name="password" class="input" placeholder="Password" autocomplete="current-password">
-                    <div class="flex-column">
-                      <div class="remember-me">
-                          <input type="checkbox" id="remember-me"> <!-- Change type to 'checkbox' -->
-                          <label for="remember-me">Remember me</label> <!-- 'for' associates with checkbox -->
-                      </div>
+                    <input required="" type="text" id="username" name="username" class="input" placeholder="Username" autocomplete="username">
+                    <input required="" type="password" id="password" name="password" class="input" placeholder="Password" autocomplete="current-password">
+                    <div class="flex-column" >
                       <button class="forgot-password">Forgot password?</button>
                   </div>
                   <button class="btn">Login</button>
