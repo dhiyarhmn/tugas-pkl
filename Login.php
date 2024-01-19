@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="inner-header flex flex-col items-center justify-center h-screen">
         <div class="container">
         <form class="form" method="post" action="">
-              <div class="form_front">
+          <div class="form_front login-box">
                 <div class="col-auto">
                   <img src="/Assets/img/logo3.png" class="img-fluid" style="max-width: 100px; height: auto;">  
                 </div>

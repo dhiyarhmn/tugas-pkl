@@ -3,15 +3,16 @@ session_start();
 
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-// Ambil data dari tabel Manajer
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
+    header("Location: /Login.php");
+    exit(); 
+}
+
 $queryManajer = "SELECT NamaLengkap, departemen, jabatan FROM Manajer WHERE UserID = '{$_SESSION["UserID"]}'";
 $resultManajer = mysqli_query($koneksi, $queryManajer);
 $rowManajer = mysqli_fetch_assoc($resultManajer);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $NamaLengkap = $_POST["NamaLengkap"];
-    $departemen = $_POST["departemen"];
-    $jabatan = $_POST["jabatan"];
     $tanggal_pengajuan = $_POST["tanggal_pengajuan"];
     $jenis_absensi = $_POST["jenis_absensi"];
     $lama_periode_absensi = $_POST["lama_periode_absensi"];
@@ -19,16 +20,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $periode_akhir = $_POST["periode_akhir"];
     $keterangan = $_POST["keterangan"];
 
-    // Insert data into the "Absensi" table
-    $query = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai)
-              VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal', '$periode_akhir')";
+    $berkas = '';
+    $upload_dir = "BerkasManajer/"; // Adjusted path
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
+    }
 
-    if (mysqli_query($koneksi, $query)) {
-        // Redirect to the desired page after successfully inserting data
-        header("Location: StatusPengajuanManajer.php");
-        exit();
+    if (isset($_FILES["Berkas"]) && $_FILES["Berkas"]["error"] == 0) {
+        $file_name = $_FILES["Berkas"]["name"];
+        $file_tmp = $_FILES["Berkas"]["tmp_name"];
+
+        $file_path = $upload_dir . $file_name;
+
+        if (move_uploaded_file($file_tmp, $file_path)) {
+            $berkas = $file_path;
+        } else {
+            echo "Error: Gagal meng-upload file.";
+            exit();
+        }
+    }
+
+    // Insert data into the "Absensi" table
+    $queryAbsensi = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai, Berkas)
+                    VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal', '$periode_akhir', '$berkas')";
+
+    if (mysqli_query($koneksi, $queryAbsensi)) {
+        $absensiID = mysqli_insert_id($koneksi);
+
+        // Retrieve the AlurPersetujuanID for the logged-in user's role
+        $role = $_SESSION["Role"];
+        $queryAlurPersetujuan = "SELECT AlurPersetujuanID FROM AlurPersetujuan WHERE Role = '$role'";
+        $resultAlurPersetujuan = mysqli_query($koneksi, $queryAlurPersetujuan);
+
+        if ($rowAlurPersetujuan = mysqli_fetch_assoc($resultAlurPersetujuan)) {
+            $alurPersetujuanID = $rowAlurPersetujuan['AlurPersetujuanID'];
+
+            // Define PersetujuanAbsensi information
+            $statusPersetujuan = 'On Process';
+            $tanggalPersetujuan = date('Y-m-d');
+            $tahapanSaatIni = 1;
+
+            // Insert data into PersetujuanAbsensi table using the retrieved AlurPersetujuanID
+            $queryPersetujuan = "INSERT INTO PersetujuanAbsensi (AbsensiID, UserID, StatusPersetujuan, TanggalPersetujuan, AlurPersetujuanID, TahapanSaatIni) 
+                                 VALUES ('$absensiID', '{$_SESSION["UserID"]}', '$statusPersetujuan', '$tanggalPersetujuan', '$alurPersetujuanID', '$tahapanSaatIni')";
+
+            if (mysqli_query($koneksi, $queryPersetujuan)) {
+                header("Location: StatusPengajuanManajer.php");
+                exit();
+            } else {
+                echo "Error: " . mysqli_error($koneksi);
+            }
+        } else {
+            echo "Error: Unable to find AlurPersetujuanID for the role";
+        }
     } else {
-        // Handle any errors that may occur during the database insert
         echo "Error: " . mysqli_error($koneksi);
     }
 }
@@ -113,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
-                            <form method="post">
+                            <form method="post" action="" enctype="multipart/form-data">
                                 <div class="container input-container">
                                     <input required="" type="text" name="nama" class="input" value="<?php echo htmlspecialchars($rowManajer['NamaLengkap']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Nama</label>
@@ -131,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
                                 </div>
                                 <div class="container input-container">
-                                    <select required="" name="jenis_absensi" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <select required="" name="jenis_absensi" class="input" id="jenis_absensi" onfocus="focusInput(this)" onblur="blurInput(this)">
                                         <option value=""></option>
                                         <option value="A">Absent (Absen)</option>
                                         <option value="P">Permit (Izin)</option>
@@ -145,11 +190,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </select>
                                     <label class="label">Jenis Absensi</label>
                                 </div>
-                                <div class="container input-container">
-                                    <label
-                                        class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                    </label>
-                                    <input class="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium" type="file" id="picture"/>
+                                <div class="container input-container" id="fileContainer" style="display: none;">
+                                    <input required="" class="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium" type="file" name="Berkas" id="picture"/>
                                 </div>
                                 <div class="container input-container">
                                     <select required="" name="lama_periode_absensi" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">

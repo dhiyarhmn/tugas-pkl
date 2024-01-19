@@ -97,6 +97,7 @@ h1 {
   border-radius: 15px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6), /* Bayangan luar untuk efek menonjol keluar */ -5px -5px 15px rgba(255, 255, 255, 0.5); /* Bayangan terang untuk memberi efek dimensi */
   background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  backdrop-filter: blur(10px); /* Nilai blur dapat disesuaikan */
   color: black; /* Mengatur warna teks menjadi hitam untuk kontras yang lebih baik */
 }
 

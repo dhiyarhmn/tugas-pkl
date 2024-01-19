@@ -9,6 +9,17 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
 }
+
+// Menyiapkan query untuk mengambil data proses persetujuan absensi
+$query = "SELECT a.AbsensiID, a.TanggalPengajuan, a.NamaJenisAbsensi, pa.StatusPersetujuan, pa.TahapanSaatIni, ap.NamaAlur
+          FROM Absensi a
+          JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+          JOIN AlurPersetujuan ap ON pa.AlurPersetujuanID = ap.AlurPersetujuanID
+          WHERE a.UserID = ".$_SESSION["UserID"]."
+          ORDER BY a.TanggalPengajuan DESC";
+
+$result = mysqli_query($koneksi, $query);
+
 ?>
 
 <!DOCTYPE html>
@@ -132,24 +143,19 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><i class="fa fa-check-circle approved-icon" aria-hidden="true"></i> Approved</td>
-                        <td>AL (Annual Leave)</td>
-                        <td>01-10-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-times-circle declined-icon" aria-hidden="true"></i> Declined</td>
-                        <td>DL (Doctor Letter)</td>
-                        <td>26-09-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-exclamation-circle on-process-icon" aria-hidden="true"></i> On Process</td>
-                        <td>L (Late)</td>
-                        <td>01-10-2023</td>
-                        <td class="text-center"><button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button></td>
-                    </tr>
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                        <tr>
+                            <td>
+                                <i class="fa <?php echo ($row['StatusPersetujuan'] == 'Approved') ? 'fa-check-circle approved-icon' : (($row['StatusPersetujuan'] == 'Declined') ? 'fa-times-circle declined-icon' : 'fa-exclamation-circle on-process-icon'); ?>" aria-hidden="true"></i>
+                                <?php echo $row['StatusPersetujuan']; ?>
+                            </td>
+                            <td><?php echo $row['NamaJenisAbsensi']; ?></td>
+                            <td><?php echo $row['TanggalPengajuan']; ?></td>
+                            <td class="text-center">
+                                <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal" onclick="showDetail(<?php echo $row['AbsensiID']; ?>)">Detail</button>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
@@ -160,13 +166,13 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="detailModalLabel">Detail Pengajuan Absensi</h5>
+        <h5 class="modal-title" id="detailModalLabel">Detail Absensi</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <!-- Isi detail pengajuan absensi akan ditampilkan di sini -->
+        <!-- Isi detail absensi akan ditampilkan di sini -->
         <!-- Anda bisa menambahkan informasi absensi seperti jenis, tanggal, dan lainnya di sini -->
       </div>
       <div class="modal-footer">
@@ -178,14 +184,17 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
 
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 <script src="assets/demo/datatables-demo.js"></script>
 
 <script src="./js/script.js"></script>
 
+<script src="./js/detailAbsensi.js"></script>
 </body>
+
 </html>

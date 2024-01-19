@@ -195,3 +195,17 @@ $(document).ready(function () {
   // Initialize DataTable
   $("#dataTable").DataTable();
 });
+
+// -------------------------------------------------------------------
+// JS BUAT CHOOSE FILE
+// -------------------------------------------------------------------
+document.getElementById('jenis_absensi').addEventListener('change', function() {
+  var selectedValue = this.value;
+  var fileContainer = document.getElementById('fileContainer');
+
+  if (selectedValue === 'BT' || selectedValue === 'DL' || selectedValue === 'SBA' || selectedValue === 'LP') {
+      fileContainer.style.display = 'block';
+  } else {
+      fileContainer.style.display = 'none';
+  }
+});
