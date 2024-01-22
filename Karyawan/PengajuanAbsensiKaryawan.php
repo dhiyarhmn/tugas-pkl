@@ -180,7 +180,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                     <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                <input required="" type="date" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="datetime-local" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)" readonly>
                                     <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
                                 </div>
                                 <div class="container input-container">
@@ -233,9 +233,9 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
     </div>
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
     <script src="./js/script.js"></script>
 </body>

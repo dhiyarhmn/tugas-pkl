@@ -186,7 +186,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                     <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                <input required="" type="date" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="datetime-local" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)" readonly>
                                     <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
                                 </div>
                                 <div class="container input-container">

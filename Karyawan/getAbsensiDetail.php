@@ -14,15 +14,18 @@ if (!$koneksi) {
 if(isset($_POST['id'])) {
     $absensiId = mysqli_real_escape_string($koneksi, $_POST['id']);
 
-    // Query untuk mendapatkan detail absensi dan informasi tahapan persetujuan
+    // Query untuk mendapatkan detail absensi, informasi tahapan persetujuan, departemen, jabatan, dan NIK pengguna
     $query = "SELECT a.AbsensiID, a.TanggalPengajuan, a.NamaJenisAbsensi, a.Keterangan, 
               a.PeriodeAbsensi, a.WaktuPeriodeAbsensiMulai, a.WaktuPeriodeAbsensiSelesai, 
               pa.StatusPersetujuan, pa.TanggalPersetujuan, pa.TahapanSaatIni, 
-              dap.RolePersetujuan, ap.NamaAlur
+              dap.RolePersetujuan, ap.NamaAlur,
+              karyawan.Departemen, karyawan.Jabatan, karyawan.NIK
               FROM Absensi a
               LEFT JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
               LEFT JOIN AlurPersetujuan ap ON pa.AlurPersetujuanID = ap.AlurPersetujuanID
               LEFT JOIN DetailAlurPersetujuan dap ON ap.AlurPersetujuanID = dap.AlurPersetujuanID AND pa.TahapanSaatIni = dap.Tahapan
+              LEFT JOIN User u ON a.UserID = u.UserID
+              LEFT JOIN Karyawan karyawan ON u.UserID = karyawan.UserID
               WHERE a.AbsensiID = '$absensiId'";
 
     $result = mysqli_query($koneksi, $query);

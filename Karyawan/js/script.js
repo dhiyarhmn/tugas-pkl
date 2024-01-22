@@ -37,11 +37,13 @@ $(".logout-button").on("click", function () {
 // -------------------------------------------------------------------
 function focusInput(element) {
   element.parentElement.classList.add("focused");
+  element.style.backgroundColor = "#fff"; // Example style
 }
 
 function blurInput(element) {
   if (element.value === "") {
     element.parentElement.classList.remove("focused");
+    element.style.backgroundColor = ""; // Reset to default
   }
 }
 function updateInput(value) {
@@ -161,10 +163,25 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById('jenis_absensi').addEventListener('change', function() {
   var selectedValue = this.value;
   var fileContainer = document.getElementById('fileContainer');
+  var fileInput = document.getElementById('picture');
 
-  if (selectedValue === 'BT' || selectedValue === 'DL' || selectedValue === 'SBA' || selectedValue === 'LP') {
+  if (['BT', 'DL', 'SBA', 'LP'].includes(selectedValue)) {
       fileContainer.style.display = 'block';
+      fileInput.required = true;
   } else {
       fileContainer.style.display = 'none';
+      fileInput.required = false;
   }
+});
+
+// JS BUAT DATETIME TANGGAL PENGAJUAN
+document.addEventListener('DOMContentLoaded', function() {
+  var now = new Date();
+  var month = ('0' + (now.getMonth() + 1)).slice(-2); // Bulan dimulai dari 0
+  var day = ('0' + now.getDate()).slice(-2);
+  var hours = ('0' + now.getHours()).slice(-2);
+  var minutes = ('0' + now.getMinutes()).slice(-2);
+  var formattedNow = now.getFullYear() + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+  document.getElementById('tanggal_pengajuan').value = formattedNow;
 });

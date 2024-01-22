@@ -186,7 +186,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                           
                                         </form>
                                         <div style='text-align: center; margin-top: 10px;'>
-                                          <button type='button' class='btn custom-detail-btn-blue' data-toggle='modal' data-target='#detailModal'>Detail</button>
+                                            <button type='button' class='btn custom-detail-btn-blue' onclick='showDetail({$row['AbsensiID']})'>Detail</button>
                                         </div>
                                     </td>
                                   </tr>";
@@ -261,7 +261,6 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 <script src="assets/demo/datatables-demo.js"></script>
