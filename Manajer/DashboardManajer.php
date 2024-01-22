@@ -8,6 +8,15 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
 }
+
+// buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// Adjust this query based on your actual database schema
+$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Jabatan, User.ProfilePhoto 
+                     FROM Manajer
+                     JOIN User ON Manajer.UserID = User.UserID
+                     WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
+$userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
+$userDetails = mysqli_fetch_assoc($userDetailsResult);
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +41,13 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     <nav id="sidebar">
         <div class="sidebar-header">
             <button type="button" id="sidebarCollapse" class="btn">
-                <i class="fas fa-bars"></i> <!-- Ikon hamburger -->
+                <i class="fas fa-bars"></i>
             </button>
+            <div style="text-align: center; margin-top: 30px;">
+                <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
+              </div>
         </div>
         <ul class="list-unstyled components">
             <li class="active">

@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+$koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
+
 // Koneksi ke database
 $servername = "localhost";
 $username = "root";
@@ -47,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sqlManajer = "UPDATE Manajer SET Email = '$Email', NoHP = '$NoHP' WHERE UserID = '$userID'";
 
         if ($conn->query($sqlManajer) === TRUE) {
-            echo "Data Manajer berhasil diupdate.";
+            echo "";
         } else {
             echo "Error: " . $sqlManajer . "<br>" . $conn->error;
         }
@@ -55,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Update data User
         $sqlUser = "UPDATE User SET Username = '$Username' WHERE UserID = '$userID'";
         if ($conn->query($sqlUser) === TRUE) {
-            echo "Data User berhasil diupdate.";
+            echo "";
         } else {
             echo "Error: " . $sqlUser . "<br>" . $conn->error;
         }
@@ -63,6 +66,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Tutup koneksi ke database
     $conn->close();
 }
+
+// buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// Adjust this query based on your actual database schema
+$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Jabatan, User.ProfilePhoto 
+                     FROM Manajer
+                     JOIN User ON Manajer.UserID = User.UserID
+                     WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
+$userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
+$userDetails = mysqli_fetch_assoc($userDetailsResult);
 ?>
 
 <!DOCTYPE html>
@@ -87,8 +99,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <nav id="sidebar">
         <div class="sidebar-header">
             <button type="button" id="sidebarCollapse" class="btn">
-                <i class="fas fa-bars"></i> <!-- Ikon hamburger -->
+                <i class="fas fa-bars"></i>
             </button>
+            <div style="text-align: center; margin-top: 30px;">
+                <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
+              </div>
         </div>
         <ul class="list-unstyled components">
             <li>
@@ -113,6 +130,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="StatusPengajuanManajer.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="ApprovalManajer.php">
+                    <i class="fa fa-check-square"></i> 
+                    <span>Approval</span>
                 </a>
             </li>
         </ul>

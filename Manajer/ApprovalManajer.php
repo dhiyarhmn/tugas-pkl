@@ -1,14 +1,63 @@
 <?php
 session_start();
 
-
-// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+// Koneksi ke database
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
 if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     header("Location: /Login.php");
-    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+    exit();
 }
+
+// Fungsi untuk menangani persetujuan atau penolakan
+function handleApplication($absensiID, $status) {
+    global $koneksi;
+
+    // Cek tahapan saat ini dan jumlah total tahapan
+    $queryTahapan = "SELECT p.TahapanSaatIni, a.JumlahTahapan 
+                    FROM PersetujuanAbsensi p
+                    JOIN AlurPersetujuan a ON p.AlurPersetujuanID = a.AlurPersetujuanID 
+                    WHERE p.AbsensiID = '$absensiID'";
+    $resultTahapan = mysqli_query($koneksi, $queryTahapan);
+    $dataTahapan = mysqli_fetch_assoc($resultTahapan);
+
+    if ($dataTahapan) {
+        $tahapanSaatIni = $dataTahapan['TahapanSaatIni'];
+        $jumlahTahapan = $dataTahapan['JumlahTahapan'];
+
+        if ($tahapanSaatIni < $jumlahTahapan) {
+            $statusBaru = ($status == 'Approved') ? 'On Process' : 'Declined';
+            $tahapanSelanjutnya = $tahapanSaatIni + 1;
+            $queryUpdate = "UPDATE PersetujuanAbsensi 
+                            SET StatusPersetujuan = '$statusBaru', TahapanSaatIni = '$tahapanSelanjutnya' 
+                            WHERE AbsensiID = '$absensiID'";
+        } else {
+            $queryUpdate = "UPDATE PersetujuanAbsensi 
+                            SET StatusPersetujuan = '$status', TahapanSaatIni = '$tahapanSaatIni' 
+                            WHERE AbsensiID = '$absensiID'";
+        }
+
+        mysqli_query($koneksi, $queryUpdate);
+    }
+}
+
+// Cek jika ada form yang disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['approve'])) {
+        handleApplication($_POST['absensiID'], 'Approved');
+    } elseif (isset($_POST['decline'])) {
+        handleApplication($_POST['absensiID'], 'Declined');
+    }
+}
+
+// buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// Adjust this query based on your actual database schema
+$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Jabatan, User.ProfilePhoto 
+                     FROM Manajer
+                     JOIN User ON Manajer.UserID = User.UserID
+                     WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
+$userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
+$userDetails = mysqli_fetch_assoc($userDetailsResult);
 ?>
 
 <!DOCTYPE html>
@@ -35,8 +84,13 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     <nav id="sidebar">
         <div class="sidebar-header">
             <button type="button" id="sidebarCollapse" class="btn">
-                <i class="fas fa-bars"></i> <!-- Ikon hamburger -->
+                <i class="fas fa-bars"></i>
             </button>
+            <div style="text-align: center; margin-top: 30px;">
+                <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
+              </div>
         </div>
         <ul class="list-unstyled components">
             <li>
@@ -90,78 +144,58 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
             
             <div class="custom-table-container">
                 <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th class="text-center table-column" style="width: 20px;">No</th>
-                        <th class="text-center table-column">Nama</th>
-                        <th class="text-center table-column">NIK</th>
-                        <th class="text-center table-column">Jenis Absensi</th>
-                        <th class="text-center table-column" style="width: 20px;">Tanggal Pengajuan</th>
-                        <th class="text-center table-column">Berkas</th>
-                        <th class="text-center detail-column" style="width: 50px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">1</td>
-                        <td>Puti Dhiya</td>
-                        <td>24060121140173</td>
-                        <td>AL (Annual Leave)</td>
-                        <td>26-09-2023</td>
-                        <td class="text-center">bukti.pdf</td>
-                        <td>
-                            <div class="button-row">
-                              <button type="button" class="btn custom-approval-btn-green" data-toggle="modal" data-target="#approveModal">Approve</button>
-                              <button type="button" class="btn custom-decline-btn-red" data-toggle="modal" data-target="#declineModal">Decline</button>
-                            </div>
+                    <thead>
+                        <tr>
+                            <th class="text-center table-column">No</th>
+                            <th class="text-center table-column">Nama</th>
+                            <th class="text-center table-column">NIK</th>
+                            <th class="text-center table-column">Jenis Absensi</th>
+                            <th class="text-center table-column">Tanggal Pengajuan</th>
+                            <th class="text-center table-column">Berkas</th>
+                            <th class="text-center table-column">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $query = "SELECT a.AbsensiID, k.NamaLengkap, k.NIK, a.NamaJenisAbsensi, a.TanggalPengajuan, a.Berkas 
+                                  FROM Absensi a 
+                                  JOIN Karyawan k ON a.UserID = k.UserID 
+                                  JOIN PersetujuanAbsensi p ON a.AbsensiID = p.AbsensiID
+                                  JOIN DetailAlurPersetujuan d ON p.AlurPersetujuanID = d.AlurPersetujuanID
+                                  WHERE p.StatusPersetujuan = 'On Process' 
+                                    AND d.AlurPersetujuanID = 1 
+                                    AND d.RolePersetujuan = 'Manajer'";
+                        $result = mysqli_query($koneksi, $query);
+                        $no = 1;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            // Membuat link ke berkas
+                            $berkasLink = !empty($row['Berkas']) ? "<a href='/Karyawan/{$row['Berkas']}' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
 
-                            <!-- Wrapper for the lower row of buttons (Detail) -->
-                            <div style="text-align: center;">
-                              <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button>
-                          </div>
-                      </td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">2</td>
-                        <td>Satria</td>
-                        <td>24060121140099</td>
-                        <td>Late (Terlambat)</td>
-                        <td>06-09-2023</td>
-                        <td class="text-center">bukti.pdf</td>
-                        <td>
-                            <div class="button-row">
-                              <button type="button" class="btn custom-approval-btn-green" data-toggle="modal" data-target="#approveModal">Approve</button>
-                              <button type="button" class="btn custom-decline-btn-red" data-toggle="modal" data-target="#declineModal">Decline</button>
-                            </div>
-
-                            <!-- Wrapper for the lower row of buttons (Detail) -->
-                            <div style="text-align: center;">
-                              <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button>
-                          </div>
-                      </td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">3</td>
-                        <td>Pusat</td>
-                        <td>24060121140040</td>
-                        <td>Legal Permit (Izin Resmi)</td>
-                        <td>10-01-2023</td>
-                        <td class="text-center">bukti.pdf</td>
-                        <td>
-                            <div class="button-row">
-                              <button type="button" class="btn custom-approval-btn-green" data-toggle="modal" data-target="#approveModal">Approve</button>
-                              <button type="button" class="btn custom-decline-btn-red" data-toggle="modal" data-target="#declineModal">Decline</button>
-                            </div>
-
-                            <!-- Wrapper for the lower row of buttons (Detail) -->
-                            <div style="text-align: center;">
-                              <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal">Detail</button>
-                          </div>
-                      </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                            echo "<tr>
+                                    <td class='text-center'>{$no}</td>
+                                    <td>{$row['NamaLengkap']}</td>
+                                    <td>{$row['NIK']}</td>
+                                    <td>{$row['NamaJenisAbsensi']}</td>
+                                    <td>{$row['TanggalPengajuan']}</td>
+                                    <td class='text-center'>{$berkasLink}</td>
+                                    <td>
+                                        <form method='post'>
+                                          <input type='hidden' name='absensiID' value='{$row['AbsensiID']}'>
+                                          <button type='submit' name='approve' class='btn custom-approval-btn-green' data-toggle='modal'>Approve</button>
+                                          <button type='submit' name='decline' class='btn custom-decline-btn-red' data-toggle='modal'>Decline</button>
+                                          
+                                        </form>
+                                        <div style='text-align: center; margin-top: 10px;'>
+                                          <button type='button' class='btn custom-detail-btn-blue' data-toggle='modal' data-target='#detailModal'>Detail</button>
+                                        </div>
+                                    </td>
+                                  </tr>";
+                            $no++;
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
     </div>
 </div>
 <!-- Popup card detail -->
@@ -231,7 +265,9 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 <script src="assets/demo/datatables-demo.js"></script>
+<script src="js/datatables-demo.js"></script>
 
+<script src="./js/detailAbsensi.js"></script>
 <script src="./js/script.js"></script>
 
 </body>

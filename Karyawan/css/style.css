@@ -39,6 +39,10 @@ body {
   align-items: center;
   height: 150px;
 }
+#sidebar.closed div h3 {
+  display: none;
+}
+
 #sidebar ul.components {
   padding: 20px 0;
   border-bottom: 1px solid #818181;
@@ -292,7 +296,7 @@ a[aria-expanded="true"] {
   border-radius: 6px;
   color: #000000;
   font-size: 15px;
-  background-color: #b0b0b0;
+  background-color: #d9d9d9;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
