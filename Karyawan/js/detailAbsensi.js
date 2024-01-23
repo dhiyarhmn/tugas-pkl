@@ -35,6 +35,7 @@ function showDetail(absensiId) {
       // Mengisi modal dengan data dari response
       $("#detailModalLabel").text("Detail Absensi");
       let modalBody = `
+        <p><strong>AbsensiID:</strong> ${response.AbsensiID}</p>
         <p><strong>Departemen:</strong> ${response.Departemen}</p>
         <p><strong>Jabatan:</strong> ${response.Jabatan}</p>
         <p><strong>Tanggal Pengajuan:</strong> ${response.TanggalPengajuan}</p>

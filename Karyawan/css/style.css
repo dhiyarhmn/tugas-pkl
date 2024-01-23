@@ -37,7 +37,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 150px;
+  height: 180px;
 }
 #sidebar.closed div h3 {
   display: none;
@@ -382,3 +382,5 @@ a[aria-expanded="true"] {
   color: #b0b0b0;
   box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
 }
+
+/* CSS GANTI FOTO PROFILE */

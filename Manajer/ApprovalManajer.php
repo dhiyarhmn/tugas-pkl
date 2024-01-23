@@ -10,6 +10,7 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
 }
 
 // Fungsi untuk menangani persetujuan atau penolakan
+// Fungsi untuk menangani persetujuan atau penolakan
 function handleApplication($absensiID, $status) {
     global $koneksi;
 
@@ -25,19 +26,30 @@ function handleApplication($absensiID, $status) {
         $tahapanSaatIni = $dataTahapan['TahapanSaatIni'];
         $jumlahTahapan = $dataTahapan['JumlahTahapan'];
 
-        if ($tahapanSaatIni < $jumlahTahapan) {
-            $statusBaru = ($status == 'Approved') ? 'On Process' : 'Declined';
-            $tahapanSelanjutnya = $tahapanSaatIni + 1;
+        if ($status == 'Approved') {
+            // Cek apakah ini tahapan terakhir
+            if ($tahapanSaatIni < $jumlahTahapan) {
+                // Jika bukan tahapan terakhir, increment TahapanSaatIni
+                // dan tetapkan status ke 'On Process'
+                $tahapanSaatIni++;
+                $queryUpdate = "UPDATE PersetujuanAbsensi 
+                                SET TahapanSaatIni = '$tahapanSaatIni', StatusPersetujuan = 'On Process'
+                                WHERE AbsensiID = '$absensiID'";
+                mysqli_query($koneksi, $queryUpdate);
+            } else {
+                // Jika ini adalah tahapan terakhir, set status menjadi 'Approved'
+                $queryUpdate = "UPDATE PersetujuanAbsensi 
+                                SET StatusPersetujuan = 'Approved' 
+                                WHERE AbsensiID = '$absensiID'";
+                mysqli_query($koneksi, $queryUpdate);
+            }
+        } elseif ($status == 'Declined') {
+            // Jika ditolak, set status menjadi 'Declined'
             $queryUpdate = "UPDATE PersetujuanAbsensi 
-                            SET StatusPersetujuan = '$statusBaru', TahapanSaatIni = '$tahapanSelanjutnya' 
+                            SET StatusPersetujuan = 'Declined' 
                             WHERE AbsensiID = '$absensiID'";
-        } else {
-            $queryUpdate = "UPDATE PersetujuanAbsensi 
-                            SET StatusPersetujuan = '$status', TahapanSaatIni = '$tahapanSaatIni' 
-                            WHERE AbsensiID = '$absensiID'";
+            mysqli_query($koneksi, $queryUpdate);
         }
-
-        mysqli_query($koneksi, $queryUpdate);
     }
 }
 
@@ -50,14 +62,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// -------------------------------------------------------------------
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Jabatan, User.ProfilePhoto 
+$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Departemen, Manajer.Jabatan, User.ProfilePhoto 
                      FROM Manajer
                      JOIN User ON Manajer.UserID = User.UserID
                      WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
+$manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
 ?>
 
 <!DOCTYPE html>
@@ -89,8 +104,9 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             <div style="text-align: center; margin-top: 30px;">
                 <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
-                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
-              </div>
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
+            </div>
         </div>
         <ul class="list-unstyled components">
             <li>
@@ -156,21 +172,24 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $query = "SELECT a.AbsensiID, k.NamaLengkap, k.NIK, a.NamaJenisAbsensi, a.TanggalPengajuan, a.Berkas 
-                                  FROM Absensi a 
-                                  JOIN Karyawan k ON a.UserID = k.UserID 
-                                  JOIN PersetujuanAbsensi p ON a.AbsensiID = p.AbsensiID
-                                  JOIN DetailAlurPersetujuan d ON p.AlurPersetujuanID = d.AlurPersetujuanID
-                                  WHERE p.StatusPersetujuan = 'On Process' 
-                                    AND d.AlurPersetujuanID = 1 
-                                    AND d.RolePersetujuan = 'Manajer'";
-                        $result = mysqli_query($koneksi, $query);
-                        $no = 1;
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            // Membuat link ke berkas
-                            $berkasLink = !empty($row['Berkas']) ? "<a href='/Karyawan/{$row['Berkas']}' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
+                    <?php
+                          // Query to get only those approval requests that meet the specific criteria
+                          $query = "SELECT a.AbsensiID, k.NamaLengkap, k.NIK, ja.NamaJenisAbsensi, a.TanggalPengajuan, a.Berkas 
+                                    FROM Absensi a
+                                    JOIN User u ON a.UserID = u.UserID
+                                    JOIN Karyawan k ON u.UserID = k.UserID
+                                    JOIN JenisAbsensi ja ON a.NamaJenisAbsensi = ja.NamaJenisAbsensi
+                                    JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+                                    WHERE pa.StatusPersetujuan = 'On Process'
+                                      AND pa.AlurPersetujuanID = 1
+                                      AND pa.TahapanSaatIni = 1
+                                      AND k.Departemen = '$manajerDepartemen'";
 
+                          $result = mysqli_query($koneksi, $query);
+                          $no = 1;
+                          while ($row = mysqli_fetch_assoc($result)) {
+    // Membuat link ke berkas
+                            $berkasLink = !empty($row['Berkas']) ? "<a href='/Karyawan/" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
                             echo "<tr>
                                     <td class='text-center'>{$no}</td>
                                     <td>{$row['NamaLengkap']}</td>
@@ -180,10 +199,9 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                     <td class='text-center'>{$berkasLink}</td>
                                     <td>
                                         <form method='post'>
-                                          <input type='hidden' name='absensiID' value='{$row['AbsensiID']}'>
-                                          <button type='submit' name='approve' class='btn custom-approval-btn-green' data-toggle='modal'>Approve</button>
-                                          <button type='submit' name='decline' class='btn custom-decline-btn-red' data-toggle='modal'>Decline</button>
-                                          
+                                            <input type='hidden' name='absensiID' value='{$row['AbsensiID']}'>
+                                            <button type='submit' name='approve' class='btn custom-approval-btn-green'>Approve</button>
+                                            <button type='submit' name='decline' class='btn custom-decline-btn-red'>Decline</button>
                                         </form>
                                         <div style='text-align: center; margin-top: 10px;'>
                                             <button type='button' class='btn custom-detail-btn-blue' onclick='showDetail({$row['AbsensiID']})'>Detail</button>

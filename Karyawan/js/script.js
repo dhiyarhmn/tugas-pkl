@@ -185,3 +185,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('tanggal_pengajuan').value = formattedNow;
 });
+
+// -------------------------------------------------------------------
+// JS FOTO PROFILE DI EDIT PROFILE
+// -------------------------------------------------------------------
+// Menambahkan event listener ke tombol "Upload new image"
+// Menambahkan event listener untuk mengganti gambar profil saat gambar diunggah
+// Menambahkan event listener untuk mengganti gambar profil saat gambar diunggah
+document.getElementById("imageUpload").addEventListener("change", function() {
+  // Mendapatkan file yang diunggah
+  var file = this.files[0];
+  if (file) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+          // Mengubah sumber gambar profil dengan data URL dari file yang diunggah
+          document.getElementById("profileImage").src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+  }
+});
+
+// Menambahkan event listener untuk form submit
+document.querySelector("form").addEventListener("submit", function() {
+  // Menjalankan fungsi ini saat form disubmit
+  // Cek apakah ada file yang diunggah
+  var fileInput = document.getElementById("imageUpload");
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+      // Tidak ada file yang diunggah, jangan lanjutkan submit
+      alert("Anda harus mengunggah foto profil terlebih dahulu.");
+      event.preventDefault(); // Menghentikan submit form
+  }
+});
+
+// JS FOTO PROFILE DI EDIT PROFILE
+// Fungsi untuk menampilkan gambar yang diunggah oleh pengguna
+    function displayImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#uploadedImage').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Event listener untuk input file
+    $('#imageUpload').on('change', function() {
+        displayImage(this);
+    });

@@ -67,9 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 
+// -------------------------------------------------------------------
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Karyawan.NamaLengkap, Karyawan.Jabatan, User.ProfilePhoto 
+$userDetailsQuery = "SELECT Karyawan.NamaLengkap, Karyawan.Departemen, Karyawan.Jabatan, User.ProfilePhoto 
                      FROM Karyawan
                      JOIN User ON Karyawan.UserID = User.UserID
                      WHERE Karyawan.UserID = '".$_SESSION["UserID"]."'";
@@ -104,8 +106,9 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             <div style="text-align: center; margin-top: 30px;">
                 <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
-                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
-              </div>
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
+            </div>
         </div>
         <ul class="list-unstyled components">
             <li>
@@ -156,7 +159,16 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
                             <form method="post">
-                                <div class="container input-container">
+                            <div class="container input-container">
+                                <div class="card-body text-center">
+                                    <input id="imageUpload" type="file" accept="image/*" style="display: none;">
+                                    <img id="profileImage" class="img-account-profile rounded-circle mb-2" width="150" src="/Assets/img/profile.jpeg" alt=""> <br>
+                                    <label for="imageUpload" class="btn btn-primary" style="font-size: 10px; background-color: #160066; border: #160066;">Upload Photo</label>
+                                </div>
+                            </div>
+                            </form>
+                                </div>
+                                <div class="container input-container" style= "margin-top: -50px;">
                                     <input required="" type="text" name="NIK" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NIK']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">NIK</label>
                                 </div>

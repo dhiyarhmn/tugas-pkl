@@ -56,22 +56,25 @@ function loginUser($username, $password) {
         exit();
     } else {
         // Jika username atau password salah
-        header("Location: Login.php?error=invalid");
-        exit();
+        return false;
     }
 }
+
+$error = "";
 
 // Menangani request POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    loginUser($username, $password);
+    if (loginUser($username, $password) === false) {
+        $error = "Username atau password salah. Silakan coba lagi.";
+    }
 }
 ?>
-  
-  <!DOCTYPE html>
-  <html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -99,17 +102,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <div class="form_details">Login</div>
                     <input required="" type="text" id="username" name="username" class="input" placeholder="Username" autocomplete="username">
                     <input required="" type="password" id="password" name="password" class="input" placeholder="Password" autocomplete="current-password">
-                    <div class="flex-column" >
-                      <button class="forgot-password">Forgot password?</button>
-                  </div>
                   <button class="btn">Login</button>
               </div>
           </form>
       </div>
     </div>
   </div>
-  <?php if (!empty($error)) : ?>
-        <div class="text-red-500 text-center mt-2"><?= $error ?></div>
+  
+  <!-- Pop-up Card untuk Menampilkan Pesan Kesalahan -->
+  <div id="popup-card" class="fixed inset-0 flex items-center justify-center hidden">
+    <div class="bg-white p-4 shadow-lg rounded-md">
+      <h2 class="text-lg font-semibold mb-2">Error</h2>
+      <p><?= $error ?></p>
+        <button id="close-popup" style="background-color: #160066; color: white; padding: 4px 12px; margin-top: 10px; border-radius: 4px; float: right;">Close</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Fungsi untuk menampilkan pop-up card
+    function showPopup() {
+      document.getElementById("popup-card").classList.remove("hidden");
+    }
+
+    // Fungsi untuk menyembunyikan pop-up card
+    function closePopup() {
+      document.getElementById("popup-card").classList.add("hidden");
+    }
+
+    // Mendaftarkan event click pada tombol close-popup
+    document.getElementById("close-popup").addEventListener("click", closePopup);
+
+    // Menampilkan pop-up card jika error tidak kosong
+    <?php if (!empty($error)) : ?>
+      showPopup();
     <?php endif; ?>
-  </body>
+  </script>
+</body>
 </html>

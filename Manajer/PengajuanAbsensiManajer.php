@@ -78,9 +78,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// -------------------------------------------------------------------
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Jabatan, User.ProfilePhoto 
+$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Departemen, Manajer.Jabatan, User.ProfilePhoto 
                      FROM Manajer
                      JOIN User ON Manajer.UserID = User.UserID
                      WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
@@ -115,8 +117,9 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             <div style="text-align: center; margin-top: 30px;">
                 <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
-                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
-              </div>
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
+            </div>
         </div>
         <ul class="list-unstyled components">
             <li>

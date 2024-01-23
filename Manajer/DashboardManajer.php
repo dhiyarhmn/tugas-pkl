@@ -9,14 +9,46 @@ if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
 }
 
+// -------------------------------------------------------------------
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
+// -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Jabatan, User.ProfilePhoto 
+$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Departemen, Manajer.Jabatan, User.ProfilePhoto 
                      FROM Manajer
                      JOIN User ON Manajer.UserID = User.UserID
                      WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
+
+// -------------------------------------------------------------------
+// KOTAK APPROVE, ON PROCESS, DECLINE
+// -------------------------------------------------------------------
+// Hitung jumlah berkas dengan status 'Approved'
+$queryApprovedCount = "SELECT COUNT(*) AS ApprovedCount
+                        FROM Absensi a
+                        JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+                        WHERE a.UserID = ".$_SESSION["UserID"]."
+                        AND pa.StatusPersetujuan = 'Approved'";
+$resultApprovedCount = mysqli_query($koneksi, $queryApprovedCount);
+$approvedCount = mysqli_fetch_assoc($resultApprovedCount)["ApprovedCount"];
+
+// Hitung jumlah berkas dengan status 'On Process'
+$queryOnProcessCount = "SELECT COUNT(*) AS OnProcessCount
+                        FROM Absensi a
+                        JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+                        WHERE a.UserID = ".$_SESSION["UserID"]."
+                        AND pa.StatusPersetujuan = 'On Process'";
+$resultOnProcessCount = mysqli_query($koneksi, $queryOnProcessCount);
+$onProcessCount = mysqli_fetch_assoc($resultOnProcessCount)["OnProcessCount"];
+
+// Hitung jumlah berkas dengan status 'Declined'
+$queryDeclinedCount = "SELECT COUNT(*) AS DeclinedCount
+                        FROM Absensi a
+                        JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+                        WHERE a.UserID = ".$_SESSION["UserID"]."
+                        AND pa.StatusPersetujuan = 'Declined'";
+$resultDeclinedCount = mysqli_query($koneksi, $queryDeclinedCount);
+$declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
 ?>
 
 <!DOCTYPE html>
@@ -46,8 +78,9 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             <div style="text-align: center; margin-top: 30px;">
                 <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
-                <h3 class="profile-text" style="font-size: 16px; color:white">[<?php echo $userDetails['Jabatan']; ?>]</h3>
-              </div>
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
+            </div>
         </div>
         <ul class="list-unstyled components">
             <li class="active">
@@ -99,12 +132,12 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                 </div>
             </div>
             <div class="row justify-content-center mt-4 box-container">
-                <div class="col-auto mb-3 larger-card" style="margin-top: 75px; ">
+                <div class="col-auto mb-3 larger-card" style="margin-top: 75px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
                                 <h5 class="card-title">Approved</h5>
-                                <p class="card-text">10</p>
+                                <p class="card-text"><?php echo $approvedCount; ?></p>
                             </div>
                             <i class="fa fa-check-circle approved-icon" aria-hidden="true"></i>
                         </div>
@@ -115,7 +148,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
                                 <h5 class="card-title">Declined</h5>
-                                <p class="card-text">1</p>
+                                <p class="card-text"><?php echo $declinedCount; ?></p>
                             </div> 
                             <i class="fa fa-times-circle declined-icon" aria-hidden="true"></i>
                         </div>
@@ -126,7 +159,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>     
                                 <h5 class="card-title">On Process</h5>
-                                <p class="card-text">9</p>
+                                <p class="card-text"><?php echo $onProcessCount; ?></p>
                             </div>
                             <i class="fa fa-exclamation-circle on-process-icon" aria-hidden="true"></i>
                         </div>
