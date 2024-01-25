@@ -37,13 +37,11 @@ $(".logout-button").on("click", function () {
 // -------------------------------------------------------------------
 function focusInput(element) {
   element.parentElement.classList.add("focused");
-  element.style.backgroundColor = "#fff"; // Example style
 }
 
 function blurInput(element) {
   if (element.value === "") {
     element.parentElement.classList.remove("focused");
-    element.style.backgroundColor = ""; // Reset to default
   }
 }
 function updateInput(value) {
@@ -160,17 +158,17 @@ document.addEventListener("DOMContentLoaded", function () {
 // -------------------------------------------------------------------
 // JS BUAT CHOOSE FILE
 // -------------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
+document.getElementById("jenis_absensi").addEventListener("change", function () {
   var selectedValue = this.value;
-  var fileContainer = document.getElementById('fileContainer');
-  var fileInput = document.getElementById('picture');
+  var fileContainer = document.getElementById("fileContainer");
+  var fileInput = document.getElementById("picture");
 
-  if (['BT', 'DL', 'SBA', 'LP'].includes(selectedValue)) {
-      fileContainer.style.display = 'block';
-      fileInput.required = true;
+  if (["BT", "DL", "SBA", "LP"].includes(selectedValue)) {
+    fileContainer.style.display = "block";
+    fileInput.required = true;
   } else {
-      fileContainer.style.display = 'none';
-      fileInput.required = false;
+    fileContainer.style.display = "none";
+    fileInput.required = false;
   }
 });
 
@@ -235,3 +233,15 @@ document.querySelector("form").addEventListener("submit", function() {
     $('#imageUpload').on('change', function() {
         displayImage(this);
     });
+
+
+  // JS CUTI TAHUNAN
+  document.getElementById('jenis_absensi').addEventListener('change', function() {
+    var jenisAbsensi = this.value;
+    var sisaCutiContainer = document.getElementById('sisaCutiContainer');
+    if (jenisAbsensi === 'AL') { // Sesuaikan dengan kode jenis cuti tahunan Anda
+        sisaCutiContainer.style.display = 'block';
+    } else {
+        sisaCutiContainer.style.display = 'none';
+    }
+});

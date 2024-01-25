@@ -16,18 +16,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tanggal_pengajuan = $_POST["tanggal_pengajuan"];
     $jenis_absensi = $_POST["jenis_absensi"];
     $lama_periode_absensi = $_POST["lama_periode_absensi"];
-    $periode_awal = $_POST["periode_awal"];
-    $periode_akhir = $_POST["periode_akhir"];
     $keterangan = $_POST["keterangan"];
 
+    $periode_awal = new DateTime($_POST["periode_awal"]);
+    $periode_akhir = new DateTime($_POST["periode_akhir"]);
+    $periode_awal_str = $periode_awal->format('Y-m-d H:i:s');
+    $periode_akhir_str = $periode_akhir->format('Y-m-d H:i:s');
+
     $berkas = '';
-    $upload_dir = "BerkasKaryawan/"; // Adjusted path
+    $upload_dir = "BerkasKaryawan/";  // Naik satu level dari direktori skrip saat ini
+    
+        // Proses pengajuan cuti tahunan
+     if ($jenis_absensi == "AL") {
+        $periode_awal = new DateTime($_POST["periode_awal"]);
+        $periode_akhir = new DateTime($_POST["periode_akhir"]);
+
+        // Mengonversi DateTime ke string
+        $periode_awal_str = $periode_awal->format('Y-m-d H:i:s');
+        $periode_akhir_str = $periode_akhir->format('Y-m-d H:i:s');
+
+        $interval = $periode_awal->diff($periode_akhir);
+        $durasiCuti = $interval->days + 1;
+
+        // Query untuk mendapatkan data sisa cuti
+        $queryCuti = "SELECT CutiTerpakai, CutiSisa FROM CutiTahunan WHERE UserID = '{$_SESSION["UserID"]}'";
+        $resultCuti = mysqli_query($koneksi, $queryCuti);
+
+        if ($resultCuti && mysqli_num_rows($resultCuti) > 0) {
+            $dataCuti = mysqli_fetch_assoc($resultCuti);
+
+            if ($durasiCuti <= $dataCuti['CutiSisa']) {
+                $cutiTerpakaiBaru = $dataCuti['CutiTerpakai'] + $durasiCuti;
+                $cutiSisaBaru = $dataCuti['CutiSisa'] - $durasiCuti;
+
+                $queryUpdateCuti = "UPDATE CutiTahunan SET CutiTerpakai = '$cutiTerpakaiBaru', CutiSisa = '$cutiSisaBaru' WHERE UserID = '{$_SESSION["UserID"]}'";
+                mysqli_query($koneksi, $queryUpdateCuti);
+            } else {
+                echo "Jumlah cuti yang diambil melebihi sisa cuti yang tersedia.";
+                exit();
+            }
+        } else {
+            echo "Data cuti tidak ditemukan atau terjadi kesalahan query.";
+            exit();
+        }
+    }
+    
     if (!is_dir($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
+        mkdir($upload_dir, 0777, true); // Membuat direktori jika belum ada
     }
 
     if (isset($_FILES["Berkas"]) && $_FILES["Berkas"]["error"] == 0) {
-        $file_name = $_FILES["Berkas"]["name"];
+        $file_name = str_replace(" ", "_", $_FILES["Berkas"]["name"]); // Mengganti spasi dengan underscore
         $file_tmp = $_FILES["Berkas"]["tmp_name"];
 
         $file_path = $upload_dir . $file_name;
@@ -41,8 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert data into the "Absensi" table
-    $queryAbsensi = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai, Berkas)
-                    VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal', '$periode_akhir', '$berkas')";
+        $queryAbsensi = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai, Berkas)
+                    VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal_str', '$periode_akhir_str', '$berkas')";
 
     if (mysqli_query($koneksi, $queryAbsensi)) {
         $absensiID = mysqli_insert_id($koneksi);
@@ -67,6 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (mysqli_query($koneksi, $queryPersetujuan)) {
                 header("Location: StatusPengajuanKaryawan.php");
                 exit();
+
+            if ($_POST["jenis_absensi"] == "AL") {
+                $durasiCuti = // Hitung durasi cuti dari $periode_awal dan $periode_akhir
+                $queryUpdateCuti = "UPDATE CutiTahunan SET CutiTerpakai = CutiTerpakai + $durasiCuti, CutiSisa = CutiSisa - $durasiCuti WHERE UserID = '{$_SESSION["UserID"]}'";
+                mysqli_query($koneksi, $queryUpdateCuti);
+            }
             } else {
                 echo "Error: " . mysqli_error($koneksi);
             }
@@ -77,7 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . mysqli_error($koneksi);
     }
 }
-
 // -------------------------------------------------------------------
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
 // -------------------------------------------------------------------
@@ -204,6 +248,10 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                 <div class="container input-container" id="fileContainer" style="display: none;">
                                     <input required="" class="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium" type="file" name="Berkas" id="picture"/>
                                 </div>
+                                <div class="container input-container" id="sisaCutiContainer" style="display: none;">
+                                    <span id= "sisaCuti" class="label"></span>
+                                    <input required="" type="text" name="sisa_cuti_tahunan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)" readonly style="background-color: #8a8a8a; color: black;">
+                                </div>
                                 <div class="container input-container">
                                     <select required="" name="lama_periode_absensi" class="input" onfocus="focusInput(this)" onblur="blurInput(this)">
                                         <option value=""></option>
@@ -238,7 +286,35 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#jenis_absensi').change(function() {
+        var jenisAbsensi = $(this).val();
+        if (jenisAbsensi == 'AL') { // 'AL' adalah kode untuk Annual Leave
+            $.ajax({
+                url: 'getSisaCuti.php', // Lokasi file PHP yang akan dipanggil
+                type: 'POST',
+                data: { userID: "<?php echo $_SESSION['UserID']; ?>" },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.error) {
+                        alert(response.error);
+                    } else {
+                        $('#sisaCutiContainer').show();
+                        $('#sisaCuti').text('Sisa Cuti Tahunan: ' + response.cutiSisa);
+                    }
+                },
+                error: function() {
+                    alert('Tidak dapat mengambil data sisa cuti');
+                }
+            });
+        } else {
+            $('#sisaCutiContainer').hide();
+        }
+    });
+});
+</script>
     <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
     <script src="./js/script.js"></script>
 </body>

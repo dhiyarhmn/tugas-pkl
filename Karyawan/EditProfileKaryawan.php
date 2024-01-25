@@ -29,7 +29,7 @@ $rowKaryawan = null;
 if (isset($_SESSION['UserID'])) {
     $userID = $_SESSION['UserID'];
 
-    // Ambil data karyawan dan username berdasarkan UserID
+    // Ambil data Karyawan dan username berdasarkan UserID
     $queryGetDataKaryawan = "SELECT Karyawan.*, User.Username FROM Karyawan JOIN User ON Karyawan.UserID = User.UserID WHERE Karyawan.UserID = '$userID'";
     $resultGetDataKaryawan = $conn->query($queryGetDataKaryawan);
 
@@ -139,7 +139,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
         <div class="sidebar-logout">
             <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
-                <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
+                <span>Logout</span> 
             </a>
         </div>
     </nav>
@@ -159,16 +159,14 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
                             <form method="post">
-                            <div class="container input-container">
-                                <div class="card-body text-center">
-                                    <input id="imageUpload" type="file" accept="image/*" style="display: none;">
-                                    <img id="profileImage" class="img-account-profile rounded-circle mb-2" width="150" src="/Assets/img/profile.jpeg" alt=""> <br>
-                                    <label for="imageUpload" class="btn btn-primary" style="font-size: 10px; background-color: #160066; border: #160066;">Upload Photo</label>
+                                <div class="container input-container">
+                                    <div class="card-body text-center">
+                                        <input id="imageUpload" type="file" accept="image/*" style="display: none;">
+                                        <img id="profileImage" class="img-account-profile rounded-circle mb-2" width="150" src="/Assets/img/profile.jpeg" alt=""> <br>
+                                        <label for="imageUpload" class="btn btn-primary" style="font-size: 10px; background-color: #160066; border: #160066;">Upload Photo</label>
+                                    </div>
                                 </div>
-                            </div>
-                            </form>
-                                </div>
-                                <div class="container input-container" style= "margin-top: -50px;">
+                                <div class="container input-container" style="margin-top: -10px;">
                                     <input required="" type="text" name="NIK" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NIK']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">NIK</label>
                                 </div>
@@ -212,9 +210,8 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
     </div>
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
     <script src="./js/script.js"></script>
