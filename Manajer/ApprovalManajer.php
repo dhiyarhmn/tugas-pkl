@@ -162,13 +162,14 @@ $manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
                 <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th class="text-center table-column">No</th>
-                            <th class="text-center table-column">Nama</th>
-                            <th class="text-center table-column">NIK</th>
-                            <th class="text-center table-column">Jenis Absensi</th>
-                            <th class="text-center table-column">Tanggal Pengajuan</th>
-                            <th class="text-center table-column">Berkas</th>
-                            <th class="text-center table-column">Actions</th>
+                            <th class="text-center table-column" style="width: 30px;">No</th>
+                            <th class="text-center table-column" style="width: 30px;">AbsensiID</th>
+                            <th class="text-center table-column" style="width: 200px;">Nama</th>
+                            <th class="text-center table-column" style="width: 100px;">NIK</th>
+                            <th class="text-center table-column" style="width: 30px;">Jenis Absensi</th>
+                            <th class="text-center table-column" style="width: 30px;">Tanggal Pengajuan</th>
+                            <th class="text-center table-column" style="width: 50px;">Berkas</th>
+                            <th class="text-center table-column" style="width: 145px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -190,8 +191,9 @@ $manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
                           while ($row = mysqli_fetch_assoc($result)) {
     // Membuat link ke berkas
                             $berkasLink = !empty($row['Berkas']) ? "<a href='/Karyawan/" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
-                            echo "<tr>
-                                    <td class='text-center'>{$no}</td>
+                            echo "<tr class='text-center'>
+                                    <td>{$no}</td>
+                                    <td>{$row['AbsensiID']}</td>
                                     <td>{$row['NamaLengkap']}</td>
                                     <td>{$row['NIK']}</td>
                                     <td>{$row['NamaJenisAbsensi']}</td>

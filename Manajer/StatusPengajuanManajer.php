@@ -182,35 +182,45 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
             <div class="custom-table-container">
                 <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                 <thead>
-                    <tr>
-                        <th class="text-center table-column">Status</th>
-                        <th class="text-center table-column">Jenis Absensi</th>
-                        <th class="text-center table-column">Tanggal Pengajuan</th>
-                        <th class="text-center table-column">Berkas</th>
-                        <th class="text-center detail-column">Actions</th>
+                    <tr class='text-center'>
+                        <th>No</th>
+                        <th>AbsensiID</th>
+                        <th>Jenis Absensi</th>
+                        <th>Tanggal Pengajuan</th>
+                        <th>Berkas</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa <?php echo ($row['StatusPersetujuan'] == 'Approved') ? 'fa-check-circle approved-icon' : (($row['StatusPersetujuan'] == 'Declined') ? 'fa-times-circle declined-icon' : 'fa-exclamation-circle on-process-icon'); ?>" aria-hidden="true"></i>
-                                <?php echo htmlspecialchars($row['StatusPersetujuan']); ?>
-                            </td>
-                            <td><?php echo htmlspecialchars($row['NamaJenisAbsensi']); ?></td>
-                            <td><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
-                            <td class="text-center">
+                    <?php 
+                    $no = 1; // Inisialisasi nomor urutan
+                    while ($row = mysqli_fetch_assoc($result)): 
+                    ?>
+                        <tr class='text-center'>
+                            <td style="width: 10px;"><?php echo $no; ?></td>
+                            <td style="width: 20px;"><?php echo htmlspecialchars($row['AbsensiID']); ?></td>
+                            <td style="width: 30px;"><?php echo htmlspecialchars($row['NamaJenisAbsensi']); ?></td>
+                            <td style="width: 200px;"><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
+                            <td style="width: 200px;">
                                 <?php
                                 // Debugging untuk melihat nilai yang diperoleh dari database
                                 $berkasLink = !empty($row['Berkas']) ? "<a href='" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
                                 echo $berkasLink;
                                 ?>
                             </td>
+                            <td style="width: 200px;">
+                                <i class="fa <?php echo ($row['StatusPersetujuan'] == 'Approved') ? 'fa-check-circle approved-icon' : (($row['StatusPersetujuan'] == 'Declined') ? 'fa-times-circle declined-icon' : 'fa-exclamation-circle on-process-icon'); ?>" aria-hidden="true"></i>
+                                <?php echo htmlspecialchars($row['StatusPersetujuan']); ?>
+                            </td>
                             <td class="text-center">
                                 <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal" onclick="showDetail(<?php echo htmlspecialchars($row['AbsensiID']); ?>)">Detail</button>
                             </td>
                         </tr>
-                    <?php endwhile; ?>
+                        <?php 
+                        $no++; // Inkrement nomor urutan
+                        endwhile; 
+                        ?>
                 </tbody>
             </table>
         </div>
