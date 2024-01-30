@@ -53,10 +53,23 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 180px;
+  height: 300px auto;
 }
+
+.profile-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 #sidebar.closed div h3 {
   display: none;
+}
+
+#sidebar.closed .profile-image {
+  width: 40px; /* Adjust this value as needed */
+  height: 40px; /* Adjust this value as needed */
 }
 
 #sidebar ul.components {
@@ -282,11 +295,10 @@ a[aria-expanded="true"] {
   margin: auto; /* Menengahkan tabel */
   width: 1150px; /* Menyesuaikan lebar tabel */
   padding: 20px; /* Menambahkan padding */
+  
 }
 #dataTable {
   box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.8); /* Anda dapat menyesuaikan ukuran dan warna bayangan sesuai kebutuhan Anda */
-  border-radius: 20px;
-  border-top: 2000px; /* Menghilangkan garis atas pada sel header tabel */
 }
 .container {
   display: flex;
@@ -444,3 +456,65 @@ a[aria-expanded="true"] {
 .btn.custom-detail-btn-blue {
   margin-left: 0; /* Adjust this value to align under the Approve button if necessary */
 }
+
+/* --------------------------------------- */
+.button {
+  position: relative;
+  width: 500px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid #9bc4e2;
+  background-color: #160066;
+}
+
+.button, .button__icon, .button__text {
+  transition: all 0.3s;
+}
+
+.button .button__text {
+  transform: translateX(30px);
+  color: #fff;
+  font-weight: 600;
+  
+}
+
+.button .button__icon {
+  position: absolute;
+  transform: translateX(335px);
+  height: 100%;
+  width: 150px;
+  background-color: #9bc4e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+}
+
+.button .svg {
+  width: 30px;
+  stroke: #fff;
+}
+
+.button:hover {
+  background: #9bc4e2;
+}
+
+.button:hover .button__text {
+  color: transparent;
+}
+
+.button:hover .button__icon {
+  width: 148px;
+  transform: translateX(0);
+}
+
+.button:active .button__icon {
+  background-color: #9bc4e2;
+}
+
+.button:active {
+  border: 1px solid #9bc4e2;
+}
+/* --------------------------------------- */

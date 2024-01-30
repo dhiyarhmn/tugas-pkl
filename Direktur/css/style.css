@@ -12,7 +12,23 @@ body {
   background-repeat: no-repeat; /* Do not repeat the image */
   min-height: 100vh; /* Ensure it covers the whole viewport height */
 }
-
+/* .container {
+  display: grid;
+  grid-template-rows: 60px 60px auto 60px;
+  grid-template-columns: 1fr;
+  grid-template-areas: 'header' 'sidebar' 'main' 'footer';
+  height: 100vh;
+}
+@media (min-width: 480px) {
+  .container {
+    grid-template-rows: 60px auto 60px;
+    grid-template-columns: 160px auto;
+    grid-template-areas: 
+    'header header header' 
+    'sidebar main main'  
+    'footer footer footer';
+    }
+} */
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -247,7 +263,7 @@ a[aria-expanded="true"] {
   color: white;
   border-radius: 20px; /* Rounded edges */
   border: none;
-  padding: 1px 20px; /* Padding */
+  padding: 1px 65px; /* Padding */
   font-size: 0.7rem; /* Font size */
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
   transition: all 0.3s ease; /* Smooth transition for hover effects */
@@ -277,7 +293,7 @@ a[aria-expanded="true"] {
 }
 .custom-table-container {
   margin: auto; /* Menengahkan tabel */
-  width: 1025px; /* Menyesuaikan lebar tabel */
+  width: 1150px; /* Menyesuaikan lebar tabel */
   padding: 20px; /* Menambahkan padding */
 }
 #dataTable {
@@ -331,9 +347,9 @@ a[aria-expanded="true"] {
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4), inset 3px 3px 10px rgba(0, 0, 0, 1), inset -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
-/* -------------------------------------------------------------------  */
-/* CSS BUAT KOTAK DI FORM PENGAJUAN ABSENSI */
-/* -------------------------------------------------------------------  */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+/* CSS KOTAK DI FORM PENGAJUAN ABSENSI */
+/* -------------------------------------------------------------------------------------------------------------------------- */
 .input-container {
   width: 100%; /* Mengatur lebar container input sesuai lebar card */
   padding: 0 15px; /* Penambahan padding jika diperlukan */
@@ -357,11 +373,12 @@ a[aria-expanded="true"] {
 .static-label {
   transform: translateY(-35px); /* Atur sesuai dengan desain Anda */
   font-size: 12px; /* Atur sesuai dengan desain Anda */
+  /* Tambahkan properti lain yang diperlukan */
 }
 
-/* -------------------------------------------------------------------  */
+/* -------------------------------------------------------------------------------------------------------------------------- */
 /* CSS BUAT DATETIME PADA FORM PENGAJUAN */
-/* -------------------------------------------------------------------  */
+/* -------------------------------------------------------------------------------------------------------------------------- */
 /* Gaya untuk input date ketika placeholder ditampilkan */
 .input.placeholder-shown::-webkit-datetime-edit,
 .input.placeholder-shown::-webkit-inner-spin-button,
@@ -375,10 +392,9 @@ a[aria-expanded="true"] {
 .input::-webkit-clear-button {
   color: #000000; /* atau warna lain sesuai kebutuhan */
 }
-
-/* -------------------------------------------------------------------  */
-/* CSS BUAT BUTTON SUBMIT FORM PENGAJUAN */
-/* -------------------------------------------------------------------  */
+/* -------------------------------------------------------------------------------------------------------------------------- */
+/* CSS UNTUK BUTTON SUBMIT FORM PENGAJUAN */
+/* -------------------------------------------------------------------------------------------------------------------------- */
 .button-submit {
   color: #ffffff;
   padding: 0.3em 1.5em;
@@ -394,6 +410,50 @@ a[aria-expanded="true"] {
 .button-submit:active {
   color: #b0b0b0;
   box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+}
+
+.btn.custom-approval-btn-green {
+  background-color: #006b3c; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 20px; /* Rounded edges */
+  border: none;
+  padding: 7px 20px; /* Padding */
+  font-size: 0.7rem; /* Font size */
+  box-shadow: 0 4px 6px #62c29e; /* Bootstrap shadow for primary blue */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+.btn.custom-approval-btn-green:hover,
+.btn.custom-approval-btn-green:focus {
+  background-color: #87c495; /* Darker blue on hover/focus */
+  box-shadow: 0 5px 9px #62c29e; /* Deeper shadow on hover/focus */
+}
+
+.btn.custom-decline-btn-red {
+  background-color: #7c0a02; /* Bootstrap primary blue */
+  color: white;
+  border-radius: 20px; /* Rounded edges */
+  border: none;
+  padding: 7px 20px; /* Padding */
+  font-size: 0.7rem; /* Font size */
+  box-shadow: 0 4px 6px #dd4e4e; /* Bootstrap shadow for primary blue */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+.btn.custom-decline-btn-red:hover,
+.btn.custom-decline-btn-red:focus {
+  background-color: #ff6161; /* Darker blue on hover/focus */
+  box-shadow: 0 5px 9px #dd4e4e; /* Deeper shadow on hover/focus */
+}
+
+/* Additional CSS for positioning the buttons */
+.button-row {
+  display: flex;
+  justify-content: flex-start; /* Aligns buttons to the left */
+  margin-bottom: 10px; /* Adds space between the rows */
+}
+
+/* If you want the Detail button to align under the Approve button specifically */
+.btn.custom-detail-btn-blue {
+  margin-left: 0; /* Adjust this value to align under the Approve button if necessary */
 }
 
 /* --------------------------------------- */

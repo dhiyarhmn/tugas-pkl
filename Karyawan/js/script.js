@@ -245,3 +245,5 @@ document.querySelector("form").addEventListener("submit", function() {
         sisaCutiContainer.style.display = 'none';
     }
 });
+
+// JS BUAT GANTI FOTO PROFILE

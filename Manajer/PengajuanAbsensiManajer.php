@@ -159,7 +159,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
+                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>

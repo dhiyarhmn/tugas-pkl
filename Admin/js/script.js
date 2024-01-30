@@ -199,41 +199,50 @@ $(document).ready(function () {
 // -------------------------------------------------------------------
 // JS BUAT CHOOSE FILE
 // -------------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
+document.getElementById("jenis_absensi").addEventListener("change", function () {
   var selectedValue = this.value;
-  var fileContainer = document.getElementById('fileContainer');
-  var fileInput = document.getElementById('picture');
+  var fileContainer = document.getElementById("fileContainer");
+  var fileInput = document.getElementById("picture");
 
-  if (['BT', 'DL', 'SBA', 'LP'].includes(selectedValue)) {
-      fileContainer.style.display = 'block';
-      fileInput.required = true;
+  if (["BT", "DL", "SBA", "LP"].includes(selectedValue)) {
+    fileContainer.style.display = "block";
+    fileInput.required = true;
   } else {
-      fileContainer.style.display = 'none';
-      fileInput.required = false;
+    fileContainer.style.display = "none";
+    fileInput.required = false;
   }
 });
 
-// JS BUAT DATETIME TANGGAL PENGAJUAN
-document.addEventListener('DOMContentLoaded', function() {
-  var now = new Date();
-  var month = ('0' + (now.getMonth() + 1)).slice(-2); // Bulan dimulai dari 0
-  var day = ('0' + now.getDate()).slice(-2);
-  var hours = ('0' + now.getHours()).slice(-2);
-  var minutes = ('0' + now.getMinutes()).slice(-2);
-  var formattedNow = now.getFullYear() + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+$(document).ready(function () {
+  $(".btn-approve, .btn-decline").on("click", function () {
+    var absensiID = $(this).data("absensiId");
+    var action = $(this).hasClass("btn-approve") ? "approve" : "decline";
 
-  document.getElementById('tanggal_pengajuan').value = formattedNow;
+    $.ajax({
+      url: "handleApplication.php", // URL ke file PHP yang menangani logika approve/decline
+      type: "post",
+      data: { absensiID: absensiID, action: action },
+      success: function (response) {
+        // Logika untuk menghapus baris dari tabel
+        if (response.success) {
+          $('button[data-absensi-id="' + absensiID + '"]')
+            .closest("tr")
+            .remove();
+        } else {
+          alert("Error: " + response.message);
+        }
+      },
+      error: function () {
+        alert("Terjadi kesalahan, coba lagi.");
+      },
+    });
+  });
 });
 
-// ----------------------------------------------------------------
-// JS BUAT Cuti Tahunan
-// ----------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
-  var jenisAbsensi = this.value;
-  var sisaCutiContainer = document.getElementById('sisaCutiContainer');
-  if (jenisAbsensi === 'AL') { // Sesuaikan dengan kode jenis cuti tahunan Anda
-      sisaCutiContainer.style.display = 'block';
-  } else {
-      sisaCutiContainer.style.display = 'none';
-  }
+
+$(document).ready(function () {
+  $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+      // Ini akan mengganti ukuran logo berdasarkan class 'active' pada sidebar
+  });
 });

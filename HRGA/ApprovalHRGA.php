@@ -4,7 +4,7 @@ session_start();
 // Koneksi ke database
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'HRGA') {
     header("Location: /Login.php");
     exit();
 }
@@ -66,13 +66,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
 // -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Manajer.NamaLengkap, Manajer.Departemen, Manajer.Jabatan, User.ProfilePhoto 
-                     FROM Manajer
-                     JOIN User ON Manajer.UserID = User.UserID
-                     WHERE Manajer.UserID = '".$_SESSION["UserID"]."'";
+$userDetailsQuery = "SELECT HRGA.NamaLengkap, HRGA.Departemen, HRGA.Jabatan, User.ProfilePhoto 
+                     FROM HRGA
+                     JOIN User ON HRGA.UserID = User.UserID
+                     WHERE HRGA.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
-$manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
+$HRGADepartemen = $userDetails['Departemen']; // Get the HRGA's department
 ?>
 
 <!DOCTYPE html>
@@ -110,31 +110,31 @@ $manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="DashboardManajer.php">
+                <a href="DashboardHRGA.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="EditProfileManajer.php">
+                <a href="EditProfileHRGA.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="PengajuanAbsensiManajer.php">
+                <a href="PengajuanAbsensiHRGA.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li>
-                <a href="StatusPengajuanManajer.php">
+                <a href="StatusPengajuanHRGA.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
                 </a>
             </li>
             <li class="active">
-                <a href="ApprovalManajer.php">
+                <a href="ApprovalHRGA.php">
                     <i class="fa fa-check-square"></i> 
                     <span>Approval</span>
                 </a>
@@ -161,34 +161,44 @@ $manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
             <div class="custom-table-container">
                 <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr class="text-center table-column">
-                            <th style="width: 30px;">No</th>
-                            <th style="width: 30px;">AbsensiID</th>
-                            <th style="width: 200px;">Nama</th>
-                            <th style="width: 100px;">NIK</th>
-                            <th style="width: 30px;">Jenis Absensi</th>
-                            <th style="width: 30px;">Tanggal Pengajuan</th>
-                            <th style="width: 50px;">Berkas</th>
-                            <th style="width: 145px;">Actions</th>
+                        <tr>
+                            <th class="text-center table-column" style="width: 30px;">No</th>
+                            <th class="text-center table-column" style="width: 30px;">AbsensiID</th>
+                            <th class="text-center table-column" style="width: 200px;">Nama</th>
+                            <th class="text-center table-column" style="width: 100px;">NIK</th>
+                            <th class="text-center table-column" style="width: 30px;">Jenis Absensi</th>
+                            <th class="text-center table-column" style="width: 30px;">Tanggal Pengajuan</th>
+                            <th class="text-center table-column" style="width: 50px;">Berkas</th>
+                            <th class="text-center table-column" style="width: 145px;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                     <?php
-                          // Query to get only those approval requests that meet the specific criteria
-                          $query = "SELECT a.AbsensiID, k.NamaLengkap, k.NIK, ja.NamaJenisAbsensi, a.TanggalPengajuan, a.Berkas 
-                                    FROM Absensi a
-                                    JOIN User u ON a.UserID = u.UserID
-                                    JOIN Karyawan k ON u.UserID = k.UserID
-                                    JOIN JenisAbsensi ja ON a.NamaJenisAbsensi = ja.NamaJenisAbsensi
-                                    JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
-                                    WHERE pa.StatusPersetujuan = 'On Process'
-                                      AND pa.AlurPersetujuanID = 1
-                                      AND pa.TahapanSaatIni = 1
-                                      AND k.Departemen = '$manajerDepartemen'";
+                        $query = "SELECT 
+                        a.AbsensiID, 
+                        COALESCE(k.NamaLengkap, m.NamaLengkap) AS NamaLengkap, 
+                        COALESCE(k.NIK, m.NIK) AS NIK, 
+                        ja.NamaJenisAbsensi, 
+                        a.TanggalPengajuan, 
+                        a.Keterangan, 
+                        pa.StatusPersetujuan,
+                        pa.TanggalPersetujuan,
+                        pa.AlurPersetujuanID,
+                        pa.TahapanSaatIni
+                    FROM Absensi a
+                    JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+                    LEFT JOIN User u ON a.UserID = u.UserID
+                    LEFT JOIN Karyawan k ON u.UserID = k.UserID
+                    LEFT JOIN Manajer m ON u.UserID = m.UserID
+                    JOIN JenisAbsensi ja ON a.NamaJenisAbsensi = ja.NamaJenisAbsensi
+                    WHERE ((pa.AlurPersetujuanID = 2 AND pa.TahapanSaatIni = 1) OR (pa.AlurPersetujuanID = 1 AND pa.TahapanSaatIni = 2))
+                    AND pa.StatusPersetujuan NOT IN ('Approved', 'Declined')";
+                  
 
-                          $result = mysqli_query($koneksi, $query);
-                          $no = 1;
-                          while ($row = mysqli_fetch_assoc($result)) {
+                        $result = mysqli_query($koneksi, $query);
+                        $no = 1;
+                        while ($row = mysqli_fetch_assoc($result)) {
+    // Output atau proses data seperti biasa
     // Membuat link ke berkas
                             $berkasLink = !empty($row['Berkas']) ? "<a href='/Karyawan/" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
                             echo "<tr class='text-center'>
@@ -206,7 +216,7 @@ $manajerDepartemen = $userDetails['Departemen']; // Get the manajer's department
                                             <button type='submit' name='decline' class='btn custom-decline-btn-red'>Decline</button>
                                         </form>
                                         <div style='text-align: center; margin-top: 10px;'>
-                                            <button type='button' class='btn custom-detail-btn-blue' data-toggle='modal' data-target='#detailModal' onclick='showDetail(". htmlspecialchars($row['AbsensiID']) .")'>Detail</button>
+                                            <button type='button' class='btn custom-detail-btn-blue' onclick='showDetail({$row['AbsensiID']})'>Detail</button>
                                         </div>
                                     </td>
                                   </tr>";

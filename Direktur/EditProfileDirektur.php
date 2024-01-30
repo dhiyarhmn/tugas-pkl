@@ -8,26 +8,26 @@ if (!$koneksi) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Manajer') {
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Direktur') {
     header("Location: /Login.php");
     exit();
 }
 
 // Inisialisasi variabel
-$rowManajer = null;
+$rowDirektur = null;
 $userDetails = [];
 
 // Cek apakah UserID ada di session
 if (isset($_SESSION['UserID'])) {
     $userID = $_SESSION['UserID'];
 
-    // Ambil data Manajer dan username berdasarkan UserID
-    $queryGetDataManajer = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.ProfilePhoto FROM Manajer AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
-    $resultGetDataManajer = $koneksi->query($queryGetDataManajer);
+    // Ambil data Direktur dan username berdasarkan UserID
+    $queryGetDataDirektur = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.ProfilePhoto FROM Direktur AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
+    $resultGetDataDirektur = $koneksi->query($queryGetDataDirektur);
 
-    if ($resultGetDataManajer->num_rows > 0) {
-        $rowManajer = $resultGetDataManajer->fetch_assoc();
-        $userDetails = $rowManajer; // Gunakan data ini untuk tampilan profil
+    if ($resultGetDataDirektur->num_rows > 0) {
+        $rowDirektur = $resultGetDataDirektur->fetch_assoc();
+        $userDetails = $rowDirektur; // Gunakan data ini untuk tampilan profil
     }
 }
 
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Periksa dan unggah foto profil jika ada
     if (isset($_FILES["profilePhoto"]) && $_FILES["profilePhoto"]["error"] == 0) {
-        $target_dir = "ProfileManajer/";
+        $target_dir = "ProfileDirektur/";
         $target_file = $target_dir . basename($_FILES["profilePhoto"]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -73,13 +73,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }        
     }
 
-    if ($rowManajer) {
-        // Update data Manajer
-        $sqlManajer = "UPDATE Manajer SET Email = '$Email', NoHP = '$NoHP' WHERE UserID = '$userID'";
-        if ($koneksi->query($sqlManajer) === TRUE) {
+    if ($rowDirektur) {
+        // Update data Direktur
+        $sqlDirektur = "UPDATE Direktur SET Email = '$Email', NoHP = '$NoHP' WHERE UserID = '$userID'";
+        if ($koneksi->query($sqlDirektur) === TRUE) {
             echo "";
         } else {
-            echo "Error: " . $sqlManajer . "<br>" . $koneksi->error;
+            echo "Error: " . $sqlDirektur . "<br>" . $koneksi->error;
         }
 
         // Update data User
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Ambil detail user untuk tampilan profil
 $userDetailsQuery = "SELECT K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.Jabatan, U.ProfilePhoto 
-                     FROM Manajer AS K
+                     FROM Direktur AS K
                      INNER JOIN User AS U ON K.UserID = U.UserID
                      WHERE K.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
@@ -137,33 +137,27 @@ $koneksi->close();
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="DashboardManajer.php">
+                <a href="DashboardDirektur.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li class="active">
-                <a href="EditProfileManajer.php">
+                <a href="EditProfileDirektur.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="PengajuanAbsensiManajer.php">
-                    <i class="fas fa-plus"></i> 
-                    <span>Pengajuan Absensi</span>
-                </a>
-            </li>
-            <li>
-                <a href="StatusPengajuanManajer.php">
-                    <i class="fas fa-list-alt"></i> 
-                    <span>Status Pengajuan</span>
-                </a>
-            </li>
-            <li>
-                <a href="ApprovalManajer.php">
+                <a href="ApprovalDirektur.php">
                     <i class="fa fa-check-square"></i> 
                     <span>Approval</span>
+                </a>
+            </li>
+            <li>
+                <a href="ListKaryawanDirektur.php">
+                    <i class="fa fa-search"></i> 
+                    <span>List Karyawan</span>
                 </a>
             </li>
         </ul>
@@ -199,35 +193,35 @@ $koneksi->close();
                                     </div>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="NIK" class="input" value="<?php echo htmlspecialchars($rowManajer['NIK']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="NIK" class="input" value="<?php echo htmlspecialchars($rowDirektur['NIK']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">NIK</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Nama" class="input" value="<?php echo htmlspecialchars($rowManajer['NamaLengkap']); ?>" readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="Nama" class="input" value="<?php echo htmlspecialchars($rowDirektur['NamaLengkap']); ?>" readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Nama</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Departemen" class="input" value="<?php echo htmlspecialchars($rowManajer['Departemen']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="Departemen" class="input" value="<?php echo htmlspecialchars($rowDirektur['Departemen']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Departemen</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowManajer['Jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowDirektur['Jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Gender" class="input" value="<?php echo htmlspecialchars($rowManajer['JenisKelamin']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="Gender" class="input" value="<?php echo htmlspecialchars($rowDirektur['JenisKelamin']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Gender</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" value="<?php echo htmlspecialchars($rowManajer['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" value="<?php echo htmlspecialchars($rowDirektur['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label" for="Email">Email</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="NoHP" class="input" value="<?php echo htmlspecialchars($rowManajer['NoHP'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="text" name="NoHP" class="input" value="<?php echo htmlspecialchars($rowDirektur['NoHP'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">No HP</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="Username" class="input" value="<?php echo htmlspecialchars($rowManajer['Username'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type="text" name="Username" class="input" value="<?php echo htmlspecialchars($rowDirektur['Username'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Username</label>
                                 </div>
                                 <div class="container">

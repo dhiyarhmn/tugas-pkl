@@ -40,10 +40,10 @@ function loginUser($username, $password) {
                 header("Location: ./Manajer/DashboardManajer.php");
                 break;
             case 'HRGA':
-                header("Location: ./HRGA/DashboardHRGA.php.php");
+                header("Location: ./HRGA/DashboardHRGA.php");
                 break;
             case 'Direktur':
-                header("Location: ./Direktur/DashboardDirektur.php.php");
+                header("Location: ./Direktur/DashboardDirektur.php");
                 break;
             case 'Admin':
                 header("Location: ./Admin/DashboardAdmin.php");

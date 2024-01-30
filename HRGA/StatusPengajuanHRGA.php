@@ -5,7 +5,7 @@ session_start();
 // Koneksi ke database (sesuaikan dengan detail koneksi Anda)
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'HRGA') {
     header("Location: /Login.php");
     exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
 }
@@ -25,10 +25,10 @@ $result = mysqli_query($koneksi, $query);
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
 // -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Karyawan.NamaLengkap, Karyawan.Departemen, Karyawan.Jabatan, User.ProfilePhoto 
-                     FROM Karyawan
-                     JOIN User ON Karyawan.UserID = User.UserID
-                     WHERE Karyawan.UserID = '".$_SESSION["UserID"]."'";
+$userDetailsQuery = "SELECT HRGA.NamaLengkap, HRGA.Departemen, HRGA.Jabatan, User.ProfilePhoto 
+                     FROM HRGA
+                     JOIN User ON HRGA.UserID = User.UserID
+                     WHERE HRGA.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
 
@@ -61,7 +61,6 @@ $queryDeclinedCount = "SELECT COUNT(*) AS DeclinedCount
                         AND pa.StatusPersetujuan = 'Declined'";
 $resultDeclinedCount = mysqli_query($koneksi, $queryDeclinedCount);
 $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
-
 ?>
 
 <!DOCTYPE html>
@@ -99,27 +98,33 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="DashboardKaryawan.php">
+                <a href="DashboardHRGA.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="EditProfileKaryawan.php">
+                <a href="EditProfileHRGA.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li>
-                <a href="PengajuanAbsensiKaryawan.php">
+                <a href="PengajuanAbsensiHRGA.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li class="active">
-                <a href="StatusPengajuanKaryawan.php">
+                <a href="StatusPengajuanHRGA.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="ApprovalHRGA.php">
+                    <i class="fa fa-check-square"></i> 
+                    <span>Approval</span>
                 </a>
             </li>
         </ul>
@@ -253,6 +258,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
 <script src="assets/demo/datatables-demo.js"></script>
 
 <script src="./js/script.js"></script>
+
 <script src="./js/detailAbsensi.js"></script>
 </body>
 

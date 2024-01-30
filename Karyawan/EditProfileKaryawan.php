@@ -1,82 +1,107 @@
 <?php
 session_start();
 
-// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+// Koneksi ke database
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-// Koneksi ke database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "pengajuanabsensi3";
+if (!$koneksi) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
 
 if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
     header("Location: /Login.php");
-    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+    exit();
 }
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Periksa koneksi
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
-
-// Inisialisasi variabel rowKaryawan
+// Inisialisasi variabel
 $rowKaryawan = null;
+$userDetails = [];
 
 // Cek apakah UserID ada di session
 if (isset($_SESSION['UserID'])) {
     $userID = $_SESSION['UserID'];
 
     // Ambil data Karyawan dan username berdasarkan UserID
-    $queryGetDataKaryawan = "SELECT Karyawan.*, User.Username FROM Karyawan JOIN User ON Karyawan.UserID = User.UserID WHERE Karyawan.UserID = '$userID'";
-    $resultGetDataKaryawan = $conn->query($queryGetDataKaryawan);
+    $queryGetDataKaryawan = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.ProfilePhoto FROM Karyawan AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
+    $resultGetDataKaryawan = $koneksi->query($queryGetDataKaryawan);
 
     if ($resultGetDataKaryawan->num_rows > 0) {
         $rowKaryawan = $resultGetDataKaryawan->fetch_assoc();
+        $userDetails = $rowKaryawan; // Gunakan data ini untuk tampilan profil
     }
 }
 
 // Cek apakah form telah disubmit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ambil data dari formulir
-    $Email = $_POST["Email"];
-    $NoHP = $_POST["NoHP"];
-    $Username = $_POST["Username"];
+    $Email = $_POST["Email"] ?? '';
+    $NoHP = $_POST["NoHP"] ?? '';
+    $Username = $_POST["Username"] ?? '';
+
+    // Periksa dan unggah foto profil jika ada
+    if (isset($_FILES["profilePhoto"]) && $_FILES["profilePhoto"]["error"] == 0) {
+        $target_dir = "ProfileKaryawan/";
+        $target_file = $target_dir . basename($_FILES["profilePhoto"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+        // Periksa apakah berkas yang diunggah adalah gambar
+        $check = getimagesize($_FILES["profilePhoto"]["tmp_name"]);
+        if($check !== false) {
+            $uploadOk = 1;
+        } else {
+            echo "Berkas yang diunggah bukan gambar.";
+            $uploadOk = 0;
+        }
+
+        if ($uploadOk == 1) {
+            if (move_uploaded_file($_FILES["profilePhoto"]["tmp_name"], $target_file)) {
+                
+        
+                // Update database with the new profile photo file path
+                $sqlUpdateProfilePhoto = "UPDATE User SET ProfilePhoto = '$target_file' WHERE UserID = '$userID'";
+                if ($koneksi->query($sqlUpdateProfilePhoto) === TRUE) {
+                    // Update $userDetails to reflect the new profile photo path
+                    $userDetails['ProfilePhoto'] = $target_file;
+                    echo "";
+                } else {
+                    echo "Error: " . $sqlUpdateProfilePhoto . "<br>" . $koneksi->error;
+                }
+            } else {
+                echo "Maaf, terjadi kesalahan saat mengunggah berkas Anda.";
+            }
+        }        
+    }
 
     if ($rowKaryawan) {
         // Update data Karyawan
         $sqlKaryawan = "UPDATE Karyawan SET Email = '$Email', NoHP = '$NoHP' WHERE UserID = '$userID'";
-
-        if ($conn->query($sqlKaryawan) === TRUE) {
+        if ($koneksi->query($sqlKaryawan) === TRUE) {
             echo "";
         } else {
-            echo "Error: " . $sqlKaryawan . "<br>" . $conn->error;
+            echo "Error: " . $sqlKaryawan . "<br>" . $koneksi->error;
         }
 
         // Update data User
         $sqlUser = "UPDATE User SET Username = '$Username' WHERE UserID = '$userID'";
-        if ($conn->query($sqlUser) === TRUE) {
+        if ($koneksi->query($sqlUser) === TRUE) {
             echo "";
         } else {
-            echo "Error: " . $sqlUser . "<br>" . $conn->error;
+            echo "Error: " . $sqlUser . "<br>" . $koneksi->error;
         }
     }
-    // Tutup koneksi ke database
-    $conn->close();
 }
 
-// -------------------------------------------------------------------
-// buat foto profile, nama lengkap, dan jabatan sesuai user yang login
-// -------------------------------------------------------------------
-// Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Karyawan.NamaLengkap, Karyawan.Departemen, Karyawan.Jabatan, User.ProfilePhoto 
-                     FROM Karyawan
-                     JOIN User ON Karyawan.UserID = User.UserID
-                     WHERE Karyawan.UserID = '".$_SESSION["UserID"]."'";
+// Ambil detail user untuk tampilan profil
+$userDetailsQuery = "SELECT K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.Jabatan, U.ProfilePhoto 
+                     FROM Karyawan AS K
+                     INNER JOIN User AS U ON K.UserID = U.UserID
+                     WHERE K.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
+
+// Tutup koneksi ke database di akhir skrip
+$koneksi->close();
 ?>
 
 <!DOCTYPE html>
@@ -104,10 +129,10 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="/Assets/img/<?php echo $userDetails['ProfilePhoto']; ?>" width="80" class="rounded-circle" style="margin-bottom: 10px;">
-                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
-                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
-                <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
+                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo htmlspecialchars($userDetails['NamaLengkap'] ?? ''); ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo htmlspecialchars($userDetails['Departemen'] ?? ''); ?></h3>
+                <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo htmlspecialchars($userDetails['Jabatan'] ?? ''); ?>-</h3>
             </div>
         </div>
         <ul class="list-unstyled components">
@@ -158,11 +183,12 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
-                            <form method="post">
+                            <form method="post" enctype="multipart/form-data">
                                 <div class="container input-container">
-                                    <div class="card-body text-center">
-                                        <input id="imageUpload" type="file" accept="image/*" style="display: none;">
-                                        <img id="profileImage" class="img-account-profile rounded-circle mb-2" width="150" src="/Assets/img/profile.jpeg" alt=""> <br>
+                                    <div class="card-body text-center" >
+                                        <input id="imageUpload" type="file" name="profilePhoto" accept="image/*" style="display: none;">
+                                        <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" style="width: 180px; height: 180px; border-radius: 50%; margin: 40px auto 30px auto;">
+                                        <br>
                                         <label for="imageUpload" class="btn btn-primary" style="font-size: 10px; background-color: #160066; border: #160066;">Upload Photo</label>
                                     </div>
                                 </div>

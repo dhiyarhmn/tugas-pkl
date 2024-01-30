@@ -3,14 +3,14 @@ session_start();
 
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
-if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'HRGA') {
     header("Location: /Login.php");
     exit(); 
 }
 
-$queryKaryawan = "SELECT NamaLengkap, departemen, jabatan FROM Karyawan WHERE UserID = '{$_SESSION["UserID"]}'";
-$resultKaryawan = mysqli_query($koneksi, $queryKaryawan);
-$rowKaryawan = mysqli_fetch_assoc($resultKaryawan);
+$queryHRGA = "SELECT NamaLengkap, departemen, jabatan FROM HRGA WHERE UserID = '{$_SESSION["UserID"]}'";
+$resultHRGA = mysqli_query($koneksi, $queryHRGA);
+$rowHRGA = mysqli_fetch_assoc($resultHRGA);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tanggal_pengajuan = $_POST["tanggal_pengajuan"];
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $periode_akhir_str = $periode_akhir->format('Y-m-d H:i:s');
 
     $berkas = '';
-    $upload_dir = "BerkasKaryawan/";  // Naik satu level dari direktori skrip saat ini
+    $upload_dir = "BerkasHRGA/";  // Naik satu level dari direktori skrip saat ini
     
         // Proses pengajuan cuti tahunan
      if ($jenis_absensi == "AL") {
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                  VALUES ('$absensiID', '{$_SESSION["UserID"]}', '$statusPersetujuan', '$tanggalPersetujuan', '$alurPersetujuanID', '$tahapanSaatIni')";
 
             if (mysqli_query($koneksi, $queryPersetujuan)) {
-                header("Location: StatusPengajuanKaryawan.php");
+                header("Location: StatusPengajuanHRGA.php");
                 exit();
 
             if ($_POST["jenis_absensi"] == "AL") {
@@ -126,10 +126,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
 // -------------------------------------------------------------------
 // Adjust this query based on your actual database schema
-$userDetailsQuery = "SELECT Karyawan.NamaLengkap, Karyawan.Departemen, Karyawan.Jabatan, User.ProfilePhoto 
-                     FROM Karyawan
-                     JOIN User ON Karyawan.UserID = User.UserID
-                     WHERE Karyawan.UserID = '".$_SESSION["UserID"]."'";
+$userDetailsQuery = "SELECT HRGA.NamaLengkap, HRGA.Departemen, HRGA.Jabatan, User.ProfilePhoto 
+                     FROM HRGA
+                     JOIN User ON HRGA.UserID = User.UserID
+                     WHERE HRGA.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
 ?>
@@ -167,27 +167,33 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="DashboardKaryawan.php">
+                <a href="DashboardHRGA.php">
                     <i class="fas fa-tachometer-alt"></i> 
                     <span>Dashboard</span>
                 </a>
             </li>
             <li>
-                <a href="EditProfileKaryawan.php">
+                <a href="EditProfileHRGA.php">
                     <i class="fas fa-user"></i> 
                     <span>Edit Profile</span>
                 </a>
             </li>
             <li class="active">
-                <a href="PengajuanAbsensiKaryawan.php">
+                <a href="PengajuanAbsensiHRGA.php">
                     <i class="fas fa-plus"></i> 
                     <span>Pengajuan Absensi</span>
                 </a>
             </li>
             <li>
-                <a href="StatusPengajuanKaryawan.php">
+                <a href="StatusPengajuanHRGA.php">
                     <i class="fas fa-list-alt"></i> 
                     <span>Status Pengajuan</span>
+                </a>
+            </li>
+            <li>
+                <a href="ApprovalHRGA.php">
+                    <i class="fa fa-check-square"></i> 
+                    <span>Approval</span>
                 </a>
             </li>
         </ul>
@@ -215,15 +221,15 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                             <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
                             <form method="post" action="" enctype="multipart/form-data">
                                 <div class="container input-container">
-                                    <input required="" type="text" name="nama" class="input" value="<?php echo htmlspecialchars($rowKaryawan['NamaLengkap']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="nama" class="input" value="<?php echo htmlspecialchars($rowHRGA['NamaLengkap']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Nama</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="departemen" class="input" value="<?php echo htmlspecialchars($rowKaryawan['departemen']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="departemen" class="input" value="<?php echo htmlspecialchars($rowHRGA['departemen']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Departemen</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowKaryawan['jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
+                                    <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowHRGA['jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Jabatan</label>
                                 </div>
                                 <div class="container input-container">
@@ -286,6 +292,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
