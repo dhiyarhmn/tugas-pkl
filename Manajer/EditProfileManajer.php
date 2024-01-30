@@ -90,6 +90,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: " . $sqlUser . "<br>" . $koneksi->error;
         }
     }
+    header("Location: DashboardManajer.php");
+    exit;
 }
 
 // Ambil detail user untuk tampilan profil

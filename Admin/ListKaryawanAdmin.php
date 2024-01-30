@@ -52,10 +52,6 @@ $query = "
     UNION
     SELECT H.UserID, H.NamaLengkap, H.NIK, H.Departemen, H.Jabatan 
     FROM HRGA AS H
-    UNION
-    SELECT A.UserID, A.NamaLengkap, A.NIK, A.Departemen, A.Jabatan 
-    FROM Admin AS A
-    ORDER BY Departemen
 ";
 
 $result = mysqli_query($koneksi, $query);

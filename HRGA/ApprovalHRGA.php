@@ -175,32 +175,55 @@ $HRGADepartemen = $userDetails['Departemen']; // Get the HRGA's department
                     <tbody>
                     <?php
                         $query = "SELECT 
-                        a.AbsensiID, 
-                        COALESCE(k.NamaLengkap, m.NamaLengkap) AS NamaLengkap, 
-                        COALESCE(k.NIK, m.NIK) AS NIK, 
-                        ja.NamaJenisAbsensi, 
-                        a.TanggalPengajuan, 
-                        a.Keterangan, 
-                        pa.StatusPersetujuan,
-                        pa.TanggalPersetujuan,
-                        pa.AlurPersetujuanID,
-                        pa.TahapanSaatIni
-                    FROM Absensi a
-                    JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
-                    LEFT JOIN User u ON a.UserID = u.UserID
-                    LEFT JOIN Karyawan k ON u.UserID = k.UserID
-                    LEFT JOIN Manajer m ON u.UserID = m.UserID
-                    JOIN JenisAbsensi ja ON a.NamaJenisAbsensi = ja.NamaJenisAbsensi
-                    WHERE ((pa.AlurPersetujuanID = 2 AND pa.TahapanSaatIni = 1) OR (pa.AlurPersetujuanID = 1 AND pa.TahapanSaatIni = 2))
-                    AND pa.StatusPersetujuan NOT IN ('Approved', 'Declined')";
-                  
+                                    a.AbsensiID, 
+                                    COALESCE(k.NamaLengkap, m.NamaLengkap, h.NamaLengkap, d.NamaLengkap) AS NamaLengkap, 
+                                    COALESCE(k.NIK, m.NIK, h.NIK, d.NIK) AS NIK, 
+                                    ja.NamaJenisAbsensi, 
+                                    a.TanggalPengajuan, 
+                                    a.Keterangan, 
+                                    pa.StatusPersetujuan,
+                                    pa.TanggalPersetujuan,
+                                    pa.AlurPersetujuanID,
+                                    pa.TahapanSaatIni,
+                                    u.Role,
+                                    a.Berkas  
+                                FROM Absensi a
+                                JOIN PersetujuanAbsensi pa ON a.AbsensiID = pa.AbsensiID
+                                LEFT JOIN User u ON a.UserID = u.UserID
+                                LEFT JOIN Karyawan k ON u.UserID = k.UserID
+                                LEFT JOIN Manajer m ON u.UserID = m.UserID
+                                LEFT JOIN HRGA h ON u.UserID = h.UserID
+                                LEFT JOIN Direktur d ON u.UserID = d.UserID
+                                JOIN JenisAbsensi ja ON a.NamaJenisAbsensi = ja.NamaJenisAbsensi
+                                WHERE ((pa.AlurPersetujuanID = 2 AND pa.TahapanSaatIni = 1) OR (pa.AlurPersetujuanID = 1 AND pa.TahapanSaatIni = 2))
+                                AND pa.StatusPersetujuan NOT IN ('Approved', 'Declined')";
 
                         $result = mysqli_query($koneksi, $query);
                         $no = 1;
                         while ($row = mysqli_fetch_assoc($result)) {
-    // Output atau proses data seperti biasa
-    // Membuat link ke berkas
-                            $berkasLink = !empty($row['Berkas']) ? "<a href='/Karyawan/" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
+                            // Tentukan folder berkas berdasarkan role
+                            $folderBerkas = ''; 
+                            switch ($row['Role']) {
+                                case 'Admin':
+                                    $folderBerkas = 'Admin/BerkasAdmin';
+                                    break;
+                                case 'Karyawan':
+                                    $folderBerkas = 'Karyawan/BerkasKaryawan';
+                                    break;
+                                case 'Manajer':
+                                    $folderBerkas = 'Manajer/BerkasManajer';
+                                    break;
+                                case 'HRGA':
+                                    $folderBerkas = 'HRGA/BerkasHRGA';
+                                    break;
+                                case 'Direktur':
+                                    $folderBerkas = 'Direktur/BerkasDirektur';
+                                    break;
+                            }
+
+                            $namaBerkas = basename($row['Berkas']);
+                            $berkasLink = !empty($namaBerkas) ? "<a href='/$folderBerkas/" . urlencode($namaBerkas) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
+
                             echo "<tr class='text-center'>
                                     <td>{$no}</td>
                                     <td>{$row['AbsensiID']}</td>
@@ -219,10 +242,10 @@ $HRGADepartemen = $userDetails['Departemen']; // Get the HRGA's department
                                             <button type='button' class='btn custom-detail-btn-blue' onclick='showDetail({$row['AbsensiID']})'>Detail</button>
                                         </div>
                                     </td>
-                                  </tr>";
+                                </tr>";
                             $no++;
                         }
-                        ?>
+                    ?>
                     </tbody>
                 </table>
             </div>

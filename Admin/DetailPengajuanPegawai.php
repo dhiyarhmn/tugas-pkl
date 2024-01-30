@@ -104,9 +104,25 @@ $jabatanUserDipilih = $deptJabatanData['Jabatan'];
                             <td style="width: 200px;"><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
                             <td style="width: 200px;">
                                 <?php
-                                // Debugging untuk melihat nilai yang diperoleh dari database
-                                $berkasLink = !empty($row['Berkas']) ? "<a href='" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
-                                echo $berkasLink;
+                                $role = $tabelPengguna; 
+
+                                    $folderBerkas = ''; 
+                                    switch ($role) { // Use the assigned role
+                                        case 'Karyawan':
+                                            $folderBerkas = 'Karyawan/BerkasKaryawan';
+                                            break;
+                                        case 'Manajer':
+                                            $folderBerkas = 'Manajer/BerkasManajer';
+                                            break;
+                                        case 'HRGA':
+                                            $folderBerkas = 'HRGA/BerkasHRGA';
+                                            break;
+                                        // Include other cases if necessary
+                                    }
+
+                                    $namaBerkas = basename($row['Berkas']);
+                                    $berkasLink = !empty($namaBerkas) ? "<a href='/$folderBerkas/" . urlencode($namaBerkas) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
+                                    echo $berkasLink;
                                 ?>
                             </td>
                             <td style="width: 200px;">
