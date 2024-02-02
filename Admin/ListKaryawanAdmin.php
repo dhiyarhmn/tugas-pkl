@@ -28,7 +28,7 @@ if (isset($_SESSION['UserID'])) {
 
     if ($resultGetDataAdmin->num_rows > 0) {
         $rowAdmin = $resultGetDataAdmin->fetch_assoc();
-        $userDetails = $rowAdmin; // Gunakan data ini untuk tampilan profil
+        $userDetails = $rowAdmin; // data untuk tampilan profil
     }
 }
 
@@ -41,8 +41,7 @@ $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
 
 // -----------------------------------------------------------------
-// Query untuk menggabungkan data dari berbagai tabel dan mengurutkannya berdasarkan departemen
-// Query untuk menggabungkan data dari berbagai tabel kecuali Admin dan mengurutkannya berdasarkan departemen
+// menggabungkan data dari berbagai tabel dan mengurutkannya berdasarkan departemen
 $query = "
     SELECT K.UserID, K.NamaLengkap, K.NIK, K.Departemen, K.Jabatan 
     FROM Karyawan AS K 
@@ -66,7 +65,6 @@ while($row = mysqli_fetch_assoc($result)) {
     $dataKaryawan[] = $row;
 }
 
-// Tutup koneksi ke database
 mysqli_close($koneksi);
 ?>
 
@@ -84,7 +82,7 @@ mysqli_close($koneksi);
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
-    <!-- Custom CSS -->
+
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/fonts.css"> 
 </head>
@@ -125,7 +123,7 @@ mysqli_close($koneksi);
         <div class="sidebar-logout">
             <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
-                <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
+                <span>Logout</span> 
             </a>
         </div>
     </nav>
@@ -138,8 +136,7 @@ mysqli_close($koneksi);
                 <div class="col-auto">
                     <h2>PT. DAEKYUNG INDAH HEAVY INDUSTRY</h2>
                 </div>
-            </div>
-            
+            </div>           
             <div class="custom-table-container" style="margin-top: 30px;">
             <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                         <thead>
@@ -185,7 +182,6 @@ mysqli_close($koneksi);
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Isi detail status pengajuan akan ditampilkan di sini -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -193,8 +189,6 @@ mysqli_close($koneksi);
         </div>
     </div>
 </div>
-
-
 
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

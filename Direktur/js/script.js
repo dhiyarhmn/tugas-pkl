@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// JS BUAT SIDEBAR
+// SIDEBAR
 // -------------------------------------------------------------------
 $(document).ready(function () {
   // Pastikan navbar tertutup saat halaman dimuat
@@ -33,7 +33,7 @@ $(".logout-button").on("click", function () {
 });
 
 // -------------------------------------------------------------------
-// JS BUAT ...
+// KOTAK KOTAK 
 // -------------------------------------------------------------------
 function focusInput(element) {
   element.parentElement.classList.add("focused");
@@ -50,17 +50,10 @@ function updateInput(value) {
   document.querySelector('.popup input[type="checkbox"]').checked = false;
 }
 
-// function focusInput(element) {
-//     element.parentElement.classList.add("focused");
-// }
-
 function blurInput(element) {
   element.parentElement.classList.remove("focused");
 }
 
-// -------------------------------------------------------------------
-// JS BUAT KOTAK INPUT
-// -------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".input-container .input").forEach(function (input) {
     if (input.value !== "") {
@@ -75,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // -------------------------------------------------------------------
-// JS BUAT DATETIME PADA FORM PENGAJUAN
+// DATETIME PADA FORM PENGAJUAN
 // -------------------------------------------------------------------
 function focusInput(inputElement) {
   if ((inputElement.type === "date" || inputElement.type === "datetime-local") && inputElement.value === "") {
@@ -121,18 +114,19 @@ function focusDateTimeInput() {
 function focusDateTimeInput() {
   document.getElementById("periode_akhir").focus();
 }
+
 // -------------------------------------------------------------------
-// JS BUTTON DETAIL PADA STATUS PENGAJUAN DAN APPROVAL
+// BUTTON DETAIL PADA STATUS PENGAJUAN DAN APPROVAL
 // -------------------------------------------------------------------
 $(document).ready(function () {
-  // Fungsi untuk membuka popup ketika tombol detail diklik
+  // membuka popup ketika tombol detail diklik
   $(".custom-detail-btn-blue").click(function () {
-    $("#popupCard").slideDown(); // Menggunakan slideDown untuk animasi dari atas ke bawah
+    $("#popupCard").slideDown(); 
   });
 
-  // Fungsi untuk menutup popup ketika tombol close (x) diklik
+  // untuk menutup popup ketika tombol close diklik
   $(".close-btn").click(function () {
-    $("#popupCard").slideUp(); // Menggunakan slideUp untuk animasi tutup ke atas
+    $("#popupCard").slideUp();
   });
 });
 
@@ -141,7 +135,7 @@ $(document).ready(function () {
   $("#dataTable").DataTable();
 });
 
-// Fungsi untuk menampilkan data detail pengajuan absensi
+// menampilkan data detail pengajuan absensi
 function showDetailModal(status, jenis, tanggal) {
   // Mengisi konten modal dengan data absensi
   var modalTitle = document.getElementById("detailModalLabel");
@@ -153,8 +147,9 @@ function showDetailModal(status, jenis, tanggal) {
   // Menampilkan modal
   $("#detailModal").modal("show");
 }
+
 // -------------------------------------------------------------------
-// JS BUTTON APPROVE
+// BUTTON APPROVE
 // -------------------------------------------------------------------
 $(document).ready(function () {
   $(".custom-approval-btn-green").click(function () {
@@ -165,24 +160,23 @@ $(document).ready(function () {
     // Menyimpan referensi ke tombol
     var button = $(this);
 
-    // Menghilangkan efek hover dan focus sejenak
+    // Menghilangkan efek hover dan focus 
     button.removeClass("custom-approval-btn-green");
 
     // Menunggu efek modal selesai
     setTimeout(function () {
       // Mengembalikan class dan warna asli
       button.addClass("custom-approval-btn-green");
-    }, 100); // Anda bisa menyesuaikan waktu tunggu sesuai kebutuhan
+    }, 100); 
   });
 
   $("#dataTable").DataTable();
 });
 
 // -------------------------------------------------------------------
-// JS BUTTON DECLINE
+// BUTTON DECLINE
 // -------------------------------------------------------------------
 $(document).ready(function () {
-  // Corrected the class for the Approve button
   $(".custom-decline-btn-red").click(function () {
     // Menampilkan pesan sukses pada modal
     var declineModalBody = document.querySelector("#declineModal .modal-body");
@@ -197,7 +191,7 @@ $(document).ready(function () {
 });
 
 // -------------------------------------------------------------------
-// JS BUAT CHOOSE FILE
+// CHOOSE FILE
 // -------------------------------------------------------------------
 document.getElementById('jenis_absensi').addEventListener('change', function() {
   var selectedValue = this.value;
@@ -213,10 +207,12 @@ document.getElementById('jenis_absensi').addEventListener('change', function() {
   }
 });
 
-// JS BUAT DATETIME TANGGAL PENGAJUAN
+// -------------------------------------------------------------------
+// DATETIME TANGGAL PENGAJUAN
+// -------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
   var now = new Date();
-  var month = ('0' + (now.getMonth() + 1)).slice(-2); // Bulan dimulai dari 0
+  var month = ('0' + (now.getMonth() + 1)).slice(-2); 
   var day = ('0' + now.getDate()).slice(-2);
   var hours = ('0' + now.getHours()).slice(-2);
   var minutes = ('0' + now.getMinutes()).slice(-2);
@@ -226,12 +222,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ----------------------------------------------------------------
-// JS BUAT Cuti Tahunan
+// Cuti Tahunan
 // ----------------------------------------------------------------
 document.getElementById('jenis_absensi').addEventListener('change', function() {
   var jenisAbsensi = this.value;
   var sisaCutiContainer = document.getElementById('sisaCutiContainer');
-  if (jenisAbsensi === 'AL') { // Sesuaikan dengan kode jenis cuti tahunan Anda
+  if (jenisAbsensi === 'AL') { 
       sisaCutiContainer.style.display = 'block';
   } else {
       sisaCutiContainer.style.display = 'none';

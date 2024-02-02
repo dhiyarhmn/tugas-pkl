@@ -1,25 +1,24 @@
 <?php
 session_start();
 
-
-// Koneksi ke database (sesuaikan dengan detail koneksi Anda)
+// Koneksi ke database 
 $koneksi = mysqli_connect("localhost", "root", "", "pengajuanabsensi3");
 
 if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Karyawan') {
     header("Location: /Login.php");
-    exit(); // Penting untuk menghentikan eksekusi skrip lebih lanjut
+    exit(); 
 }
 
 // -------------------------------------------------------------------
 // buat foto profile, nama lengkap, dan jabatan sesuai user yang login
 // -------------------------------------------------------------------
-// Adjust this query based on your actual database schema
 $userDetailsQuery = "SELECT Karyawan.NamaLengkap, Karyawan.Departemen, Karyawan.Jabatan, User.ProfilePhoto 
                      FROM Karyawan
                      JOIN User ON Karyawan.UserID = User.UserID
                      WHERE Karyawan.UserID = '".$_SESSION["UserID"]."'";
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
+
 // -------------------------------------------------------------------
 // KOTAK APPROVE, ON PROCESS, DECLINE
 // -------------------------------------------------------------------
@@ -64,7 +63,6 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Adjusted CSS link. Assuming 'style.css' is in the same directory as the PHP file -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/fonts.css"> 
 </head>
@@ -77,8 +75,8 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
             </button>
             <div style="text-align: center; margin-top: 30px;">
                 <?php
-                // Contoh kode PHP untuk menampilkan foto profil
-                $defaultProfilePhoto = 'ProfileKaryawan/profile.jpeg'; // Lokasi foto default
+                // navbar header
+                $defaultProfilePhoto = 'ProfileKaryawan/profile.jpeg'; 
                 $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
 
                 $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
@@ -119,7 +117,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
         <div class="sidebar-logout">
             <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
-                <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
+                <span>Logout</span> 
             </a>
         </div>
     </nav>
@@ -180,7 +178,6 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                         </div>
                     </div>
                 </div>    
-            <!-- Kotak Pengajuan Absensi -->
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
@@ -193,7 +190,6 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                         </div>
                     </div>
                 </div>
-                <!-- Kotak Status Pengajuan -->
                 <div class="col-md-6" style="margin-top: 30px; margin-bottom: 30px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
@@ -213,10 +209,9 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
 
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
-    <script src="./js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   
+<script src="./js/script.js"></script>
 </body>
 </html>

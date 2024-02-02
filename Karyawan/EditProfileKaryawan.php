@@ -27,7 +27,7 @@ if (isset($_SESSION['UserID'])) {
 
     if ($resultGetDataKaryawan->num_rows > 0) {
         $rowKaryawan = $resultGetDataKaryawan->fetch_assoc();
-        $userDetails = $rowKaryawan; // Gunakan data ini untuk tampilan profil
+        $userDetails = $rowKaryawan; // data untuk tampilan profil
     }
 }
 
@@ -57,11 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($uploadOk == 1) {
             if (move_uploaded_file($_FILES["profilePhoto"]["tmp_name"], $target_file)) {
                 
-        
-                // Update database with the new profile photo file path
+                // Update database dengan foto profile baru 
                 $sqlUpdateProfilePhoto = "UPDATE User SET ProfilePhoto = '$target_file' WHERE UserID = '$userID'";
                 if ($koneksi->query($sqlUpdateProfilePhoto) === TRUE) {
-                    // Update $userDetails to reflect the new profile photo path
+                    // Update $userDetails dengan foto profile baru
                     $userDetails['ProfilePhoto'] = $target_file;
                     echo "";
                 } else {
@@ -91,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     header("Location: DashboardKaryawan.php");
-    exit; // Pastikan untuk mengakhiri eksekusi skrip ini setelah melakukan redirect
+    exit; 
 }
 
 // Ambil detail user untuk tampilan profil
@@ -102,7 +101,6 @@ $userDetailsQuery = "SELECT K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.Jaba
 $userDetailsResult = mysqli_query($koneksi, $userDetailsQuery);
 $userDetails = mysqli_fetch_assoc($userDetailsResult);
 
-// Tutup koneksi ke database di akhir skrip
 $koneksi->close();
 ?>
 
@@ -119,7 +117,6 @@ $koneksi->close();
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Adjusted CSS link. Assuming 'style.css' is in the same directory as the PHP file -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/fonts.css">  
 </head>
@@ -132,8 +129,8 @@ $koneksi->close();
             </button>
             <div style="text-align: center; margin-top: 30px;">
                 <?php
-                // Contoh kode PHP untuk menampilkan foto profil
-                $defaultProfilePhoto = 'ProfileKaryawan/profile.jpeg'; // Lokasi foto default
+                // navbar header
+                $defaultProfilePhoto = 'ProfileKaryawan/profile.jpeg';
                 $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
 
                 $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
@@ -198,13 +195,12 @@ $koneksi->close();
                                     <div class="card-body text-center" >
                                         <input id="imageUpload" type="file" name="profilePhoto" accept="image/*" style="display: none;">
                                         <?php
-                                            // Contoh kode PHP untuk menampilkan foto profil
-                                            $defaultProfilePhoto = 'ProfileKaryawan/profile.jpeg'; // Lokasi foto default
+                                            // untuk menampilkan foto profil
+                                            $defaultProfilePhoto = 'ProfileKaryawan/profile.jpeg'; 
                                             $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
 
                                             $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
 
-                                            // Menambahkan style ke dalam tag img
                                             echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="width: 180px; height: 180px; border-radius: 50%; margin: 40px auto 30px auto;">';
                                         ?>
                                         <br>
@@ -255,10 +251,10 @@ $koneksi->close();
     </div>
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
-    <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
-    <script src="./js/script.js"></script>
+<script src="./js/script.js"></script>
+
 </body>
 </html>

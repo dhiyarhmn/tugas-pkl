@@ -59,7 +59,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>PT. Daekyung Indah Heavy Industry</title>
-    
+    <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
@@ -75,8 +75,8 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
             </button>
             <div style="text-align: center; margin-top: 30px;">
                 <?php
-                // Contoh kode PHP untuk menampilkan foto profil
-                $defaultProfilePhoto = 'ProfileManajer/profile.jpeg'; // Lokasi foto default
+                // navbar header
+                $defaultProfilePhoto = 'ProfileManajer/profile.jpeg'; 
                 $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
 
                 $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
@@ -123,7 +123,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
         <div class="sidebar-logout">
             <a href="/Logout.php" class="btn logout-button">
                 <i class="fa fa-sign-out"></i>
-                <span>Logout</span> <!-- Elemen ini akan disembunyikan ketika navbar tertutup -->
+                <span>Logout</span> 
             </a>
         </div>
     </nav>
@@ -227,10 +227,10 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
 
 <!-- Bootstrap and jQuery libraries -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
-    <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
-    <script src="./js/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="./js/script.js"></script>
+
 </body>
 </html>

@@ -6,12 +6,12 @@ img {
 body {
   margin: 0;
   padding: 0;
-  background-image: url("/Assets/img/background7.jpeg"); /* Pastikan path ini benar */
+  background-image: url("/Assets/img/background7.jpeg"); 
   background-color: #add2ff; /* Warna fallback jika gambar tidak bisa dimuat */
   background-size: cover; /* Tutupi seluruh halaman */
-  background-position: center; /* Pusatkan gambar */
-  background-repeat: no-repeat; /* Jangan ulangi gambar */
-  min-height: 100vh; /* Pastikan menutupi tinggi viewport */
+  background-position: center; 
+  background-repeat: no-repeat; 
+  min-height: 100vh; 
 }
 /* .container {
   display: grid;
@@ -69,8 +69,8 @@ body {
 }
 
 #sidebar.closed .profile-image {
-  width: 40px; /* Adjust this value as needed */
-  height: 40px; /* Adjust this value as needed */
+  width: 40px; 
+  height: 40px;
 }
 
 #sidebar ul.components {
@@ -90,7 +90,7 @@ body {
   color: #fff;
 }
 #sidebar ul li a i {
-  margin-right: 15px; /* Sesuaikan ini untuk memberi ruang yang cukup antara ikon dan teks */
+  margin-right: 15px; 
 }
 #sidebar ul li a:hover {
   color: #fff;
@@ -128,33 +128,33 @@ a[aria-expanded="true"] {
   display: none;
 }
 #sidebar.closed ul li a {
-  justify-content: center; /* Tengahkan ikon secara horizontal */
-  align-items: center; /* Tengahkan ikon secara vertikal */
-  padding: 15px; /* Atur padding agar ikon terletak di tengah */
+  justify-content: center; /*horizontal */
+  align-items: center; /*vertikal */
+  padding: 15px; 
 }
 #sidebar ul li a span {
-  margin-left: 0; /* Sesuaikan ini jika perlu */
+  margin-left: 0; 
 }
 #sidebarCollapse {
-  background: none; /* Hapus latar belakang */
-  border: none; /* Hapus border */
-  color: white; /* Atur warna ikon, sesuaikan sesuai kebutuhan */
-  padding: 10px; /* Atur padding, sesuaikan sesuai kebutuhan */
-  font-size: 20px; /* Atur ukuran ikon, sesuaikan sesuai kebutuhan */
-  cursor: pointer; /* Tambahkan cursor pointer untuk memberikan indikasi bahwa ini adalah tombol */
+  background: none; 
+  border: none; 
+  color: white;
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer; 
 }
 #sidebarCollapse:hover {
-  color: #ddd; /* Warna saat hover, sesuaikan sesuai kebutuhan */
+  color: #ddd; 
 }
 #sidebarCollapse.open {
   position: fixed;
-  left: 190px; /* Pindahkan ke kanan sejauh lebar sidebar */
+  left: 190px; 
   top: 0;
   z-index: 1050;
   margin-top: 0.5rem;
 }
-/* Posisi logout */
-/* Gaya untuk tombol Logout */
+
+/*logout */
 .sidebar-logout {
   position: absolute;
   bottom: 0;
@@ -171,46 +171,43 @@ a[aria-expanded="true"] {
 .logout-button:hover {
   background-color: pink;
 }
-/* Menyembunyikan teks "Logout" ketika navbar tertutup */
 #sidebar.closed .logout-button span {
   display: none;
 }
-/* Menampilkan teks "Logout" ketika navbar terbuka */
 #sidebar:not(.closed) .logout-button span {
   display: inline;
 }
 .btn.custom-btn-blue {
-  background-color: #160066; /* Bootstrap primary blue */
+  background-color: #160066; 
   color: white;
-  border-radius: 20px; /* Rounded edges */
+  border-radius: 20px; 
   border: none;
-  padding: 0.5em 11em; /* More flexible padding */
-  font-size: 1rem; /* Relative font size */
-  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  padding: 0.5em 11em; 
+  font-size: 1rem; 
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); 
+  transition: all 0.3s ease;
 }
 .btn.custom-btn-blue:hover,
 .btn.custom-btn-blue:focus {
-  background-color: #9bc4e2; /* Darker blue on hover/focus */
-  box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); /* Deeper shadow on hover/focus */
+  background-color: #9bc4e2;
+  box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); 
 }
 .larger-card {
-  width: 30%; /* Atur lebar kotak */
-  margin-bottom: 30px; /* Atur margin bawah */
-  padding: 2%; /* Atur padding dalam kotak */
-  font-size: 1.2rem; /* Atur ukuran font */
+  width: 30%; 
+  margin-bottom: 30px;
+  padding: 2%; 
+  font-size: 1.2rem; 
 }
 .larger-card .card {
-  transition: transform 0.8s ease-in-out; /* Add the transition to the default state */
+  transition: transform 0.8s ease-in-out; 
 }
 
 .larger-card:hover .card {
-  transform: scale(1.1); /* Increase the size when hovered */
-  transition: transform 0.8s ease-in-out; /* Add a smooth transition effect */
+  transform: scale(1.1); 
+  transition: transform 0.8s ease-in-out; 
 }
 .larger-card .fa {
-  font-size: 5rem; /* Atur ukuran ikon */
-  /* Anda juga bisa menambahkan margin atau padding jika diperlukan */
+  font-size: 5rem; 
 }
 .larger-card .card-body {
   display: flex;
@@ -218,49 +215,50 @@ a[aria-expanded="true"] {
   align-items: flex-start;
 }
 .approved-icon {
-  color: #006b3c; /* Warna biru dengan kode #160066 */
+  color: #006b3c;
 }
 .declined-icon {
-  color: #7c0a02; /* Warna biru dengan kode #160066 */
+  color: #7c0a02; 
 }
 .on-process-icon {
-  color: #eead0e; /* Warna biru dengan kode #160066 */
+  color: #eead0e; 
 }
-/* Responsive Text for 'PT. Daekyung Indah Heavy Industry' */
+
+/* Responsive buat 'PT. Daekyung Indah Heavy Industry' */
 .navbar-brand {
-  font-size: 1.5rem; /* Adjust base font size */
+  font-size: 1.5rem; 
 }
 
 /* Media Queries */
 @media (max-width: 768px) {
   .navbar-brand {
-    font-size: 1.2rem; /* Smaller font size for smaller devices */
+    font-size: 1.2rem; 
   }
 
   #sidebar {
-    width: 20%; /* Full width sidebar on smaller screens */
+    width: 20%; 
     left: 0;
   }
 
   #content.shift {
-    padding-left: 0; /* Remove shift on smaller screens */
+    padding-left: 0; 
   }
 
   .larger-card,
   .sidebar-logout,
   .btn.custom-btn-blue {
-    width: 100%; /* Full width for cards and buttons on smaller screens */
-    padding: 15px; /* Adjust padding */
+    width: 100%; 
+    padding: 15px; 
   }
 }
 
 @media (max-width: 100%) {
   .navbar-brand {
-    font-size: 1rem; /* Even smaller font size for very small devices */
+    font-size: 1rem;
   }
 
   #sidebar.closed {
-    width: 100%; /* Full width sidebar when closed on very small screens */
+    width: 100%;
   }
 }
 .rounded-card {
@@ -268,45 +266,44 @@ a[aria-expanded="true"] {
   box-shadow: 0px 8px 12px rgba(34, 34, 34, 0.6);
 }
 .btn.custom-detail-btn-blue {
-  background-color: #160066; /* Bootstrap primary blue */
+  background-color: #160066; 
   color: white;
-  border-radius: 20px; /* Rounded edges */
+  border-radius: 20px; 
   border: none;
-  padding: 1px 65px; /* Padding */
-  font-size: 0.7rem; /* Font size */
-  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); /* Bootstrap shadow for primary blue */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  padding: 1px 65px;
+  font-size: 0.7rem; 
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.5); 
+  transition: all 0.3s ease; 
 }
 .btn.custom-detail-btn-blue:hover,
 .btn.custom-detail-btn-blue:focus {
-  background-color: #9bc4e2; /* Darker blue on hover/focus */
-  box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); /* Deeper shadow on hover/focus */
+  background-color: #9bc4e2; 
+  box-shadow: 0 5px 9px rgba(0, 123, 255, 0.7); 
 }
 .custom-larger-card {
-  width: 100%; /* Atau nilai spesifik lain sesuai kebutuhan */
-  padding: 30px; /* Lebih banyak padding di dalam kotak */
-  /* Anda bisa menambahkan properti CSS lain jika diperlukan */
+  width: 100%; 
+  padding: 30px; 
 }
 .col-md-6.mb-3 {
-  width: 100%; /* Change this value to the desired width */
-  margin: auto; /* Center the box if the width is less than 100% */
+  width: 100%; 
+  margin: auto; 
 }
 .text-center {
   text-align: center;
 }
 .detail-column {
-  width: 130px; /* atau lebar yang diinginkan */
+  width: 130px; 
 }
 .table-column {
   width: 250px;
 }
 .custom-table-container {
-  margin: auto; /* Menengahkan tabel */
-  width: 1150px; /* Menyesuaikan lebar tabel */
-  padding: 20px; /* Menambahkan padding */
+  margin: auto; 
+  width: 1150px; 
+  padding: 20px;
 }
 #dataTable {
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.8); /* Anda dapat menyesuaikan ukuran dan warna bayangan sesuai kebutuhan Anda */
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.8);
 }
 .container {
   display: flex;
@@ -357,50 +354,49 @@ a[aria-expanded="true"] {
 }
 
 /* -------------------------------------------------------------------------------------------------------------------------- */
-/* CSS KOTAK DI FORM PENGAJUAN ABSENSI */
+/* KOTAK DI FORM PENGAJUAN ABSENSI */
 /* -------------------------------------------------------------------------------------------------------------------------- */
 .input-container {
-  width: 100%; /* Mengatur lebar container input sesuai lebar card */
-  padding: 0 15px; /* Penambahan padding jika diperlukan */
-  margin-bottom: 40px; /* Jarak antar kotak input */
+  width: 100%; 
+  padding: 0 15px; 
+  margin-bottom: 40px; 
   transition: margin-top 0.7s;
 }
 
 .input-container .input {
-  width: 100%; /* Mengatur lebar input sesuai container */
-  box-sizing: border-box; /* Pastikan padding dan border tidak menambah lebar total */
+  width: 100%; 
+  box-sizing: border-box; 
 }
 .input-container.focused {
-  margin: 60px 0; /* Margin tambahan ketika difokuskan */
+  margin: 60px 0;
 }
 .active-label {
-  /* Sesuaikan properti ini sesuai kebutuhan untuk mengatur posisi label */
   transition: 0.3s;
   padding-left: 0px;
   transform: translateY(-35px);
 }
 .static-label {
-  transform: translateY(-35px); /* Atur sesuai dengan desain Anda */
-  font-size: 12px; /* Atur sesuai dengan desain Anda */
-  /* Tambahkan properti lain yang diperlukan */
+  transform: translateY(-35px);
+  font-size: 12px; 
 }
 
 /* -------------------------------------------------------------------------------------------------------------------------- */
-/* CSS BUAT DATETIME PADA FORM PENGAJUAN */
+/* DATETIME PADA FORM PENGAJUAN */
 /* -------------------------------------------------------------------------------------------------------------------------- */
-/* Gaya untuk input date ketika placeholder ditampilkan */
+/* input date ketika placeholder ditampilkan */
 .input.placeholder-shown::-webkit-datetime-edit,
 .input.placeholder-shown::-webkit-inner-spin-button,
 .input.placeholder-shown::-webkit-clear-button {
   color: transparent;
 }
 
-/* Gaya untuk input date ketika placeholder tidak ditampilkan */
+/* input date ketika placeholder tidak ditampilkan */
 .input::-webkit-datetime-edit,
 .input::-webkit-inner-spin-button,
 .input::-webkit-clear-button {
-  color: #000000; /* atau warna lain sesuai kebutuhan */
+  color: #000000; 
 }
+
 /* -------------------------------------------------------------------------------------------------------------------------- */
 /* CSS UNTUK BUTTON SUBMIT FORM PENGAJUAN */
 /* -------------------------------------------------------------------------------------------------------------------------- */
@@ -422,47 +418,45 @@ a[aria-expanded="true"] {
 }
 
 .btn.custom-approval-btn-green {
-  background-color: #006b3c; /* Bootstrap primary blue */
+  background-color: #006b3c; 
   color: white;
-  border-radius: 20px; /* Rounded edges */
+  border-radius: 20px; 
   border: none;
-  padding: 7px 20px; /* Padding */
-  font-size: 0.7rem; /* Font size */
-  box-shadow: 0 4px 6px #62c29e; /* Bootstrap shadow for primary blue */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  padding: 7px 20px; 
+  font-size: 0.7rem; 
+  box-shadow: 0 4px 6px #62c29e; 
+  transition: all 0.3s ease; 
 }
 .btn.custom-approval-btn-green:hover,
 .btn.custom-approval-btn-green:focus {
-  background-color: #87c495; /* Darker blue on hover/focus */
-  box-shadow: 0 5px 9px #62c29e; /* Deeper shadow on hover/focus */
+  background-color: #87c495; 
+  box-shadow: 0 5px 9px #62c29e; 
 }
 
 .btn.custom-decline-btn-red {
-  background-color: #7c0a02; /* Bootstrap primary blue */
+  background-color: #7c0a02; 
   color: white;
-  border-radius: 20px; /* Rounded edges */
+  border-radius: 20px; 
   border: none;
-  padding: 7px 20px; /* Padding */
-  font-size: 0.7rem; /* Font size */
-  box-shadow: 0 4px 6px #dd4e4e; /* Bootstrap shadow for primary blue */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  padding: 7px 20px;
+  font-size: 0.7rem; 
+  box-shadow: 0 4px 6px #dd4e4e; 
+  transition: all 0.3s ease; 
 }
 .btn.custom-decline-btn-red:hover,
 .btn.custom-decline-btn-red:focus {
-  background-color: #ff6161; /* Darker blue on hover/focus */
-  box-shadow: 0 5px 9px #dd4e4e; /* Deeper shadow on hover/focus */
+  background-color: #ff6161;
+  box-shadow: 0 5px 9px #dd4e4e; 
 }
 
-/* Additional CSS for positioning the buttons */
 .button-row {
   display: flex;
-  justify-content: flex-start; /* Aligns buttons to the left */
-  margin-bottom: 10px; /* Adds space between the rows */
+  justify-content: flex-start; 
+  margin-bottom: 10px; 
 }
 
-/* If you want the Detail button to align under the Approve button specifically */
 .btn.custom-detail-btn-blue {
-  margin-left: 0; /* Adjust this value to align under the Approve button if necessary */
+  margin-left: 0; 
 }
 
 /* --------------------------------------- */
