@@ -40,7 +40,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
     <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
@@ -65,7 +65,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             <li>
                 <a href="ListKaryawanAdmin.php">
                     <i class="fa fa-search"></i> 
-                    <span>List Karyawan</span>
+                    <span>List Pegawai</span>
                 </a>
             </li>
         </ul>
@@ -78,7 +78,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
     </nav>
     <div id="content">
         <div class="container mt-3"> 
-            <div class="row justify-content-center align-items-center">
+            <div class="row justify-content-center align-items-center" style="margin-bottom: 100px;">
                 <div class="col-auto">
                     <img src="/Assets/img/logo3.png" class="img-fluid" style="max-width: 60px; height: auto;">  
                 </div>
@@ -92,7 +92,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Generate Akun</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Generate Employee Accounts with Ease</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='GenerateAkun.php'">
                                 <span class="button__text">Click Here</span>
                                 <span class="button__icon"><i class="fas fa-plus"></i></i></span>
@@ -104,8 +104,8 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
-                            <h5 class="card-title">List Karyawan</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <h5 class="card-title">List Pegawai</h5>
+                            <p class="card-text">Discover the Full Employees Listing Here</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ListKaryawanAdmin.php'">
                                 <span class="button__text">Show More</span>
                                 <span class="button__icon"><i class="fa fa-search"></i></i></span>

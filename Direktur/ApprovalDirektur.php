@@ -43,8 +43,44 @@ function handleApplication($absensiID, $status) {
                                 WHERE AbsensiID = '$absensiID'";
                 mysqli_query($koneksi, $queryUpdate);
             }
-        } elseif ($status == 'Declined') {
-            // Jika ditolak, set status menjadi 'Declined'
+        } if ($status == 'Declined') {
+            $queryCekJenis = "SELECT a.NamaJenisAbsensi, a.UserID, a.WaktuPeriodeAbsensiMulai, a.WaktuPeriodeAbsensiSelesai 
+                              FROM Absensi a 
+                              WHERE a.AbsensiID = '$absensiID'";
+            $resultCekJenis = mysqli_query($koneksi, $queryCekJenis);
+            $dataJenis = mysqli_fetch_assoc($resultCekJenis);
+    
+            if ($dataJenis && $dataJenis['NamaJenisAbsensi'] == 'AL') {
+                $tanggalMulai = new DateTime($dataJenis['WaktuPeriodeAbsensiMulai']);
+                $tanggalSelesai = new DateTime($dataJenis['WaktuPeriodeAbsensiSelesai']);
+                $interval = $tanggalMulai->diff($tanggalSelesai);
+    
+                $jumlahHariCuti = 0;
+                for ($i = 0; $i <= $interval->days; $i++) {
+                    $tanggal = clone $tanggalMulai;
+                    $tanggal->modify("+$i days");
+                    if ($tanggal->format('N') < 6) {
+                        $jumlahHariCuti++;
+                    }
+                }
+    
+                // Debugging: Periksa jumlah hari cuti
+                echo "\n";
+    
+                $userID = $dataJenis['UserID'];
+                $queryUpdateCuti = "UPDATE CutiTahunan 
+                                    SET CutiTerpakai = CutiTerpakai - $jumlahHariCuti, 
+                                        CutiSisa = CutiSisa + $jumlahHariCuti 
+                                    WHERE UserID = '$userID'";
+                if (mysqli_query($koneksi, $queryUpdateCuti)) {
+                    // Debugging: Periksa apakah query berhasil
+                    echo "\n";
+                } else {
+                    // Debugging: Periksa apakah ada error
+                    echo "Error: " . mysqli_error($koneksi) . "\n";
+                }
+            }
+    
             $queryUpdate = "UPDATE PersetujuanAbsensi 
                             SET StatusPersetujuan = 'Declined' 
                             WHERE AbsensiID = '$absensiID'";
@@ -98,11 +134,19 @@ $DirekturDepartemen = $userDetails['Departemen']; // Get the Direktur's departme
 <div class="wrapper">
 <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
+                <?php
+                // Contoh kode PHP untuk menampilkan foto profil
+                $defaultProfilePhoto = 'ProfileDirektur/profile.jpeg'; // Lokasi foto default
+                $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
+
+                $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
+
+                echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="margin-bottom: 10px;">';
+                ?>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
@@ -130,7 +174,7 @@ $DirekturDepartemen = $userDetails['Departemen']; // Get the Direktur's departme
             <li>
                 <a href="ListKaryawanDirektur.php">
                     <i class="fa fa-search"></i> 
-                    <span>List Karyawan</span>
+                    <span>List Pegawai</span>
                 </a>
             </li>
         </ul>
@@ -152,7 +196,7 @@ $DirekturDepartemen = $userDetails['Departemen']; // Get the Direktur's departme
                 </div>
             </div>
             
-            <div class="custom-table-container">
+            <div class="custom-table-container" style="margin-top: 30px;">
                 <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>

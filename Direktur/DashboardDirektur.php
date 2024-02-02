@@ -72,11 +72,19 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
     <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
+                <?php
+                // Contoh kode PHP untuk menampilkan foto profil
+                $defaultProfilePhoto = 'ProfileDirektur/profile.jpeg'; // Lokasi foto default
+                $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
+
+                $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
+
+                echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="margin-bottom: 10px;">';
+                ?>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
@@ -104,7 +112,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
             <li>
                 <a href="ListKaryawanDirektur.php">
                     <i class="fa fa-search"></i> 
-                    <span>List Karyawan</span>
+                    <span>List Pegawai</span>
                 </a>
             </li>
         </ul>
@@ -117,7 +125,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
     </nav>
     <div id="content">
         <div class="container mt-3"> 
-            <div class="row justify-content-center align-items-center">
+            <div class="row justify-content-center align-items-center" style="margin-bottom: 100px;">
                 <div class="col-auto">
                     <img src="/Assets/img/logo3.png" class="img-fluid" style="max-width: 60px; height: auto;">  
                 </div>
@@ -125,12 +133,12 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     <h2>PT. DAEKYUNG INDAH HEAVY INDUSTRY</h2>
                 </div>
             </div>
-            <div class="row justify-content-center mt-4 box-container" style="margin-top: 75px;">
+            <div class="row justify-content-center mt-4 box-container" style="margin-top: 100px;">
                 <div class="col-md-6">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Edit Profile</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Optimize Your Profile Settings</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='EditProfileDirektur.php'">
                                 <span class="button__text">Click Here</span>
                                 <span class="button__icon"><i class="fas fa-user"></i></i></span>
@@ -143,7 +151,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Approval</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Approval for Employees Absence Submissions</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ApprovalDirektur.php'">
                                 <span class="button__text">Click Here</span>
                                 <span class="button__icon"><i class="fa fa-check-square"></i></i></span>
@@ -155,8 +163,8 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                 <div class="col-md-6" style="margin-top: 30px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
-                            <h5 class="card-title">List Karyawan</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <h5 class="card-title">List Pegawai</h5>
+                            <p class="card-text">Discover the Full Employees Listing Here</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ListKaryawanDirektur.php'">
                                 <span class="button__text">Show More</span>
                                 <span class="button__icon"><i class="fa fa-search"></i></i></span>

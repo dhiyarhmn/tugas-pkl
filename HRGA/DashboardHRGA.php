@@ -72,11 +72,19 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
     <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
+                <?php
+                // Contoh kode PHP untuk menampilkan foto profil
+                $defaultProfilePhoto = 'ProfileHRGA/profile.jpeg'; // Lokasi foto default
+                $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
+
+                $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
+
+                echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="margin-bottom: 10px;">';
+                ?>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
@@ -132,7 +140,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                 </div>
             </div>
             <div class="row justify-content-center mt-4 box-container">
-                <div class="col-auto mb-3 larger-card" style="margin-top: 75px;">
+                <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
@@ -143,7 +151,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                         </div>
                     </div>
                 </div>
-                <div class="col-auto mb-3 larger-card" style="margin-top: 75px;">
+                <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
@@ -154,7 +162,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                         </div>
                     </div>
                 </div>
-                <div class="col-auto mb-3 larger-card" style="margin-top: 75px;">
+                <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>     
@@ -170,7 +178,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Edit Profile</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Optimize Your Profile Settings</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='EditProfileHRGA.php'">
                                 <span class="button__text">Click Here</span>
                                 <span class="button__icon"><i class="fas fa-user"></i></i></span>
@@ -183,7 +191,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Pengajuan Absensi</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Submit Your Absence Submissions</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='PengajuanAbsensiHRGA.php'">
                                 <span class="button__text">Click Here</span>
                                 <span class="button__icon"><i class="fas fa-plus"></i></i></span>
@@ -196,7 +204,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Status Pengajuan</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Check Your Submissions Status</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='StatusPengajuanHRGA.php'">
                                 <span class="button__text">Show More</span>
                                 <span class="button__icon"><i class="fas fa-list-alt"></i></span>
@@ -204,11 +212,11 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6" style="margin-top: 30px;">
+                <div class="col-md-6" style="margin-top: 30px; margin-bottom: 30px;">
                     <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                         <div class="card-body">
                             <h5 class="card-title">Approval</h5>
-                            <p class="card-text">Some sample content goes here.</p>
+                            <p class="card-text">Approval for Employees Absence Submissions</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ApprovalHRGA.php'">
                                 <span class="button__text">Click Here</span>
                                 <span class="button__icon"><i class="fa fa-check-square"></i></span>

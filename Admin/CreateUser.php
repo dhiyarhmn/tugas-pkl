@@ -34,9 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $insertRoleTable = "INSERT INTO $role (NIK, UserID, NamaLengkap, JenisKelamin, TahunMasuk, Departemen, Jabatan) 
                             VALUES ('$nik', $last_id, '$namaLengkap', '$jenisKelamin', $tahunMasuk, '$departemen', '$jabatan')";
         if ($koneksi->query($insertRoleTable) === TRUE) {
-            // Redirect to dashboard.php after successful insertion
-            header('Location: DashboardAdmin.php');
-            exit();
+            // Tambahkan data ke tabel CutiTahunan
+            $tahunSekarang = date("Y"); // Mengambil tahun sekarang
+            $jatahCuti = 12; // Jatah cuti per tahun
+            $insertCutiTahunan = "INSERT INTO CutiTahunan (UserID, Tahun, JatahCuti, CutiTerpakai, CutiSisa) 
+                                  VALUES ($last_id, '$tahunSekarang', $jatahCuti, 0, $jatahCuti)";
+            if ($koneksi->query($insertCutiTahunan) === TRUE) {
+                header('Location: DashboardAdmin.php');
+                exit();
+            } else {
+                echo "Error: " . $koneksi->error;
+            }
         } else {
             echo "Error: " . $koneksi->error;
         }

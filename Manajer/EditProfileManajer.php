@@ -22,7 +22,7 @@ if (isset($_SESSION['UserID'])) {
     $userID = $_SESSION['UserID'];
 
     // Ambil data Manajer dan username berdasarkan UserID
-    $queryGetDataManajer = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.ProfilePhoto FROM Manajer AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
+    $queryGetDataManajer = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.Password, U.ProfilePhoto FROM Manajer AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
     $resultGetDataManajer = $koneksi->query($queryGetDataManajer);
 
     if ($resultGetDataManajer->num_rows > 0) {
@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Email = $_POST["Email"] ?? '';
     $NoHP = $_POST["NoHP"] ?? '';
     $Username = $_POST["Username"] ?? '';
+    $Password = $_POST["Password"] ?? '';
 
     // Periksa dan unggah foto profil jika ada
     if (isset($_FILES["profilePhoto"]) && $_FILES["profilePhoto"]["error"] == 0) {
@@ -83,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Update data User
-        $sqlUser = "UPDATE User SET Username = '$Username' WHERE UserID = '$userID'";
+        $sqlUser = "UPDATE User SET Username = '$Username', Password = '$Password' WHERE UserID = '$userID'";
         if ($koneksi->query($sqlUser) === TRUE) {
             echo "";
         } else {
@@ -127,11 +128,19 @@ $koneksi->close();
     <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
+                <?php
+                // Contoh kode PHP untuk menampilkan foto profil
+                $defaultProfilePhoto = 'ProfileManajer/profile.jpeg'; // Lokasi foto default
+                $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
+
+                $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
+
+                echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="margin-bottom: 10px;">';
+                ?>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
@@ -188,14 +197,23 @@ $koneksi->close();
             </div>            
             <div class="row justify-content-center mt-4">
                 <div class="col-md-6">
-                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
+                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8); margin-bottom: 30px;">
                         <div class="card-body">
-                        <h5 class="card-title text-center mb-4">EDIT PROFILE</h5>
+                        <h5 class="card-title text-center mb-4">Edit Profile</h5>
                             <form method="post" enctype="multipart/form-data">
                                 <div class="container input-container">
                                     <div class="card-body text-center" >
                                         <input id="imageUpload" type="file" name="profilePhoto" accept="image/*" style="display: none;">
-                                        <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" style="width: 180px; height: 180px; border-radius: 50%; margin: 40px auto 30px auto;">
+                                        <?php
+                                            // Contoh kode PHP untuk menampilkan foto profil
+                                            $defaultProfilePhoto = 'ProfileManajer/profile.jpeg'; // Lokasi foto default
+                                            $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
+
+                                            $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
+
+                                            // Menambahkan style ke dalam tag img
+                                            echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="width: 180px; height: 180px; border-radius: 50%; margin: 40px auto 30px auto;">';
+                                        ?>
                                         <br>
                                         <label for="imageUpload" class="btn btn-primary" style="font-size: 10px; background-color: #160066; border: #160066;">Upload Photo</label>
                                     </div>
@@ -231,6 +249,24 @@ $koneksi->close();
                                 <div class="container input-container">
                                     <input required="" type="text" name="Username" class="input" value="<?php echo htmlspecialchars($rowManajer['Username'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Username</label>
+                                </div>
+                                <div class="container input-container">
+                                    <label for="exampleInputEmail1" style="margin-bottom: -8px; margin-top: -23px;">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" id="pass" class="input" value="<?php echo htmlspecialchars($rowManajer['Password'] ?? ''); ?>" readonly onfocus="focusInput(this)" onblur="blurInput(this)">
+                                        <div class="input-group-append">
+                                            <span id="mybutton" onclick="change()" class="input" style="cursor: pointer;">
+                                                <!-- icon mata bawaan bootstrap -->
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                                                    <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right; margin-top: 5px;">
+                                        <a href="ChangePassword.php" style="font-size: 12;">Change Password</a>
+                                    </div>
                                 </div>
                                 <div class="container">
                                     <button class="button-submit" type="submit">Save</button>

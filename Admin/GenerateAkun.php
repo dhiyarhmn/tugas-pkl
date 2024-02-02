@@ -39,7 +39,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
 <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
@@ -65,7 +65,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             <li>
                 <a href="ListKaryawanAdmin.php">
                     <i class="fa fa-search"></i> 
-                    <span>List Karyawan</span>
+                    <span>List Pegawai</span>
                 </a>
             </li>
         </ul>
@@ -88,7 +88,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             </div>            
             <div class="row justify-content-center mt-4">
                 <div class="col-md-6">
-                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
+                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8); margin-bottom: 30px;">
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">Generate Akun</h5>
                             <!-- Form untuk input manual -->

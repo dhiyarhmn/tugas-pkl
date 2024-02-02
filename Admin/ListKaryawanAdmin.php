@@ -52,6 +52,10 @@ $query = "
     UNION
     SELECT H.UserID, H.NamaLengkap, H.NIK, H.Departemen, H.Jabatan 
     FROM HRGA AS H
+    UNION
+    SELECT A.UserID, A.NamaLengkap, A.NIK, A.Departemen, A.Jabatan 
+    FROM Admin AS A
+    ORDER BY Departemen
 ";
 
 $result = mysqli_query($koneksi, $query);
@@ -89,7 +93,7 @@ mysqli_close($koneksi);
 <div class="wrapper">
 <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
@@ -114,7 +118,7 @@ mysqli_close($koneksi);
             <li class="active">
                 <a href="ListKaryawanAdmin.php">
                     <i class="fa fa-search"></i> 
-                    <span>List Karyawan</span>
+                    <span>List Pegawai</span>
                 </a>
             </li>
         </ul>
@@ -136,7 +140,7 @@ mysqli_close($koneksi);
                 </div>
             </div>
             
-            <div class="custom-table-container">
+            <div class="custom-table-container" style="margin-top: 30px;">
             <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>

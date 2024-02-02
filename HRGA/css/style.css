@@ -6,11 +6,12 @@ img {
 body {
   margin: 0;
   padding: 0;
-  background-image: url("/Assets/img/background9.jpeg"); /* Adjust the path as necessary */
-  background-size: cover; /* Cover the entire page */
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  min-height: 100vh; /* Ensure it covers the whole viewport height */
+  background-image: url("/Assets/img/background7.jpeg"); /* Pastikan path ini benar */
+  background-color: #add2ff; /* Warna fallback jika gambar tidak bisa dimuat */
+  background-size: cover; /* Tutupi seluruh halaman */
+  background-position: center; /* Pusatkan gambar */
+  background-repeat: no-repeat; /* Jangan ulangi gambar */
+  min-height: 100vh; /* Pastikan menutupi tinggi viewport */
 }
 /* .container {
   display: grid;
@@ -147,7 +148,7 @@ a[aria-expanded="true"] {
 }
 #sidebarCollapse.open {
   position: fixed;
-  left: -10px; /* Pindahkan ke kanan sejauh lebar sidebar */
+  left: 190px; /* Pindahkan ke kanan sejauh lebar sidebar */
   top: 0;
   z-index: 1050;
   margin-top: 0.5rem;
@@ -198,6 +199,14 @@ a[aria-expanded="true"] {
   margin-bottom: 30px; /* Atur margin bawah */
   padding: 2%; /* Atur padding dalam kotak */
   font-size: 1.2rem; /* Atur ukuran font */
+}
+.larger-card .card {
+  transition: transform 0.8s ease-in-out; /* Add the transition to the default state */
+}
+
+.larger-card:hover .card {
+  transform: scale(1.1); /* Increase the size when hovered */
+  transition: transform 0.8s ease-in-out; /* Add a smooth transition effect */
 }
 .larger-card .fa {
   font-size: 5rem; /* Atur ukuran ikon */
@@ -469,7 +478,7 @@ a[aria-expanded="true"] {
 }
 
 .button, .button__icon, .button__text {
-  transition: all 0.3s;
+  transition: all 0.5s;
 }
 
 .button .button__text {

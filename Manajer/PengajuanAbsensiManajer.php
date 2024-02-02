@@ -27,38 +27,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $upload_dir = "BerkasManajer/";  // Naik satu level dari direktori skrip saat ini
     
         // Proses pengajuan cuti tahunan
-     if ($jenis_absensi == "AL") {
-        $periode_awal = new DateTime($_POST["periode_awal"]);
-        $periode_akhir = new DateTime($_POST["periode_akhir"]);
+        if ($_POST["jenis_absensi"] == "AL") {
+            $periode_awal = new DateTime($_POST["periode_awal"]);
+            $periode_akhir = new DateTime($_POST["periode_akhir"]);
 
-        // Mengonversi DateTime ke string
-        $periode_awal_str = $periode_awal->format('Y-m-d H:i:s');
-        $periode_akhir_str = $periode_akhir->format('Y-m-d H:i:s');
+            // Mengonversi DateTime ke string
+            $periode_awal_str = $periode_awal->format('Y-m-d H:i:s');
+            $periode_akhir_str = $periode_akhir->format('Y-m-d H:i:s');
 
-        $interval = $periode_awal->diff($periode_akhir);
-        $durasiCuti = $interval->days + 1;
+            $durasiCuti = 0;
 
-        // Query untuk mendapatkan data sisa cuti
-        $queryCuti = "SELECT CutiTerpakai, CutiSisa FROM CutiTahunan WHERE UserID = '{$_SESSION["UserID"]}'";
-        $resultCuti = mysqli_query($koneksi, $queryCuti);
+            // Menghitung durasi cuti, mengabaikan hari Sabtu dan Minggu
+            while ($periode_awal <= $periode_akhir) {
+                if ($periode_awal->format('N') <= 5) { // Hanya hari Senin-Jumat yang dihitung
+                    $durasiCuti++;
+                }
+                $periode_awal->modify('+1 day');
+            }
 
-        if ($resultCuti && mysqli_num_rows($resultCuti) > 0) {
-            $dataCuti = mysqli_fetch_assoc($resultCuti);
+            // Query untuk mendapatkan data sisa cuti
+            $queryCuti = "SELECT CutiTerpakai, CutiSisa FROM CutiTahunan WHERE UserID = '{$_SESSION["UserID"]}'";
+            $resultCuti = mysqli_query($koneksi, $queryCuti);
 
-            if ($durasiCuti <= $dataCuti['CutiSisa']) {
-                $cutiTerpakaiBaru = $dataCuti['CutiTerpakai'] + $durasiCuti;
-                $cutiSisaBaru = $dataCuti['CutiSisa'] - $durasiCuti;
+            if ($resultCuti && mysqli_num_rows($resultCuti) > 0) {
+                $dataCuti = mysqli_fetch_assoc($resultCuti);
 
-                $queryUpdateCuti = "UPDATE CutiTahunan SET CutiTerpakai = '$cutiTerpakaiBaru', CutiSisa = '$cutiSisaBaru' WHERE UserID = '{$_SESSION["UserID"]}'";
-                mysqli_query($koneksi, $queryUpdateCuti);
+                if ($durasiCuti <= $dataCuti['CutiSisa']) {
+                    $cutiTerpakaiBaru = $dataCuti['CutiTerpakai'] + $durasiCuti;
+                    $cutiSisaBaru = $dataCuti['CutiSisa'] - $durasiCuti;
+
+                    $queryUpdateCuti = "UPDATE CutiTahunan SET CutiTerpakai = '$cutiTerpakaiBaru', CutiSisa = '$cutiSisaBaru' WHERE UserID = '{$_SESSION["UserID"]}'";
+                    mysqli_query($koneksi, $queryUpdateCuti);
+                } else {
+                    echo "Jumlah cuti yang diambil melebihi sisa cuti yang tersedia.";
+                    exit();
+                }
             } else {
-                echo "Jumlah cuti yang diambil melebihi sisa cuti yang tersedia.";
+                echo "Data cuti tidak ditemukan atau terjadi kesalahan query.";
                 exit();
             }
-        } else {
-            echo "Data cuti tidak ditemukan atau terjadi kesalahan query.";
-            exit();
-        }
     }
     
     if (!is_dir($upload_dir)) {
@@ -155,11 +162,19 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
     <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <button type="button" id="sidebarCollapse" class="btn">
+            <button type="button" id="sidebarCollapse" class="btn" style="transition: 0.3s;">
                 <i class="fas fa-bars"></i>
             </button>
             <div style="text-align: center; margin-top: 30px;">
-                <img src="<?php echo htmlspecialchars($userDetails['ProfilePhoto'] ?? 'default.jpg'); ?>" class="rounded-circle profile-image" style="margin-bottom: 10px;">
+                <?php
+                // Contoh kode PHP untuk menampilkan foto profil
+                $defaultProfilePhoto = 'ProfileManajer/profile.jpeg'; // Lokasi foto default
+                $userProfilePhoto = $userDetails['ProfilePhoto'] ?? null; // Foto profil yang diunggah oleh pengguna
+
+                $photoToDisplay = $userProfilePhoto ? $userProfilePhoto : $defaultProfilePhoto; // Menentukan foto yang akan ditampilkan
+
+                echo '<img src="'.htmlspecialchars($photoToDisplay).'" class="rounded-circle profile-image" style="margin-bottom: 10px;">';
+                ?>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['NamaLengkap']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white"><?php echo $userDetails['Departemen']; ?></h3>
                 <h3 class="profile-text" style="font-size: 16px; color:white">-<?php echo $userDetails['Jabatan']; ?>-</h3>
@@ -216,7 +231,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
             </div>            
             <div class="row justify-content-center mt-4">
                 <div class="col-md-6">
-                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
+                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8); margin-bottom: 30px;">
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
                             <form method="post" action="" enctype="multipart/form-data">
