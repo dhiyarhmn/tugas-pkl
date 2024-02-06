@@ -33,7 +33,7 @@ $(".logout-button").on("click", function () {
 });
 
 // -------------------------------------------------------------------
-// KOTAK KOTAK 
+// KOTAK KOTAK
 // -------------------------------------------------------------------
 function focusInput(element) {
   element.parentElement.classList.add("focused");
@@ -121,7 +121,7 @@ function focusDateTimeInput() {
 $(document).ready(function () {
   // membuka popup ketika tombol detail diklik
   $(".custom-detail-btn-blue").click(function () {
-    $("#popupCard").slideDown(); 
+    $("#popupCard").slideDown();
   });
 
   // untuk menutup popup ketika tombol close diklik
@@ -160,14 +160,14 @@ $(document).ready(function () {
     // Menyimpan referensi ke tombol
     var button = $(this);
 
-    // Menghilangkan efek hover dan focus 
+    // Menghilangkan efek hover dan focus
     button.removeClass("custom-approval-btn-green");
 
     // Menunggu efek modal selesai
     setTimeout(function () {
       // Mengembalikan class dan warna asli
       button.addClass("custom-approval-btn-green");
-    }, 100); 
+    }, 100);
   });
 
   $("#dataTable").DataTable();
@@ -193,43 +193,66 @@ $(document).ready(function () {
 // -------------------------------------------------------------------
 // CHOOSE FILE
 // -------------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
+document.getElementById("jenis_absensi").addEventListener("change", function () {
   var selectedValue = this.value;
-  var fileContainer = document.getElementById('fileContainer');
-  var fileInput = document.getElementById('picture');
+  var fileContainer = document.getElementById("fileContainer");
+  var fileInput = document.getElementById("picture");
 
-  if (['BT', 'DL', 'SBA', 'LP'].includes(selectedValue)) {
-      fileContainer.style.display = 'block';
-      fileInput.required = true;
+  if (["BT", "DL", "SBA", "LP"].includes(selectedValue)) {
+    fileContainer.style.display = "block";
+    fileInput.required = true;
   } else {
-      fileContainer.style.display = 'none';
-      fileInput.required = false;
+    fileContainer.style.display = "none";
+    fileInput.required = false;
   }
 });
 
 // -------------------------------------------------------------------
 // DATETIME TANGGAL PENGAJUAN
 // -------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   var now = new Date();
-  var month = ('0' + (now.getMonth() + 1)).slice(-2); 
-  var day = ('0' + now.getDate()).slice(-2);
-  var hours = ('0' + now.getHours()).slice(-2);
-  var minutes = ('0' + now.getMinutes()).slice(-2);
-  var formattedNow = now.getFullYear() + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+  var month = ("0" + (now.getMonth() + 1)).slice(-2);
+  var day = ("0" + now.getDate()).slice(-2);
+  var hours = ("0" + now.getHours()).slice(-2);
+  var minutes = ("0" + now.getMinutes()).slice(-2);
+  var formattedNow = now.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes;
 
-  document.getElementById('tanggal_pengajuan').value = formattedNow;
+  document.getElementById("tanggal_pengajuan").value = formattedNow;
 });
 
 // ----------------------------------------------------------------
 // Cuti Tahunan
 // ----------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
+document.getElementById("jenis_absensi").addEventListener("change", function () {
   var jenisAbsensi = this.value;
-  var sisaCutiContainer = document.getElementById('sisaCutiContainer');
-  if (jenisAbsensi === 'AL') { 
-      sisaCutiContainer.style.display = 'block';
+  var sisaCutiContainer = document.getElementById("sisaCutiContainer");
+  if (jenisAbsensi === "AL") {
+    sisaCutiContainer.style.display = "block";
   } else {
-      sisaCutiContainer.style.display = 'none';
+    sisaCutiContainer.style.display = "none";
   }
 });
+
+// ----------------------------------------------------------------
+// JS BUAT mata liat password
+// ----------------------------------------------------------------
+function togglePasswordVisibility(passwordFieldId) {
+  var field = document.getElementById(passwordFieldId);
+  var button = field.parentNode.querySelector(".input-group-append .input");
+
+  if (field.type === "password") {
+    field.type = "text";
+    button.innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-slash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.79 12.912l-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                          <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708l-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829z"/>
+                          <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+                          </svg>`;
+  } else {
+    field.type = "password";
+    button.innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                          <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                          </svg>`;
+  }
+}

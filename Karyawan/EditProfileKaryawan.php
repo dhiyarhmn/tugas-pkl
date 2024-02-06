@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     header("Location: DashboardKaryawan.php");
-    exit; 
+    exit;
 }
 
 // Ambil detail user untuk tampilan profil
@@ -228,7 +228,7 @@ $koneksi->close();
                                     <label class="label static-label">Gender</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type='email' pattern=".+(@\w+\.com|@daekyung\.co\.id)" name="Email" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label" for="Email">Email</label>
                                 </div>
                                 <div class="container input-container">
@@ -239,8 +239,13 @@ $koneksi->close();
                                     <input required="" type="text" name="Username" class="input" value="<?php echo htmlspecialchars($rowKaryawan['Username'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label">Username</label>
                                 </div>
+                                <div class="container input-container">
+                                    <div style="text-align: right; margin-top: -30px;">
+                                        <a href="ChangePassword.php" style="font-size: 12;">Change Password</a>
+                                    </div>
+                                </div>
                                 <div class="container">
-                                    <button class="button-submit" type="submit">Save</button>
+                                    <button class="button-submit" type="submit" style="margin-top: -30px;"">Save</button>
                                 </div>
                             </form>
                         </div>

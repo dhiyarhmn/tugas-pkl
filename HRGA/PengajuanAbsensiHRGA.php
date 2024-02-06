@@ -13,7 +13,11 @@ $resultHRGA = mysqli_query($koneksi, $queryHRGA);
 $rowHRGA = mysqli_fetch_assoc($resultHRGA);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $tanggal_pengajuan = $_POST["tanggal_pengajuan"];
+    // Atur zona waktu sesuai dengan lokasi pengguna
+    date_default_timezone_set('Asia/Jakarta'); // Sesuaikan dengan zona waktu pengguna
+
+    // Ambil tanggal dan waktu saat ini sesuai zona waktu yang telah diatur
+    $tanggal_pengajuan = date('Y-m-d H:i:s');
     $jenis_absensi = $_POST["jenis_absensi"];
     $lama_periode_absensi = $_POST["lama_periode_absensi"];
     $keterangan = $_POST["keterangan"];
@@ -87,8 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert data into the "Absensi" table
-        $queryAbsensi = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai, Berkas)
-                    VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal_str', '$periode_akhir_str', '$berkas')";
+    $queryAbsensi = "INSERT INTO Absensi (UserID, TanggalPengajuan, NamaJenisAbsensi, Keterangan, PeriodeAbsensi, WaktuPeriodeAbsensiMulai, WaktuPeriodeAbsensiSelesai, Berkas)
+    VALUES ('{$_SESSION["UserID"]}', '$tanggal_pengajuan', '$jenis_absensi', '$keterangan', '$lama_periode_absensi', '$periode_awal_str', '$periode_akhir_str', '$berkas')";
 
     if (mysqli_query($koneksi, $queryAbsensi)) {
         $absensiID = mysqli_insert_id($koneksi);
@@ -235,7 +239,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                         <div class="card-body">
                             <h5 class="card-title text-center mb-4">PENGAJUAN ABSENSI</h5>
                             <form method="post" action="" enctype="multipart/form-data">
-                                <div class="container input-container">
+                                <div class="container input-container" style="margin-top: 70px;">
                                     <input required="" type="text" name="nama" class="input" value="<?php echo htmlspecialchars($rowHRGA['NamaLengkap']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Nama</label>
                                 </div>
@@ -246,10 +250,6 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                 <div class="container input-container">
                                     <input required="" type="text" name="jabatan" class="input" value="<?php echo htmlspecialchars($rowHRGA['jabatan']); ?>" onfocus="focusInput(this)" onblur="blurInput(this)"readonly style="background-color: #8a8a8a; color: black;">
                                     <label class="label static-label">Jabatan</label>
-                                </div>
-                                <div class="container input-container">
-                                    <input required="" type="datetime-local" name="tanggal_pengajuan" class="input" id="tanggal_pengajuan" onfocus="focusInput(this)" onblur="blurInput(this)" readonly>
-                                    <label for="tanggal_pengajuan" class="label">Tanggal Pengajuan</label>
                                 </div>
                                 <div class="container input-container">
                                     <select required="" name="jenis_absensi" class="input" id="jenis_absensi" onfocus="focusInput(this)" onblur="blurInput(this)">
@@ -267,10 +267,10 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                                     <label class="label">Jenis Absensi</label>
                                 </div>
                                 <div class="container input-container" id="fileContainer" style="display: none;">
-                                    <input required="" class="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium" type="file" name="Berkas" id="picture"/>
+                                    <input required="" class="flex w-full rounded-md border border-blue-300 border-input bg-white text-sm text-gray-400 file:border-0 file:bg-blue-600 file:text-white file:text-sm file:font-medium" style="width:100%; padding: 0px;" type="file" name="Berkas" id="picture"/>
                                 </div>
                                 <div class="container input-container" id="sisaCutiContainer" style="display: none;">
-                                    <span id= "sisaCuti" class="label"></span>
+                                    <span style="color:black;" id= "sisaCuti" class="label"></span>
                                     <input required="" type="text" name="sisa_cuti_tahunan" class="input" onfocus="focusInput(this)" onblur="blurInput(this)" readonly style="background-color: #8a8a8a; color: black;">
                                 </div>
                                 <div class="container input-container">
@@ -336,6 +336,47 @@ $(document).ready(function() {
         }
     });
 });
+
+$(document).ready(function() {
+    // Mengatur tanggal dan waktu minimum untuk periode_awal ke waktu saat ini
+        var now = new Date();
+        var month = ('0' + (now.getMonth() + 1)).slice(-2); // Mengubah bulan ke format 2 digit
+        var day = ('0' + now.getDate()).slice(-2); // Mengubah hari ke format 2 digit
+        var hour = ('0' + now.getHours()).slice(-2); // Mengubah jam ke format 2 digit
+        var minute = ('0' + now.getMinutes()).slice(-2); // Mengubah menit ke format 2 digit
+        var nowFormatted = now.getFullYear() + '-' + month + '-' + day + 'T' + hour + ':' + minute;
+
+        // Menetapkan nilai min untuk periode_awal dengan tanggal dan waktu saat ini
+        $('#periode_awal').attr('min', nowFormatted);
+
+        $('#periode_awal').change(function() {
+            var startDate = $(this).val();
+            var startDateObject = new Date(startDate);
+            var nowObject = new Date();
+
+            // Jika tanggal awal lebih awal dari waktu saat ini, set tanggal awal ke waktu saat ini
+            if (startDateObject < nowObject) {
+                $(this).val(nowFormatted); // Set periode_awal ke waktu saat ini jika lebih awal
+                startDate = nowFormatted; // Update startDate untuk memastikan logika berikutnya menggunakan waktu yang benar
+            }
+
+            $('#periode_akhir').attr('min', startDate);
+
+            // Event listener untuk periode_akhir dengan logika penyesuaian waktu tambahan
+            $('#periode_akhir').change(function() {
+                var endDate = $('#periode_akhir').val();
+                if (startDate.substr(0, 10) == endDate.substr(0, 10)) {
+                    if (endDate < startDate) {
+                        $('#periode_akhir').val(startDate); // Jika periode_akhir lebih awal, set sama dengan periode_awal
+                    }
+                }
+            });
+        });
+
+        $('#jenis_absensi').change(function() {
+            // Kode existing untuk jenis_absensi change event
+        });
+    });
 </script>
     <!-- Adjusted JS link. Assuming 'script.js' is in the same directory as the PHP file -->
     <script src="./js/script.js"></script>

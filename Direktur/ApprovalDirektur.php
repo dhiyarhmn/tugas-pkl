@@ -199,15 +199,15 @@ $DirekturDepartemen = $userDetails['Departemen']; // Get the Direktur's departme
             <div class="custom-table-container" style="margin-top: 30px;">
                 <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th class="text-center table-column" style="width: 30px;">No</th>
-                            <th class="text-center table-column" style="width: 30px;">AbsensiID</th>
-                            <th class="text-center table-column" style="width: 200px;">Nama</th>
-                            <th class="text-center table-column" style="width: 100px;">NIK</th>
-                            <th class="text-center table-column" style="width: 30px;">Jenis Absensi</th>
-                            <th class="text-center table-column" style="width: 30px;">Tanggal Pengajuan</th>
-                            <th class="text-center table-column" style="width: 50px;">Berkas</th>
-                            <th class="text-center table-column" style="width: 145px;">Actions</th>
+                        <tr class="text-center table-column">
+                            <th style="width: 1%;">No</th>
+                            <th style="width: 5%;">AbsensiID</th>
+                            <th style="width: 25%;">Nama</th>
+                            <th style="width: 12%;">NIK</th>
+                            <th style="width: 8%;">Jenis Absensi</th>
+                            <th style="width: 15%;">Tanggal Pengajuan</th>
+                            <th style="width: 15%;">Berkas</th>
+                            <th style="width: 30%;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -262,22 +262,22 @@ $DirekturDepartemen = $userDetails['Departemen']; // Get the Direktur's departme
                             $namaBerkas = basename($row['Berkas']);
                             $berkasLink = !empty($namaBerkas) ? "<a href='/$folderBerkas/" . urlencode($namaBerkas) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
 
-                            echo "<tr class='text-center'>
-                                    <td>{$no}</td>
-                                    <td>{$row['AbsensiID']}</td>
+                            echo "<tr>
+                                    <td class='text-center'>{$no}</td>
+                                    <td class='text-center'>{$row['AbsensiID']}</td>
                                     <td>{$row['NamaLengkap']}</td>
-                                    <td>{$row['NIK']}</td>
-                                    <td>{$row['NamaJenisAbsensi']}</td>
-                                    <td>{$row['TanggalPengajuan']}</td>
+                                    <td class='text-center'>{$row['NIK']}</td>
+                                    <td class='text-center'>{$row['NamaJenisAbsensi']}</td>
+                                    <td class='text-center'>{$row['TanggalPengajuan']}</td>
                                     <td class='text-center'>{$berkasLink}</td>
-                                    <td>
+                                    <td class='text-center'>
                                         <form method='post'>
                                             <input type='hidden' name='absensiID' value='{$row['AbsensiID']}'>
-                                            <button type='submit' name='approve' class='btn custom-approval-btn-green'>Approve</button>
-                                            <button type='submit' name='decline' class='btn custom-decline-btn-red'>Decline</button>
+                                            <button style='width: 48%;' type='submit' name='approve' class='btn custom-approval-btn-green'>Approve</button>
+                                            <button style='width: 48%;' type='submit' name='decline' class='btn custom-decline-btn-red'>Decline</button>
                                         </form>
                                         <div style='text-align: center; margin-top: 10px;'>
-                                            <button type='button' class='btn custom-detail-btn-blue' onclick='showDetail({$row['AbsensiID']})'>Detail</button>
+                                            <button style='width: 100%;' type='button' class='btn custom-detail-btn-blue' onclick='showDetail({$row['AbsensiID']})'>Detail</button>
                                         </div>
                                     </td>
                                 </tr>";

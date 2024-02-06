@@ -8,6 +8,29 @@ if (!$koneksi) {
     die("Koneksi gagal: " . mysqli_connect_error());
 }
 
+if (!isset($_SESSION["UserID"]) || $_SESSION["Role"] != 'Direktur') {
+    header("Location: /Login.php");
+    exit();
+}
+
+// Inisialisasi variabel
+$rowDirektur = null;
+$userDetails = [];
+
+// Cek apakah UserID ada di session
+if (isset($_SESSION['UserID'])) {
+    $userID = $_SESSION['UserID'];
+
+    // Ambil data Direktur dan username berdasarkan UserID
+    $queryGetDataDirektur = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.ProfilePhoto FROM Direktur AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
+    $resultGetDataDirektur = $koneksi->query($queryGetDataDirektur);
+
+    if ($resultGetDataDirektur->num_rows > 0) {
+        $rowDirektur = $resultGetDataDirektur->fetch_assoc();
+        $userDetails = $rowDirektur; // data untuk tampilan profil
+    }
+}
+
 // Ambil NIK dari URL
 $nik = isset($_GET['NIK']) ? $_GET['NIK'] : '';
 
@@ -35,15 +58,21 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Ambil departemen dan jabatan user yang dipilih
-$deptJabatanQuery = "SELECT Departemen, Jabatan FROM $tabelPengguna WHERE NIK = ?";
+$deptJabatanQuery = "SELECT NamaLengkap, Departemen, Jabatan FROM $tabelPengguna WHERE NIK = ?";
 $deptJabatanStmt = $koneksi->prepare($deptJabatanQuery);
-$deptJabatanStmt->bind_param("s", $nik);
+$deptJabatanStmt->bind_param("s", $nik); // 's' menunjukkan bahwa parameter adalah string
 $deptJabatanStmt->execute();
 $deptJabatanResult = $deptJabatanStmt->get_result();
-$deptJabatanData = $deptJabatanResult->fetch_assoc();
-
-$departemenUserDipilih = $deptJabatanData['Departemen'];
-$jabatanUserDipilih = $deptJabatanData['Jabatan'];
+if ($deptJabatanData = $deptJabatanResult->fetch_assoc()) {
+    $namaLengkapUserDipilih = $deptJabatanData['NamaLengkap'];
+    $departemenUserDipilih = $deptJabatanData['Departemen'];
+    $jabatanUserDipilih = $deptJabatanData['Jabatan'];
+} else {
+    // Handle kasus dimana data tidak ditemukan
+    $namaLengkapUserDipilih = "";
+    $departemenUserDipilih = "";
+    $jabatanUserDipilih = "";
+}
 ?>
 
 <!DOCTYPE html>
@@ -65,7 +94,7 @@ $jabatanUserDipilih = $deptJabatanData['Jabatan'];
     <link rel="stylesheet" href="./css/fonts.css"> 
 </head>
 <body>
-    <div id="content">
+    <div>
         <div class="container mt-3"> 
             <div class="row justify-content-center align-items-center">
                 <div class="col-auto">
@@ -75,11 +104,49 @@ $jabatanUserDipilih = $deptJabatanData['Jabatan'];
                     <h2>PT. DAEKYUNG INDAH HEAVY INDUSTRY</h2>
                 </div>
             </div>
-            <br>
+            <div class="custom-table-container">
             <a href="ListKaryawanDirektur.php" class="btn custom-detail-btn-blue" style="font-size: 12px; padding: 10px 10px; width: 120px">
                 <i class="fa fa-arrow-left"></i> Kembali
             </a>
-            <div class="custom-table-container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8); margin-bottom: 30px; margin-top: 30px;">
+                        <div class="card-body" style="padding-bottom: 0px;">
+                            <form method="post" enctype="multipart/form-data">
+                                <div class="container">
+                                    <div class="d-flex align-items-start">
+                                        <!-- Input Fields Section -->
+                                        <div class="d-flex justify-content-start align-items-start"> <!-- Container untuk keseluruhan form -->
+                                            <!-- Kolom pertama untuk NIK dan Nama -->
+                                            <div class="flex-column mr-2" > 
+                                                <div class="input-container mb-3" style="width: 425px;">
+                                                    <label for="nik">NIK</label>
+                                                    <input required="" type="text" id="nik" name="NIK" class="input" value="<?php echo $nik; ?>" readonly style="background-color: #8a8a8a; color: black;">
+                                                </div>
+                                                <div class="input-container" style="width: 425px;">
+                                                    <label for="nama">Nama</label>
+                                                    <input required="" type="text" id="nama" name="Nama" class="input" value="<?php echo $namaLengkapUserDipilih; ?>" readonly style="background-color: #8a8a8a; color: black;">
+                                                </div>
+                                            </div>
+                                            <!-- Kolom kedua untuk Departemen dan Jabatan -->
+                                            <div class="flex-column">
+                                                <div class="input-container mb-3" style="width: 425px;">
+                                                    <label for="departemen">Departemen</label>
+                                                    <input required="" type="text" id="departemen" name="Departemen" class="input" value="<?php echo $departemenUserDipilih; ?>" readonly style="background-color: #8a8a8a; color: black;">
+                                                </div>
+                                                <div class="input-container" style="width: 425px;">
+                                                    <label for="jabatan">Jabatan</label>
+                                                    <input required="" type="text" id="jabatan" name="jabatan" class="input" value="<?php echo $jabatanUserDipilih; ?>" readonly style="background-color: #8a8a8a; color: black;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr class='text-center'>
@@ -98,11 +165,11 @@ $jabatanUserDipilih = $deptJabatanData['Jabatan'];
                     while ($row = mysqli_fetch_assoc($result)): 
                     ?>
                         <tr class='text-center'>
-                            <td style="width: 10px;"><?php echo $no; ?></td>
-                            <td style="width: 20px;"><?php echo htmlspecialchars($row['AbsensiID']); ?></td>
-                            <td style="width: 30px;"><?php echo htmlspecialchars($row['NamaJenisAbsensi']); ?></td>
-                            <td style="width: 200px;"><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
-                            <td style="width: 200px;">
+                            <td style="width: 1%;"><?php echo $no; ?></td>
+                            <td style="width: 10%;"><?php echo htmlspecialchars($row['AbsensiID']); ?></td>
+                            <td style="width: 15%;"><?php echo htmlspecialchars($row['NamaJenisAbsensi']); ?></td>
+                            <td style="width: 15%;"><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
+                            <td style="width: 20%;">
                                 <?php
                                 $role = $tabelPengguna; 
 
@@ -125,12 +192,12 @@ $jabatanUserDipilih = $deptJabatanData['Jabatan'];
                                     echo $berkasLink;
                                 ?>
                             </td>
-                            <td style="width: 200px;">
+                            <td style="width: 20%;">
                                 <i class="fa <?php echo ($row['StatusPersetujuan'] == 'Approved') ? 'fa-check-circle approved-icon' : (($row['StatusPersetujuan'] == 'Declined') ? 'fa-times-circle declined-icon' : 'fa-exclamation-circle on-process-icon'); ?>" aria-hidden="true"></i>
                                 <?php echo htmlspecialchars($row['StatusPersetujuan']); ?>
                             </td>
-                            <td class="text-center">
-                                <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal" onclick="showDetail(<?php echo htmlspecialchars($row['AbsensiID']); ?>)">Detail</button>
+                            <td style="width: 20%;" class="text-center">
+                                <button style="width: 100%;" type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal" onclick="showDetail(<?php echo htmlspecialchars($row['AbsensiID']); ?>)">Detail</button>
                             </td>
                         </tr>
                         <?php 

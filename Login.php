@@ -101,7 +101,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                   <div class="form_details">Login</div>
                     <input required="" type="text" id="username" name="username" class="input" placeholder="Username" autocomplete="username">
-                    <input required="" type="password" id="password" name="password" class="input" placeholder="Password" autocomplete="current-password">
+                    
+                        <div class="input-group">
+                            <input required="" type="password" id="password" name="password" class="input" placeholder="Password" autocomplete="current-password">
+                            <div class="input-group-append">
+                                <span id="togglePasswordVisibility" onclick="togglePasswordVisibility('password')" class="inputEye" style="cursor: pointer; margin-top: -35.2px;">
+                                    <!-- Bootstrap eye icon -->
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                        <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                   
                   <button class="btn">Login</button>
               </div>
           </form>
@@ -116,9 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p><?= $error ?></p>
         <button id="close-popup" style="background-color: #160066; color: white; padding: 4px 12px; margin-top: 10px; border-radius: 4px; float: right;">Close</button>
     </div>
-
   </div>
-
   <script>
     // Fungsi untuk menampilkan pop-up card
     function showPopup() {
@@ -137,6 +148,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if (!empty($error)) : ?>
       showPopup();
     <?php endif; ?>
+
+    function togglePasswordVisibility(passwordFieldId) {
+      var field = document.getElementById(passwordFieldId);
+      var button = field.parentNode.querySelector(".input-group-append .inputEye");
+
+      if (field.type === "password") {
+        field.type = "text";
+        button.innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-slash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M10.79 12.912l-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                              <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708l-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829z"/>
+                              <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+                              </svg>`;
+      } else {
+        field.type = "password";
+        button.innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                              <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                              </svg>`;
+      }
+    }
   </script>
 </body>
 </html>

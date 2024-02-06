@@ -94,7 +94,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                             <p class="card-text">Generate Employee Accounts with Ease</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='GenerateAkun.php'">
                                 <span class="button__text">Click Here</span>
-                                <span class="button__icon"><i class="fas fa-plus"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fas fa-plus"></i></i></span>
                             </button>
                         </div>
                     </div>
@@ -106,7 +106,7 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
                             <p class="card-text">Discover the Full Employees Listing Here</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ListKaryawanAdmin.php'">
                                 <span class="button__text">Show More</span>
-                                <span class="button__icon"><i class="fa fa-search"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fa fa-search"></i></i></span>
                             </button>
                         </div>
                     </div>

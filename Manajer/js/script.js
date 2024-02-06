@@ -199,75 +199,93 @@ $(document).ready(function () {
 // -------------------------------------------------------------------
 // JS BUAT CHOOSE FILE
 // -------------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
+document.getElementById("jenis_absensi").addEventListener("change", function () {
   var selectedValue = this.value;
-  var fileContainer = document.getElementById('fileContainer');
-  var fileInput = document.getElementById('picture');
+  var fileContainer = document.getElementById("fileContainer");
+  var fileInput = document.getElementById("picture");
 
-  if (['BT', 'DL', 'SBA', 'LP'].includes(selectedValue)) {
-      fileContainer.style.display = 'block';
-      fileInput.required = true;
+  if (["BT", "DL", "SBA", "LP"].includes(selectedValue)) {
+    fileContainer.style.display = "block";
+    fileInput.required = true;
   } else {
-      fileContainer.style.display = 'none';
-      fileInput.required = false;
+    fileContainer.style.display = "none";
+    fileInput.required = false;
   }
 });
 
 // JS BUAT DATETIME TANGGAL PENGAJUAN
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   var now = new Date();
-  var month = ('0' + (now.getMonth() + 1)).slice(-2); // Bulan dimulai dari 0
-  var day = ('0' + now.getDate()).slice(-2);
-  var hours = ('0' + now.getHours()).slice(-2);
-  var minutes = ('0' + now.getMinutes()).slice(-2);
-  var formattedNow = now.getFullYear() + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+  var month = ("0" + (now.getMonth() + 1)).slice(-2); // Bulan dimulai dari 0
+  var day = ("0" + now.getDate()).slice(-2);
+  var hours = ("0" + now.getHours()).slice(-2);
+  var minutes = ("0" + now.getMinutes()).slice(-2);
+  var formattedNow = now.getFullYear() + "-" + month + "-" + day + "T" + hours + ":" + minutes;
 
-  document.getElementById('tanggal_pengajuan').value = formattedNow;
+  document.getElementById("tanggal_pengajuan").value = formattedNow;
 });
 
 // ----------------------------------------------------------------
 // JS BUAT Cuti Tahunan
 // ----------------------------------------------------------------
-document.getElementById('jenis_absensi').addEventListener('change', function() {
+document.getElementById("jenis_absensi").addEventListener("change", function () {
   var jenisAbsensi = this.value;
-  var sisaCutiContainer = document.getElementById('sisaCutiContainer');
-  if (jenisAbsensi === 'AL') { // Sesuaikan dengan kode jenis cuti tahunan Anda
-      sisaCutiContainer.style.display = 'block';
+  var sisaCutiContainer = document.getElementById("sisaCutiContainer");
+  if (jenisAbsensi === "AL") {
+    // Sesuaikan dengan kode jenis cuti tahunan Anda
+    sisaCutiContainer.style.display = "block";
   } else {
-      sisaCutiContainer.style.display = 'none';
+    sisaCutiContainer.style.display = "none";
   }
 });
 
 // ----------------------------------------------------------------
 // JS BUAT mata liat password
 // ----------------------------------------------------------------
-function change() {
-    
-  // membuat variabel berisi tipe input dari id='pass', id='pass' adalah form input password 
-  var x = document.getElementById('pass').type;
+function togglePasswordVisibility(passwordFieldId) {
+  var field = document.getElementById(passwordFieldId);
+  var button = field.parentNode.querySelector(".input-group-append .input");
 
-  //membuat if kondisi, jika tipe x adalah password maka jalankan perintah di bawahnya
-  if (x == 'password') {
-
-      //ubah form input password menjadi text
-      document.getElementById('pass').type = 'text';
-      
-      //ubah icon mata terbuka menjadi tertutup
-      document.getElementById('mybutton').innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-slash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M10.79 12.912l-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
-                                                      <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708l-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829z"/>
-                                                      <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
-                                                      </svg>`;
-  }
-  else {
-
-      //ubah form input password menjadi text
-      document.getElementById('pass').type = 'password';
-
-      //ubah icon mata terbuka menjadi tertutup
-      document.getElementById('mybutton').innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
-                                                      <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
-                                                      </svg>`;
+  if (field.type === "password") {
+    field.type = "text";
+    button.innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-slash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.79 12.912l-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"/>
+                          <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708l-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829z"/>
+                          <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+                          </svg>`;
+  } else {
+    field.type = "password";
+    button.innerHTML = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                          <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                          </svg>`;
   }
 }
+
+// ----------------------------------------------------------------
+// JS BUAT VALIDASI TANGGAL
+// ----------------------------------------------------------------
+$(document).ready(function () {
+  // Sudah ada kode untuk jenis_absensi change event
+
+  // Event listener untuk periode_awal dengan validasi jam tambahan
+  $("#periode_awal").change(function () {
+    var startDate = $(this).val();
+    $("#periode_akhir").attr("min", startDate);
+
+    // Ketika periode_awal berubah, periksa juga untuk penyesuaian waktu jika tanggalnya sama
+    $("#periode_akhir").change(function () {
+      var endDate = $("#periode_akhir").val();
+      if (startDate.substr(0, 10) == endDate.substr(0, 10)) {
+        // Jika tanggal sama, pastikan jam di periode_akhir tidak lebih awal
+        if (endDate < startDate) {
+          $("#periode_akhir").val(startDate); // Set periode_akhir sama dengan periode_awal jika periode_akhir lebih awal
+        }
+      }
+    });
+  });
+
+  $("#jenis_absensi").change(function () {
+    // Kode existing untuk jenis_absensi change event
+  });
+});

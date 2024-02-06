@@ -43,18 +43,16 @@ $userDetails = mysqli_fetch_assoc($userDetailsResult);
 // -----------------------------------------------------------------
 // menggabungkan data dari berbagai tabel dan mengurutkannya berdasarkan departemen
 $query = "
-    SELECT K.UserID, K.NamaLengkap, K.NIK, K.Departemen, K.Jabatan 
-    FROM Karyawan AS K 
-    UNION
-    SELECT M.UserID, M.NamaLengkap, M.NIK, M.Departemen, M.Jabatan 
-    FROM Manajer AS M
-    UNION
-    SELECT H.UserID, H.NamaLengkap, H.NIK, H.Departemen, H.Jabatan 
-    FROM HRGA AS H
-    UNION
-    SELECT A.UserID, A.NamaLengkap, A.NIK, A.Departemen, A.Jabatan 
-    FROM Admin AS A
-    ORDER BY Departemen
+    SELECT Karyawan.UserID, Karyawan.NamaLengkap, Karyawan.NIK, Karyawan.Departemen, Karyawan.Jabatan, CutiTahunan.CutiSisa
+    FROM (
+        SELECT K.UserID, K.NamaLengkap, K.NIK, K.Departemen, K.Jabatan FROM Karyawan AS K
+        UNION
+        SELECT M.UserID, M.NamaLengkap, M.NIK, M.Departemen, M.Jabatan FROM Manajer AS M
+        UNION
+        SELECT H.UserID, H.NamaLengkap, H.NIK, H.Departemen, H.Jabatan FROM HRGA AS H
+    ) AS Karyawan
+    LEFT JOIN CutiTahunan ON Karyawan.UserID = CutiTahunan.UserID AND CutiTahunan.Tahun = YEAR(CURDATE())
+    ORDER BY Karyawan.Departemen
 ";
 
 $result = mysqli_query($koneksi, $query);
@@ -80,6 +78,7 @@ mysqli_close($koneksi);
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 
@@ -136,8 +135,18 @@ mysqli_close($koneksi);
                 <div class="col-auto">
                     <h2>PT. DAEKYUNG INDAH HEAVY INDUSTRY</h2>
                 </div>
-            </div>           
+            </div>
+            <div class="container mt-3">     
             <div class="custom-table-container" style="margin-top: 30px;">
+            <div class="row justify-content-end mb-3">
+                <div class="col-auto">
+                    <button id="resetCutiBtn" class="buttonReset"> Reset Cuti Tahunan
+                        <svg viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" height="1" width="1" xmlns="http://www.w3.org/2000/svg">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </svg>
+                    </button>
+                </div>
+            </div>  
             <table class="table table-bordered" style="background-color: rgba(220, 220, 220, 0.8);" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
@@ -147,6 +156,7 @@ mysqli_close($koneksi);
                                 <th class="text-center table-column" style="width: 100px;">NIK</th>
                                 <th class="text-center table-column" style="width: 200px;">Departemen</th>
                                 <th class="text-center table-column" style="width: 200px;">Jabatan</th>
+                                <th class="text-center table-column" style="width: 100px;">Sisa Cuti Tahunan</th>
                                 <th class="text-center table-column" style="width: 145px;">Actions</th>
                             </tr>
                         </thead>
@@ -157,12 +167,13 @@ mysqli_close($koneksi);
                             <tr>
                                 <td class="text-center"><?php echo $no++; ?></td>
                                 <td class="text-center"><?php echo htmlspecialchars($karyawan['UserID']); ?></td>
-                                <td class="text-center"><?php echo htmlspecialchars($karyawan['NamaLengkap']); ?></td>
+                                <td><?php echo htmlspecialchars($karyawan['NamaLengkap']); ?></td>
                                 <td class="text-center"><?php echo htmlspecialchars($karyawan['NIK']); ?></td>
-                                <td class="text-center"><?php echo htmlspecialchars($karyawan['Departemen']); ?></td>
-                                <td class="text-center"><?php echo htmlspecialchars($karyawan['Jabatan']); ?></td>
+                                <td><?php echo htmlspecialchars($karyawan['Departemen']); ?></td>
+                                <td><?php echo htmlspecialchars($karyawan['Jabatan']); ?></td>
+                                <td class="text-center"><?php echo htmlspecialchars($karyawan['CutiSisa'] ?? 'N/A'); ?></td>
                                 <td class="text-center">
-                                    <a href="DetailPengajuanPegawai.php?NIK=<?php echo urlencode($karyawan['NIK']); ?>" class="btn custom-detail-btn-blue">Detail</a>
+                                    <a href="DetailPengajuanPegawai.php?NIK=<?php echo urlencode($karyawan['NIK']); ?>" class="btn custom-detail-btn-blue" style="width: 100%;">Detail</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -198,6 +209,27 @@ mysqli_close($koneksi);
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
 <script src="assets/demo/datatables-demo.js"></script>
 <script src="js/datatables-demo.js"></script>
+
+<script>
+$(document).ready(function(){
+    $("#resetCutiBtn").click(function(){
+        if (confirm("Apakah Anda yakin ingin reset cuti tahunan untuk semua karyawan?")) {
+            $.ajax({
+                url: 'resetCutiTahunan.php',
+                type: 'POST',
+                success: function(response){
+                    alert(response);
+                    // Reload atau update tampilan setelah reset
+                    location.reload(); // Atau update tampilan dengan cara lain
+                },
+                error: function(){
+                    alert("Terjadi kesalahan saat mereset cuti.");
+                }
+            });
+        }
+    });
+});
+</script>
 
 <script src="./js/detailAbsensi.js"></script>
 <script src="./js/script.js"></script>

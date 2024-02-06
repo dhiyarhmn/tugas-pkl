@@ -51,9 +51,6 @@ $query = "
     UNION
     SELECT H.UserID, H.NamaLengkap, H.NIK, H.Departemen, H.Jabatan 
     FROM HRGA AS H
-    UNION
-    SELECT A.UserID, A.NamaLengkap, A.NIK, A.Departemen, A.Jabatan 
-    FROM Admin AS A
     ORDER BY Departemen
 ";
 
@@ -173,12 +170,12 @@ mysqli_close($koneksi);
                             <tr>
                                 <td class="text-center"><?php echo $no++; ?></td>
                                 <td class="text-center"><?php echo htmlspecialchars($karyawan['UserID']); ?></td>
-                                <td class="text-center"><?php echo htmlspecialchars($karyawan['NamaLengkap']); ?></td>
+                                <td><?php echo htmlspecialchars($karyawan['NamaLengkap']); ?></td>
                                 <td class="text-center"><?php echo htmlspecialchars($karyawan['NIK']); ?></td>
-                                <td class="text-center"><?php echo htmlspecialchars($karyawan['Departemen']); ?></td>
-                                <td class="text-center"><?php echo htmlspecialchars($karyawan['Jabatan']); ?></td>
+                                <td><?php echo htmlspecialchars($karyawan['Departemen']); ?></td>
+                                <td><?php echo htmlspecialchars($karyawan['Jabatan']); ?></td>
                                 <td class="text-center">
-                                    <a href="DetailPengajuanPegawai.php?NIK=<?php echo urlencode($karyawan['NIK']); ?>" class="btn custom-detail-btn-blue">Detail</a>
+                                    <a href="DetailPengajuanPegawai.php?NIK=<?php echo urlencode($karyawan['NIK']); ?>" style="width: 100%;" class="btn custom-detail-btn-blue">Detail</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

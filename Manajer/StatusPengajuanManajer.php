@@ -154,7 +154,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                 </div>
             </div>
             <div class="row justify-content-center mt-4 box-container">
-            <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
+            <div class="col-auto mb-3 larger-card" style="margin-top: 30px; width: 33.3%;">
                 <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                     <div class="card-body d-flex justify-content-between align-items-start">
                         <div>
@@ -165,7 +165,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     </div>
                 </div>
             </div>
-            <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
+            <div class="col-auto mb-3 larger-card" style="margin-top: 30px; width: 33.3%;">
                 <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                     <div class="card-body d-flex justify-content-between align-items-start">
                         <div>
@@ -176,7 +176,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     </div>
                 </div>
             </div>
-            <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
+            <div class="col-auto mb-3 larger-card" style="margin-top: 30px; width: 33.3%;">
                 <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                     <div class="card-body d-flex justify-content-between align-items-start">
                         <div>     
@@ -206,23 +206,23 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     while ($row = mysqli_fetch_assoc($result)): 
                     ?>
                         <tr class='text-center'>
-                            <td style="width: 10px;"><?php echo $no; ?></td>
-                            <td style="width: 20px;"><?php echo htmlspecialchars($row['AbsensiID']); ?></td>
-                            <td style="width: 30px;"><?php echo htmlspecialchars($row['NamaJenisAbsensi']); ?></td>
-                            <td style="width: 200px;"><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
-                            <td style="width: 200px;">
+                            <td style="width: 5%;"><?php echo $no; ?></td>
+                            <td style="width: 12%;"><?php echo htmlspecialchars($row['AbsensiID']); ?></td>
+                            <td style="width: 12%;"><?php echo htmlspecialchars($row['NamaJenisAbsensi']); ?></td>
+                            <td style="width: 15%;"><?php echo htmlspecialchars($row['TanggalPengajuan']); ?></td>
+                            <td style="width: 17%;">
                                 <?php
                                 // Debugging untuk melihat nilai yang diperoleh dari database
                                 $berkasLink = !empty($row['Berkas']) ? "<a href='" . urlencode($row['Berkas']) . "' target='_blank'>Lihat Berkas</a>" : "Tidak ada berkas";
                                 echo $berkasLink;
                                 ?>
                             </td>
-                            <td style="width: 200px;">
+                            <td style="width: 20%">
                                 <i class="fa <?php echo ($row['StatusPersetujuan'] == 'Approved') ? 'fa-check-circle approved-icon' : (($row['StatusPersetujuan'] == 'Declined') ? 'fa-times-circle declined-icon' : 'fa-exclamation-circle on-process-icon'); ?>" aria-hidden="true"></i>
                                 <?php echo htmlspecialchars($row['StatusPersetujuan']); ?>
                             </td>
-                            <td class="text-center">
-                                <button type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal" onclick="showDetail(<?php echo htmlspecialchars($row['AbsensiID']); ?>)">Detail</button>
+                            <td style="width: 20%" class="text-center">
+                                <button style="width: 100%;" type="button" class="btn custom-detail-btn-blue" data-toggle="modal" data-target="#detailModal" onclick="showDetail(<?php echo htmlspecialchars($row['AbsensiID']); ?>)">Detail</button>
                             </td>
                         </tr>
                         <?php 

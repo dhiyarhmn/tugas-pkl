@@ -139,7 +139,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                             <p class="card-text">Optimize Your Profile Settings</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='EditProfileDirektur.php'">
                                 <span class="button__text">Click Here</span>
-                                <span class="button__icon"><i class="fas fa-user"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fas fa-user"></i></i></span>
                             </button>
                         </div>
                     </div>
@@ -151,7 +151,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                             <p class="card-text">Approval for Employees Absence Submissions</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ApprovalDirektur.php'">
                                 <span class="button__text">Click Here</span>
-                                <span class="button__icon"><i class="fa fa-check-square"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fa fa-check-square"></i></i></span>
                             </button>
                         </div>
                     </div>
@@ -163,7 +163,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                             <p class="card-text">Discover the Full Employees Listing Here</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='ListKaryawanDirektur.php'">
                                 <span class="button__text">Show More</span>
-                                <span class="button__icon"><i class="fa fa-search"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fa fa-search"></i></i></span>
                             </button>
                         </div>
                     </div>

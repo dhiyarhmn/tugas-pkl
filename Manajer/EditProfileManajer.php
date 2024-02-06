@@ -22,7 +22,7 @@ if (isset($_SESSION['UserID'])) {
     $userID = $_SESSION['UserID'];
 
     // Ambil data Manajer dan username berdasarkan UserID
-    $queryGetDataManajer = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.Password, U.ProfilePhoto FROM Manajer AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
+    $queryGetDataManajer = "SELECT K.NIK, K.NamaLengkap, K.Email, K.NoHP, K.Departemen, K.JenisKelamin, K.Jabatan, U.Username, U.ProfilePhoto FROM Manajer AS K INNER JOIN User AS U ON K.UserID = U.UserID WHERE K.UserID = '$userID'";
     $resultGetDataManajer = $koneksi->query($queryGetDataManajer);
 
     if ($resultGetDataManajer->num_rows > 0) {
@@ -37,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Email = $_POST["Email"] ?? '';
     $NoHP = $_POST["NoHP"] ?? '';
     $Username = $_POST["Username"] ?? '';
-    $Password = $_POST["Password"] ?? '';
 
     // Periksa dan unggah foto profil jika ada
     if (isset($_FILES["profilePhoto"]) && $_FILES["profilePhoto"]["error"] == 0) {
@@ -82,8 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: " . $sqlManajer . "<br>" . $koneksi->error;
         }
 
-        // Update data User
-        $sqlUser = "UPDATE User SET Username = '$Username', Password = '$Password' WHERE UserID = '$userID'";
+        // Update data User, including the password
+        $sqlUser = "UPDATE User SET Username = '$Username' WHERE UserID = '$userID'";
         if ($koneksi->query($sqlUser) === TRUE) {
             echo "";
         } else {
@@ -235,7 +234,7 @@ $koneksi->close();
                                     <label class="label static-label">Gender</label>
                                 </div>
                                 <div class="container input-container">
-                                    <input required="" type='email' pattern=".+@*\.com" name="Email" class="input" value="<?php echo htmlspecialchars($rowManajer['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
+                                    <input required="" type='email' pattern=".+(@\w+\.com|@daekyung\.co\.id)" name="Email" class="input" value="<?php echo htmlspecialchars($rowManajer['Email'] ?? ''); ?>" onfocus="focusInput(this)" onblur="blurInput(this)">
                                     <label class="label" for="Email">Email</label>
                                 </div>
                                 <div class="container input-container">
@@ -247,25 +246,12 @@ $koneksi->close();
                                     <label class="label">Username</label>
                                 </div>
                                 <div class="container input-container">
-                                    <label for="exampleInputEmail1" style="margin-bottom: -8px; margin-top: -23px;">Password</label>
-                                    <div class="input-group">
-                                        <input type="password" id="pass" class="input" value="<?php echo htmlspecialchars($rowManajer['Password'] ?? ''); ?>" readonly onfocus="focusInput(this)" onblur="blurInput(this)">
-                                        <div class="input-group-append">
-                                            <span id="mybutton" onclick="change()" class="input" style="cursor: pointer;">
-                                                <!-- icon mata bawaan bootstrap -->
-                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                                                    <path fill-rule="evenodd" d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div style="text-align: right; margin-top: 5px;">
+                                    <div style="text-align: right; margin-top: -30px;">
                                         <a href="ChangePassword.php" style="font-size: 12;">Change Password</a>
                                     </div>
                                 </div>
                                 <div class="container">
-                                    <button class="button-submit" type="submit">Save</button>
+                                    <button class="button-submit" type="submit" style="margin-top: -30px;">Save</button>
                                 </div>
                             </form>
                         </div>

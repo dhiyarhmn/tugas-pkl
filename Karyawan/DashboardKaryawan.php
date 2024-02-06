@@ -132,7 +132,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                 </div>
             </div>
             <div class="row justify-content-center mt-4 box-container">
-            <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
+            <div class="col-auto mb-3 larger-card" style="margin-top: 30px; width: 33.3%;">
                 <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                     <div class="card-body d-flex justify-content-between align-items-start">
                         <div>
@@ -143,7 +143,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     </div>
                 </div>
             </div>
-            <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
+            <div class="col-auto mb-3 larger-card" style="margin-top: 30px; width: 33.3%;">
                 <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                     <div class="card-body d-flex justify-content-between align-items-start">
                         <div>
@@ -154,7 +154,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                     </div>
                 </div>
             </div>
-            <div class="col-auto mb-3 larger-card" style="margin-top: 30px;">
+            <div class="col-auto mb-3 larger-card" style="margin-top: 30px; width: 33.3%;">
                 <div class="card rounded-card" style="background-color: rgba(220, 220, 220, 0.8);">
                     <div class="card-body d-flex justify-content-between align-items-start">
                         <div>     
@@ -173,7 +173,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                             <p class="card-text">Optimize Your Profile Settings</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='EditProfileKaryawan.php'">
                                 <span class="button__text">Click Here</span>
-                                <span class="button__icon"><i class="fas fa-user"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fas fa-user"></i></i></span>
                             </button>
                         </div>
                     </div>
@@ -185,7 +185,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                             <p class="card-text">Submit Your Absence Submissions</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='PengajuanAbsensiKaryawan.php'">
                                 <span class="button__text">Click Here</span>
-                                <span class="button__icon"><i class="fas fa-plus"></i></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fas fa-plus"></i></i></span>
                             </button>
                         </div>
                     </div>
@@ -197,7 +197,7 @@ $declinedCount = mysqli_fetch_assoc($resultDeclinedCount)["DeclinedCount"];
                             <p class="card-text">Check Your Submissions Status</p>
                             <button type="button" class="btn custom-btn-blue btn-large button" style="padding: 0.5em 1em;" onclick="window.location.href='StatusPengajuanKaryawan.php'">
                                 <span class="button__text">Show More</span>
-                                <span class="button__icon"><i class="fas fa-list-alt"></i></span>
+                                <span style="transition: all 0.5s ease;" class="button__icon"><i class="fas fa-list-alt"></i></span>
                             </button>
                         </div>
                     </div>
